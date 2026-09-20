@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html class="scroll-smooth dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>403 Forbidden — Privileged Ring 0 Access Denied | Krish Gupta</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Geist', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
+            serif: ['Newsreader', 'Georgia', 'serif'],
+          },
+          colors: {
+            obsidian: {
+              DEFAULT: '#050506',
+              surface: '#131215',
+              raised: '#1c1b1d',
+              card: '#131215',
+              border: '#2e2729',
+              subtle: '#43373a',
+            },
+            maroon: {
+              DEFAULT: '#8b1e2f',
+              rich: '#800020',
+              dark: '#681120',
+              dim: 'rgba(139, 30, 47, 0.15)',
+              border: 'rgba(139, 30, 47, 0.35)',
+              glow: 'rgba(139, 30, 47, 0.25)',
+            },
+            cream: {
+              DEFAULT: '#fcf9f2',
+              body: '#f5f0e4',
+              muted: '#a89e90',
+              dim: 'rgba(252, 249, 242, 0.08)',
+              border: 'rgba(252, 249, 242, 0.15)',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::selection { background: #8b1e2f; color: #fcf9f2; }
+    .grid-pattern {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(252, 249, 242, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(252, 249, 242, 0.02) 1px, transparent 1px);
+    }
+    .glow-maroon {
+      box-shadow: 0 0 50px -5px rgba(139, 30, 47, 0.35);
+    }
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+      100% { transform: translate(0); }
+    }
+    .animate-glitch {
+      animation: glitch 3s infinite ease-in-out alternate-reverse;
+    }
+  </style>
+</head>
+<body class="bg-[#050506] text-cream-body font-sans antialiased selection:bg-maroon selection:text-cream min-h-screen flex flex-col justify-between overflow-x-hidden relative">
+
+  <!-- Ambient Backdrop Grid -->
+  <div class="fixed inset-0 grid-pattern pointer-events-none z-0 opacity-80"></div>
+  <div class="fixed top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-maroon/15 blur-[140px] pointer-events-none z-0"></div>
+
+  <!-- Top Minimal Header -->
+  <header class="relative z-20 w-full border-b border-obsidian-border/50 px-6 sm:px-12 py-4 flex items-center justify-between font-mono text-xs">
+    <a href="index.html" class="flex items-center gap-2 text-cream hover:text-cream-body transition-colors">
+      <span class="w-2 h-2 rounded-full bg-maroon"></span>
+      <span class="font-bold tracking-tight">Krish Gupta</span>
+      <span class="text-cream-muted hidden sm:inline">· Systems, ML &amp; Security</span>
+    </a>
+    <div class="flex items-center gap-3">
+      <span class="px-2.5 py-1 rounded bg-maroon-dim border border-maroon text-cream text-[11px]">SECURITY LAYER ACTIVE</span>
+      <a href="index.html" class="px-3 py-1 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-cream-muted transition-all">
+        ← Exit to Portfolio
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Error Stage -->
+  <main class="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-6 py-12">
+    <div class="max-w-2xl w-full text-center space-y-8">
+      
+      <!-- Monolithic 403 Visual -->
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-obsidian-card border border-maroon text-maroon text-xs font-mono">
+          <span class="w-2 h-2 rounded-full bg-maroon animate-ping"></span>
+          <span>EACCES // SIGSEGV (RING 0 FAULT)</span>
+        </div>
+        
+        <h1 class="text-8xl sm:text-9xl font-bold font-serif text-cream tracking-tight animate-glitch drop-shadow-2xl">
+          403
+        </h1>
+        
+        <h2 class="text-xl sm:text-2xl font-bold font-sans text-cream tracking-tight">
+          Forbidden: Privileged Ring 0 Access Denied
+        </h2>
+        
+        <p class="text-sm sm:text-base text-cream-muted font-mono max-w-lg mx-auto leading-relaxed">
+          The requested memory segment or syscall requires <code class="text-cream font-semibold">CAP_SYS_ADMIN</code> capabilities. Your session token was intercepted by the eBPF kernel security barrier.
+        </p>
+      </div>
+
+      <!-- Linux Kernel Security Terminal Log -->
+      <div class="rounded-xl bg-obsidian-surface border border-obsidian-border p-4 text-left font-mono text-xs glow-maroon shadow-2xl space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-obsidian-border text-[11px] text-cream-muted">
+          <div class="flex items-center gap-2">
+            <div class="flex gap-1">
+              <div class="w-2.5 h-2.5 rounded-full bg-maroon"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-obsidian-subtle"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-obsidian-subtle"></div>
+            </div>
+            <span>/var/log/audit/seccomp_denials.log</span>
+          </div>
+          <span class="text-maroon">SECURITY LEVEL: STRICT</span>
+        </div>
+
+        <div class="bg-[#050506] p-3 rounded-lg border border-obsidian-border/50 text-[11px] text-cream-muted space-y-1.5 leading-relaxed overflow-x-auto">
+          <div><span class="text-maroon font-bold">[403.019482]</span> <span class="text-cream">ptrace_attach:</span> PID 19844 permission denied (EACCES)</div>
+          <div><span class="text-maroon font-bold">[403.019483]</span> <span class="text-cream">seccomp:</span> syscall #101 (ptrace) blocked from unprivileged ring 3 context</div>
+          <div><span class="text-maroon font-bold">[403.019484]</span> <span class="text-cream">aegis-tensor:</span> memory integrity guard tripped at page 0x7f9a8000</div>
+          <div><span class="text-maroon font-bold">[403.019485]</span> <span class="text-cream">audit:</span> auid=1000 uid=1000 gid=1000 exe="/usr/bin/curl" sig=31 arch=x86_64</div>
+          <div class="text-cream pt-1 border-t border-obsidian-subtle">Verdict: Inbound HTTP request lacked kernel security clearance. Access rejected.</div>
+        </div>
+
+        <!-- Interactive Terminal Simulator -->
+        <div class="pt-1 flex flex-col sm:flex-row gap-2">
+          <div class="flex-1 flex items-center bg-[#050506] border border-obsidian-border rounded-lg px-3 py-2 text-xs">
+            <span class="text-maroon mr-2">guest@delhi:~$</span>
+            <input id="bypass-input" class="bg-transparent text-cream outline-none w-full placeholder:text-cream-muted/50" placeholder="Type 'sudo su', 'chmod 777', or 'help'..." onkeydown="handleBypassKey(event)"/>
+          </div>
+          <button onclick="attemptBypass()" class="px-4 py-2 rounded-lg bg-maroon hover:bg-maroon-rich text-cream font-medium text-xs transition-colors whitespace-nowrap">
+            Attempt Escalation
+          </button>
+        </div>
+        <div id="escalation-result" class="text-[11px] text-maroon font-mono hidden pt-1"></div>
+      </div>
+
+      <!-- Action Navigations -->
+      <div class="pt-4 flex flex-wrap items-center justify-center gap-4 font-mono text-xs">
+        <a href="index.html" class="px-5 py-2.5 rounded-lg bg-cream text-obsidian font-bold hover:bg-maroon hover:text-cream transition-all shadow-lg flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+          <span>Return to Safe Portfolio Hub</span>
+        </a>
+        <a href="https://github.com/KrishG7" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-lg bg-obsidian-card border border-obsidian-border text-cream hover:border-cream-muted transition-all flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"/></svg>
+          <span>Audit Source Code (@KrishG7)</span>
+        </a>
+        <a href="KrishGupta_AugustCV.pdf" download class="px-5 py-2.5 rounded-lg bg-obsidian-surface border border-maroon-border text-cream hover:bg-maroon transition-all flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+          <span>Download Dossier (CV.pdf)</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer class="relative z-20 border-t border-obsidian-border/50 py-4 px-6 sm:px-12 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-cream-muted">
+    <div>Krish Gupta · Systems, Machine Learning &amp; Security Engineering</div>
+    <div class="flex items-center gap-4">
+      <a href="https://github.com/KrishG7" class="hover:text-cream">GitHub</a>
+      <a href="https://linkedin.com/in/krish-gupta007" class="hover:text-cream">LinkedIn</a>
+      <a href="https://leetcode.com/u/KrishGupta0007/" class="hover:text-[#ffa116]">LeetCode 300+ Solved</a>
+    </div>
+  </footer>
+
+  <script>
+    function handleBypassKey(e) {
+      if (e.key === 'Enter') {
+        attemptBypass();
+      }
+    }
+
+    function attemptBypass() {
+      const input = document.getElementById('bypass-input');
+      const val = input.value.trim().toLowerCase();
+      const res = document.getElementById('escalation-result');
+      res.classList.remove('hidden');
+
+      if (!val) {
+        res.innerHTML = '<span class="text-cream">guest@delhi:~$</span> Enter command (e.g. sudo su, whoami, help)...';
+        return;
+      }
+
+      if (val === 'sudo' || val === 'sudo su' || val === 'su') {
+        res.innerHTML = '<span class="text-maroon font-bold">[SECURITY ALERT]</span> user "guest" is not in the sudoers file. This incident will be reported to /var/log/auth.log.';
+      } else if (val === 'whoami') {
+        res.innerHTML = '<span class="text-cream-muted">UID=1000(guest) GID=1000(guest) groups=1000(guest) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023</span>';
+      } else if (val === 'help') {
+        res.innerHTML = '<span class="text-cream">Allowed routines:</span> whoami, exit, portfolio, status. All ring 0 kernel escalations are strictly hardware-sandboxed.';
+      } else if (val === 'portfolio' || val === 'exit') {
+        window.location.href = 'index.html';
+      } else {
+        res.innerHTML = `<span class="text-maroon font-bold">[BLOCKED]</span> Command '${val}' rejected: Capability CAP_SYS_ADMIN required.`;
+      }
+      input.value = '';
+    }
+  </script>
+</body>
+</html>

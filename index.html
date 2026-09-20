@@ -1,0 +1,2227 @@
+<!DOCTYPE html>
+<html class="scroll-smooth dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Krish Gupta — Systems, Machine Learning &amp; Tactile Interfaces</title>
+  <meta name="description" content="Krish Gupta — B.Tech at Faculty of Technology, University of Delhi. Building production systems across Linux kernel tracing, clinical AI, computer vision, and model security."/>
+  <meta property="og:title" content="Krish Gupta — Systems, Machine Learning & Tactile Interfaces"/>
+  <meta property="og:description" content="Portfolio of 8 production systems spanning Linux kernel ptrace, clinical AI oncology, agricultural intelligence, and model security scanning."/>
+  <meta property="og:type" content="website"/>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/face_data.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Geist', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
+            serif: ['Newsreader', 'Georgia', 'serif'],
+          },
+          colors: {
+            obsidian: {
+              DEFAULT: '#050506',
+              surface: '#131215',
+              raised: '#1c1b1d',
+              card: '#131215',
+              border: '#2e2729',
+              subtle: '#43373a',
+            },
+            maroon: {
+              DEFAULT: '#8b1e2f',
+              rich: '#800020',
+              dark: '#681120',
+              dim: 'rgba(139, 30, 47, 0.15)',
+              border: 'rgba(139, 30, 47, 0.35)',
+              glow: 'rgba(139, 30, 47, 0.25)',
+            },
+            cream: {
+              DEFAULT: '#fcf9f2',
+              body: '#f5f0e4',
+              muted: '#a89e90',
+              dim: 'rgba(252, 249, 242, 0.08)',
+              border: 'rgba(252, 249, 242, 0.15)',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::selection { background: #8b1e2f; color: #fcf9f2; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #050506; }
+    ::-webkit-scrollbar-thumb { background: #2e2729; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #8b1e2f; }
+    
+    .grid-pattern {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(252, 249, 242, 0.015) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(252, 249, 242, 0.015) 1px, transparent 1px);
+    }
+    .dot-pattern {
+      background-image: radial-gradient(rgba(139, 30, 47, 0.15) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    .glow-maroon {
+      box-shadow: 0 0 40px -5px rgba(139, 30, 47, 0.25);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fcf9f2;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(139, 30, 47, 0.6);
+    }
+
+    /* Cinematic Scroll Reveal Animations */
+    .story-reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .story-reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="bg-[#050506] text-cream-body font-sans antialiased selection:bg-maroon selection:text-cream overflow-x-hidden">
+
+  <!-- HIGH-END SYSTEMS PRELOADER BUFFER -->
+  <div id="kernel-preloader" class="fixed inset-0 z-[100] bg-[#050506] flex flex-col items-center justify-center font-mono text-xs select-none transition-opacity duration-500 ease-out">
+    <div class="w-80 max-w-[calc(100%-3rem)] space-y-4">
+      <div class="flex items-center justify-between text-cream">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-maroon animate-ping"></span>
+          <span class="font-bold tracking-wider">KRISH GUPTA // KERNEL</span>
+        </div>
+        <span id="load-pct" class="text-maroon font-bold">0%</span>
+      </div>
+      <div class="w-full h-1 bg-obsidian-card rounded-full overflow-hidden border border-obsidian-border">
+        <div id="load-bar" class="h-full bg-gradient-to-r from-maroon to-cream w-0 transition-all duration-100 ease-out"></div>
+      </div>
+      <div class="flex items-center justify-between text-[11px] text-cream-muted">
+        <span id="load-status">INITIALIZING SYSTEM TELEMETRY...</span>
+        <span>v6.8.0-ptrace</span>
+      </div>
+      <div class="p-2.5 rounded bg-obsidian-surface border border-obsidian-border text-[10px] text-cream-muted space-y-1 font-mono">
+        <div id="load-log-1" class="text-cream-muted">[ ] 2,877 Facial Mesh Nodes Cached</div>
+        <div id="load-log-2" class="text-cream-muted">[ ] Tactile Physics &amp; Shockwave Engine</div>
+        <div id="load-log-3" class="text-cream-muted">[ ] 8 Production Architecture Dossiers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ambient Backdrop Grid -->
+  <div class="fixed inset-0 grid-pattern pointer-events-none z-0 opacity-70"></div>
+  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-gradient-to-b from-maroon/[0.08] via-transparent to-transparent blur-[140px] pointer-events-none z-0"></div>
+
+  <!-- Top Status Header with Always-Visible LeetCode, GitHub & LinkedIn -->
+  <header class="fixed top-0 inset-x-0 z-40 bg-[#050506]/90 backdrop-blur-md border-b border-obsidian-border/50 px-4 sm:px-8 py-2.5 flex items-center justify-between text-xs font-mono">
+    <div class="flex items-center gap-3">
+      <span class="w-2 h-2 rounded-full bg-maroon"></span>
+      <span class="text-cream font-bold">Krish Gupta</span>
+      <span class="hidden md:inline text-cream-muted">· New Delhi, India</span>
+      <span class="hidden lg:inline text-cream-muted">· B.Tech (DU '28)</span>
+    </div>
+    
+    <div class="flex items-center gap-2 sm:gap-3 text-xs">
+      <a href="https://github.com/KrishG7" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-surface border border-obsidian-border text-cream-muted hover:text-cream hover:border-cream-muted transition-all">
+        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"/></svg>
+        <span>GitHub</span>
+      </a>
+      <a href="https://linkedin.com/in/krish-gupta007" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-surface border border-obsidian-border text-cream-muted hover:text-cream hover:border-cream-muted transition-all">
+        <svg class="w-3.5 h-3.5 fill-[#0077b5]" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        <span>LinkedIn</span>
+      </a>
+      <a href="https://leetcode.com/u/KrishGupta0007/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-surface border border-maroon-border text-cream hover:border-maroon transition-all">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#ffa116]"></span>
+        <span>LeetCode 300+</span>
+      </a>
+      <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-maroon-dim border border-maroon-border text-cream text-[11px]">
+        <span class="w-1.5 h-1.5 rounded-full bg-maroon animate-ping"></span>
+        <span>Open for Internships '26–27</span>
+      </span>
+    </div>
+  </header>
+
+  <!-- FLOATING BOTTOM COMMAND DOCK -->
+  <nav class="fixed bottom-6 inset-x-0 mx-auto w-fit z-50 max-w-[calc(100%-2rem)]">
+    <div class="bg-obsidian-surface/95 backdrop-blur-2xl border border-obsidian-border rounded-full px-4 sm:px-6 py-2.5 shadow-[0_20px_60px_rgba(0,0,0,0.85)] flex items-center gap-2.5 sm:gap-5 text-xs sm:text-sm font-mono">
+      <a class="text-cream-muted hover:text-cream transition-colors" href="#hero">Start</a>
+      <a class="text-cream-muted hover:text-cream transition-colors" href="#about">Creed</a>
+      <a class="text-cream-muted hover:text-cream transition-colors flex items-center gap-1.5" href="#terminal-cli">
+        <span class="w-1.5 h-1.5 rounded-full bg-maroon"></span>
+        <span>CLI</span>
+      </a>
+      <a class="text-cream-muted hover:text-cream transition-colors" href="#works">Projects (8)</a>
+      <a class="text-cream-muted hover:text-cream transition-colors" href="#biography">Record</a>
+      <span class="w-px h-4 bg-obsidian-border hidden sm:block"></span>
+      <a class="hidden lg:flex items-center gap-1 text-cream-muted hover:text-cream transition-colors" href="https://github.com/KrishG7" target="_blank" rel="noopener noreferrer">Git</a>
+      <a class="hidden lg:flex items-center gap-1 text-cream-muted hover:text-cream transition-colors" href="https://linkedin.com/in/krish-gupta007" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="hidden md:flex items-center gap-1 text-cream-muted hover:text-[#ffa116] transition-colors" href="https://leetcode.com/u/KrishGupta0007/" target="_blank" rel="noopener noreferrer">LeetCode (300+)</a>
+      <a class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-obsidian-raised border border-maroon-border text-cream hover:bg-maroon transition-all" download="" href="KrishGupta_AugustCV.pdf">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        <span class="hidden sm:inline">CV.pdf</span>
+      </a>
+      <a class="px-3.5 py-1 rounded-full bg-cream text-obsidian font-semibold hover:bg-maroon hover:text-cream transition-all" href="#contact">
+        Contact
+      </a>
+    </div>
+  </nav>
+
+  <!-- ========================================================= -->
+  <!-- 1. CINEMATIC FULLSCREEN HERO (NAME & RIPPLE BACKGROUND PICTURE) -->
+  <!-- ========================================================= -->
+  <section class="relative w-full h-screen min-h-[640px] flex items-center justify-center overflow-hidden" id="hero">
+    
+    <!-- Fullscreen Fluid Ripple Canvas (Face Contour Matrix) -->
+    <canvas id="hero-canvas" class="absolute inset-0 w-full h-full cursor-crosshair z-0"></canvas>
+
+    <!-- MOVED TO SIDE: Faculty of Technology DU Pedigree Card (Completely Off Face) -->
+    <div class="absolute top-20 sm:top-24 left-4 sm:left-10 z-20 max-w-[280px] sm:max-w-sm p-4 rounded-xl bg-obsidian-surface/90 border border-obsidian-border backdrop-blur-md shadow-2xl font-mono space-y-1.5">
+      <div class="flex items-center gap-2 text-[11px] text-cream-muted">
+        <span class="w-2 h-2 rounded-full bg-maroon"></span>
+        <span class="tracking-wider uppercase font-semibold">Undergraduate Pedigree</span>
+      </div>
+      <div class="text-cream font-bold text-sm sm:text-base leading-snug">
+        Faculty of Technology, University of Delhi
+      </div>
+      <div class="text-cream-muted text-xs flex items-center gap-2">
+        <span>B.Tech (3rd Year, Batch of 2028)</span>
+        <span>·</span>
+        <span class="text-cream font-bold">CGPA: 8.09 / 10</span>
+      </div>
+      <div class="text-[11px] text-cream-muted pt-1 border-t border-obsidian-border/50">
+        Daksh Gurukul, IIT Guwahati · Data Science Spec
+      </div>
+    </div>
+
+    <!-- MOVED TO SIDE: Prominent Social Links on Right Side -->
+    <div class="absolute top-20 sm:top-24 right-4 sm:right-10 z-20 hidden sm:flex flex-col items-end gap-2 font-mono text-xs">
+      <a href="https://github.com/KrishG7" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-obsidian-surface/90 border border-obsidian-border hover:border-cream text-cream backdrop-blur-md transition-all flex items-center gap-2 shadow-lg">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"/></svg>
+        <span class="font-medium">GitHub: @KrishG7</span>
+      </a>
+      <a href="https://linkedin.com/in/krish-gupta007" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-obsidian-surface/90 border border-obsidian-border hover:border-cream text-cream backdrop-blur-md transition-all flex items-center gap-2 shadow-lg">
+        <svg class="w-4 h-4 fill-[#0077b5]" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        <span class="font-medium">LinkedIn: krish-gupta007</span>
+      </a>
+      <a href="https://leetcode.com/u/KrishGupta0007/" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-obsidian-surface/90 border border-maroon-border hover:border-maroon text-cream backdrop-blur-md transition-all flex items-center gap-2 shadow-lg">
+        <span class="w-2 h-2 rounded-full bg-[#ffa116]"></span>
+        <span class="font-medium">LeetCode: 300+ Solved</span>
+      </a>
+    </div>
+
+    <!-- Foreground Monumental Name (Clean, Center Unobstructed) -->
+    <div class="relative z-10 text-center select-none px-4 max-w-4xl mx-auto space-y-4">
+      
+      <!-- Monumental Typography -->
+      <h1 class="text-6xl sm:text-8xl md:text-9xl font-bold tracking-tight text-cream font-sans drop-shadow-2xl leading-none">
+        Krish Gupta
+      </h1>
+
+      <!-- Refined Narrative Subtitle -->
+      <p class="text-xl sm:text-3xl text-cream-body font-serif italic tracking-wide max-w-2xl mx-auto">
+        Systems, Machine Learning &amp; Tactile Interfaces
+      </p>
+
+      <!-- Mobile Quick Social Badges -->
+      <div class="sm:hidden pt-2 flex flex-wrap items-center justify-center gap-2 text-xs font-mono">
+        <a class="px-2.5 py-1 rounded bg-obsidian-surface border border-obsidian-border text-cream" href="https://github.com/KrishG7" target="_blank">GitHub</a>
+        <a class="px-2.5 py-1 rounded bg-obsidian-surface border border-obsidian-border text-cream" href="https://linkedin.com/in/krish-gupta007" target="_blank">LinkedIn</a>
+        <a class="px-2.5 py-1 rounded bg-obsidian-surface border border-maroon-border text-cream" href="https://leetcode.com/u/KrishGupta0007" target="_blank">LeetCode (300+)</a>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ========================================================= -->
+  <!-- 2. STORY NARRATIVE: ACT I — THE PHILOSOPHY -->
+  <!-- ========================================================= -->
+  <main class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pb-32">
+
+    <section class="story-reveal pt-16 sm:pt-24 mb-28 scroll-mt-20" id="about">
+      
+      <div class="mb-8 pb-4 border-b border-obsidian-border">
+        <div class="text-xs font-mono text-maroon tracking-wider uppercase mb-1">Act I · The Creed</div>
+        <h2 class="text-3xl sm:text-5xl font-bold text-cream tracking-tight font-sans">
+          Software isn't decorative; it is physical engineering.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        
+        <!-- Deep Narrative Prose (Zero Duplication with Act IV) -->
+        <div class="lg:col-span-8 space-y-6 text-base sm:text-lg text-cream-body leading-relaxed">
+          <p>
+            I design and build software systems at the <strong class="text-cream font-medium">Faculty of Technology, University of Delhi</strong> specializing in <strong class="text-cream font-medium">Blockchain, Cybersecurity, and Machine Learning</strong>, with data science and advanced algorithmic foundations from <strong class="text-cream font-medium">IIT Guwahati</strong>.
+          </p>
+          
+          <p>
+            I approach digital systems through the discipline of mechanical engineering: when a network packet drops on an underground Delhi metro train, the user interface shouldn't freeze, throw blocking error popups, or wipe unsaved forms. It should breathe — queuing writes into local SQLite WAL buffers, advancing optimistic state, and quietly reconciling the second signal returns.
+          </p>
+
+          <p>
+            This principle governs every system I build: whether exposing hidden Linux kernel registers via <code class="text-cream">ptrace</code> in SysCV, mapping 13 language ASTs into a 3D topology with Brahm-Kosh, or scanning neural network weight tensors at 4.2 GB/s in Aegis-Tensor. Every byte of memory allocation and every layout reflow carries physical friction.
+          </p>
+
+          <div class="pt-2 flex flex-wrap items-center gap-3 font-mono text-xs">
+            <a class="px-4 py-2 rounded-lg bg-maroon text-cream font-semibold hover:bg-maroon-rich transition-all border border-maroon-border shadow-lg" download="" href="KrishGupta_AugustCV.pdf">
+              Download Dossier (KrishGupta_AugustCV.pdf)
+            </a>
+            <a class="px-4 py-2 rounded-lg bg-obsidian-card border border-obsidian-border text-cream hover:border-cream-muted transition-all" href="#terminal-cli">
+              Open Systems Shell &amp; Skills ↓
+            </a>
+            <a class="px-4 py-2 rounded-lg bg-obsidian-card border border-obsidian-border text-cream hover:border-cream-muted transition-all" href="#works">
+              Explore 8 Production Systems ↓
+            </a>
+          </div>
+        </div>
+
+        <!-- The 3 Core Creeds -->
+        <div class="lg:col-span-4 space-y-4 font-mono text-xs">
+          
+          <div class="p-4 rounded-xl bg-obsidian-card border border-obsidian-border">
+            <div class="text-maroon font-semibold mb-1">Principle 01 · Visibility Over Opacity</div>
+            <p class="text-cream-muted leading-relaxed text-[11px]">
+              Turn hidden kernel registers, AST dependency trees, and tensor weight bytes into legible, stepped visual interfaces.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-obsidian-card border border-obsidian-border">
+            <div class="text-cream font-semibold mb-1">Principle 02 · The Delhi Metro Principle</div>
+            <p class="text-cream-muted leading-relaxed text-[11px]">
+              Architect for severe 2G drops. Write-ahead local SQLite queues and optimistic transitions guarantee zero data loss.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-obsidian-card border border-obsidian-border">
+            <div class="text-maroon font-semibold mb-1">Principle 03 · Tactile Mechanical Craft</div>
+            <p class="text-cream-muted leading-relaxed text-[11px]">
+              Figma is intent; production code is physics. Real ergonomics happen in damped springs, ARIA roving tabindex, and sub-pixel telemetry.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 3. STORY NARRATIVE: ACT II — INTERACTIVE DEVELOPER SHELL & SKILLS MATRIX -->
+    <!-- ========================================================= -->
+    <section class="story-reveal mb-28 scroll-mt-20" id="terminal-cli">
+      
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-obsidian-border">
+        <div>
+          <div class="text-xs font-mono text-maroon tracking-wider uppercase mb-1">Act II · The Developer Shell</div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-cream tracking-tight">Interactive Systems CLI &amp; Skills Matrix</h2>
+        </div>
+        <p class="text-xs font-mono text-cream-muted mt-2 sm:mt-0">
+          Direct terminal access to developer environment, kernel trace utilities &amp; competency dossier
+        </p>
+      </div>
+
+      <!-- krish_cli interactive terminal & skills matrix -->
+      <div class="rounded-2xl bg-obsidian-surface border border-obsidian-border p-5 glow-maroon" id="rig-terminal">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-4 border-b border-obsidian-border text-xs font-mono gap-2">
+          <div class="flex items-center gap-2">
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full bg-maroon"></div>
+              <div class="w-3 h-3 rounded-full bg-obsidian-subtle"></div>
+              <div class="w-3 h-3 rounded-full bg-obsidian-subtle"></div>
+            </div>
+            <span class="text-cream-muted ml-2">krish@delhi-node:~ (zsh) — v6.8.0-ptrace</span>
+          </div>
+          <span class="text-cream-muted text-[11px]">Type 'skills', 'projects', 'help' or click any skill badge to inspect</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <!-- Left Column: Terminal CLI (7 cols) -->
+          <div class="lg:col-span-7 flex flex-col justify-between">
+            <div class="bg-[#050506] rounded-xl p-4 font-mono text-xs text-cream-body min-h-[320px] max-h-[400px] overflow-y-auto space-y-2 border border-obsidian-border/50" id="terminal-screen">
+              <div class="text-cream-muted">Welcome to Krish Gupta's Interactive CLI. Type <span class="text-cream font-bold">'help'</span> or <span class="text-cream font-bold">'skills'</span>.</div>
+              <div class="text-maroon font-medium">Faculty of Technology, University of Delhi (CGPA 8.09) · IIT Guwahati Data Science</div>
+              <div><span class="text-cream-muted">krish@delhi:~$</span> <span class="text-cream">cat system_overview.log</span></div>
+              <div class="text-cream-muted pl-3 border-l border-obsidian-subtle space-y-1">
+                <div>[+] 8 Production systems engineered across Linux Kernel tracing, Clinical AI &amp; Model Security.</div>
+                <div>[+] LeetCode: 300+ Problems Solved (150+ Medium, 40+ Hard) · Top 8.4% globally.</div>
+                <div>[+] Class of 2024 Valedictorian · Recipient of 'The Red Coat' (Highest School Honor).</div>
+              </div>
+            </div>
+
+            <!-- Terminal Input Box & Quick Buttons -->
+            <div class="mt-4 flex flex-col sm:flex-row gap-2">
+              <div class="relative flex-1 flex items-center bg-[#050506] border border-obsidian-border rounded-lg px-3 py-2 text-xs font-mono">
+                <span class="text-maroon mr-2">krish@delhi:~$</span>
+                <input class="bg-transparent text-cream outline-none w-full placeholder:text-cream-muted/50" id="term-input" onkeydown="handleTerminalKey(event)" placeholder="Type help, skills, projects, leetcode, bio, clear..." type="text"/>
+              </div>
+              <div class="flex items-center gap-1.5 overflow-x-auto text-[11px] font-mono text-cream-muted">
+                <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-maroon-border text-cream hover:bg-maroon transition-colors" onclick="runCommand('skills')">skills</button>
+                <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('projects')">projects</button>
+                <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('leetcode')">leetcode</button>
+                <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('curl cv')">curl cv</button>
+                <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-maroon transition-colors" onclick="runCommand('clear')">clear</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Skills Matrix (5 cols) -->
+          <div class="lg:col-span-5 bg-[#050506] p-4 rounded-xl border border-obsidian-border space-y-3 font-mono text-xs max-h-[440px] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-obsidian-border pb-2">
+              <span class="text-cream font-bold text-xs flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-maroon"></span>
+                <span>TECHNICAL SKILLS MATRIX</span>
+              </span>
+              <span class="text-[10px] text-cream-muted">Click to inspect</span>
+            </div>
+
+            <!-- Languages -->
+            <div class="space-y-1.5">
+              <div class="text-[10px] text-cream-muted uppercase tracking-wider font-semibold">Languages</div>
+              <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <button onclick="inspectSkill('Python')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Python</button>
+                <button onclick="inspectSkill('C')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">C</button>
+                <button onclick="inspectSkill('Go')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Go</button>
+                <button onclick="inspectSkill('JavaScript')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">JavaScript</button>
+                <button onclick="inspectSkill('TypeScript')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">TypeScript</button>
+                <button onclick="inspectSkill('Oracle SQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Oracle SQL</button>
+                <button onclick="inspectSkill('VHDL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">VHDL</button>
+                <button onclick="inspectSkill('MATLAB')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">MATLAB</button>
+              </div>
+            </div>
+
+            <!-- Deep Learning & Computer Vision -->
+            <div class="space-y-1.5">
+              <div class="text-[10px] text-cream-muted uppercase tracking-wider font-semibold">Deep Learning &amp; Vision</div>
+              <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <button onclick="inspectSkill('PyTorch')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-maroon-border text-cream hover:border-maroon transition-colors">PyTorch</button>
+                <button onclick="inspectSkill('YOLOv8')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">YOLOv8/v5</button>
+                <button onclick="inspectSkill('CNNs')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">CNNs (ResNet/Inception)</button>
+                <button onclick="inspectSkill('Vision Transformers')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">ViT</button>
+                <button onclick="inspectSkill('OpenCV')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">OpenCV</button>
+                <button onclick="inspectSkill('GANs')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">GANs</button>
+              </div>
+            </div>
+
+            <!-- Machine Learning & NLP -->
+            <div class="space-y-1.5">
+              <div class="text-[10px] text-cream-muted uppercase tracking-wider font-semibold">Machine Learning &amp; NLP</div>
+              <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <button onclick="inspectSkill('scikit-learn')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">scikit-learn</button>
+                <button onclick="inspectSkill('Pandas')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Pandas</button>
+                <button onclick="inspectSkill('NumPy')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">NumPy</button>
+                <button onclick="inspectSkill('DBSCAN')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">DBSCAN</button>
+                <button onclick="inspectSkill('Time-Series')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Time Series</button>
+                <button onclick="inspectSkill('AutoDock Vina')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">AutoDock Vina</button>
+                <button onclick="inspectSkill('FalkorDB')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">FalkorDB</button>
+              </div>
+            </div>
+
+            <!-- Systems & Backend -->
+            <div class="space-y-1.5">
+              <div class="text-[10px] text-cream-muted uppercase tracking-wider font-semibold">Systems, Kernel &amp; Backend</div>
+              <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <button onclick="inspectSkill('Linux Kernel ptrace')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-maroon-border text-cream hover:border-maroon transition-colors">Linux ptrace</button>
+                <button onclick="inspectSkill('Node.js')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Node.js</button>
+                <button onclick="inspectSkill('Express')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Express</button>
+                <button onclick="inspectSkill('FastAPI')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">FastAPI</button>
+                <button onclick="inspectSkill('Docker')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Docker</button>
+                <button onclick="inspectSkill('WebSockets')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">WebSockets</button>
+                <button onclick="inspectSkill('Ethical Hacking')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Linux Security</button>
+              </div>
+            </div>
+
+            <!-- Databases & Cloud -->
+            <div class="space-y-1.5">
+              <div class="text-[10px] text-cream-muted uppercase tracking-wider font-semibold">Databases &amp; DevOps</div>
+              <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <button onclick="inspectSkill('SQLite WAL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">SQLite WAL</button>
+                <button onclick="inspectSkill('MySQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">MySQL</button>
+                <button onclick="inspectSkill('PostgreSQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">PostgreSQL</button>
+                <button onclick="inspectSkill('Git')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Git / Actions</button>
+                <button onclick="inspectSkill('Google Earth Engine')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Google Earth Engine</button>
+                <button onclick="inspectSkill('React')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">React / Vite</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 4. STORY NARRATIVE: ACT III — ARCHITECTED CASE STUDIES -->
+    <!-- ========================================================= -->
+    <section class="story-reveal mb-28 scroll-mt-20" id="works">
+      
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-obsidian-border">
+        <div>
+          <div class="text-xs font-mono text-maroon tracking-wider uppercase mb-1">Act III · Architected Systems</div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-cream tracking-tight">Systems, Intelligence &amp; Tactile Craft</h2>
+        </div>
+        <div class="text-xs font-mono text-cream-muted mt-2 sm:mt-0">
+          8 Production Repositories with Direct GitHub Verification
+        </div>
+      </div>
+
+      <div class="space-y-12">
+        
+        <!-- PROJECT 1: Athena (Cancer Copilot with Real Screen Viewer) -->
+        <article class="rounded-2xl bg-obsidian-card border border-obsidian-border p-6 sm:p-8 transition-all hover:border-maroon">
+          <div class="flex flex-col lg:flex-row gap-8 items-start">
+            <div class="flex-1 space-y-4">
+              <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-maroon-dim text-cream font-semibold border border-maroon">Clinical AI Graph</span>
+                <span class="text-cream-muted">Python · React 19 · FalkorDB · WCAG AAA</span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-bold text-cream tracking-tight">
+                Athena — Clinical Decision Support &amp; Rare-Cancer Evidence Graph
+              </h3>
+              <p class="text-sm sm:text-base text-cream-body leading-relaxed">
+                Designed and engineered for oncologists reviewing rare-cancer mutations. Built as a 2-tier clinical intelligence engine fusing FalkorDB knowledge graphs (Tier 1) with PubMed literature, falling back to computational protein-ligand docking via AutoDock Vina (Tier 2) to evaluate mutation proximity to drug binding pockets. Features WCAG AAA accessibility, explicit Degraded-State warnings when RNA-seq coverage drops below 30x, and ARIA roving-tabindex navigation across 50+ patient queues.
+              </p>
+
+              <!-- Metrics Grid -->
+              <div class="grid grid-cols-2 gap-4 pt-2 font-mono">
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">-42%</div>
+                  <div class="text-xs text-cream-muted">Diagnostic Workflow Latency</div>
+                </div>
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">0 False Negatives</div>
+                  <div class="text-xs text-cream-muted">In 120-Patient Synthetic Trial</div>
+                </div>
+              </div>
+
+              <!-- Action Links -->
+              <div class="pt-2 flex flex-wrap gap-3">
+                <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cream text-obsidian font-semibold text-xs font-mono hover:bg-maroon hover:text-cream transition-all" href="https://github.com/healers-second-look/Athena" rel="noopener noreferrer" target="_blank">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path></svg>
+                  <span>github.com/healers-second-look/Athena ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Dual-Mode: Real Working UI & Mutation Triage Simulator -->
+            <div class="w-full lg:w-[480px] rounded-xl bg-[#050506] border border-obsidian-border p-4 font-mono text-xs">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-obsidian-border text-[11px]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-maroon"></span>
+                  <span class="text-cream font-semibold">Athena Interactive Laboratory</span>
+                </div>
+                <!-- Mode Switcher -->
+                <div class="flex gap-1">
+                  <button id="athena-btn-screens" onclick="switchAthenaMode('screens')" class="px-2 py-0.5 rounded bg-maroon text-cream font-semibold text-[10px] transition-all">Screens</button>
+                  <button id="athena-btn-sim" onclick="switchAthenaMode('sim')" class="px-2 py-0.5 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border text-[10px] transition-all">AutoDock Sim</button>
+                </div>
+              </div>
+
+              <!-- VIEW 1: Real System Screens -->
+              <div id="athena-view-screens" class="space-y-3">
+                <div class="flex gap-1 overflow-x-auto pb-1 text-[11px]">
+                  <button id="athena-tab-tumor" onclick="switchAthenaView('tumor')" class="px-2.5 py-1 rounded bg-maroon text-cream font-medium transition-all">Tumor Board</button>
+                  <button id="athena-tab-graph" onclick="switchAthenaView('graph')" class="px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border transition-all">FalkorDB Graph</button>
+                  <button id="athena-tab-dock" onclick="switchAthenaView('dock')" class="px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border transition-all">AutoDock ΔG</button>
+                  <button id="athena-tab-cockpit" onclick="switchAthenaView('cockpit')" class="px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border transition-all">Cockpit</button>
+                </div>
+                <div class="relative w-full aspect-[16/10] rounded-lg overflow-hidden bg-obsidian-surface border border-obsidian-border flex items-center justify-center">
+                  <img id="athena-img" src="assets/fig6_tumor_board.png" alt="Athena Tumor Board UI" class="w-full h-full object-contain transition-opacity duration-200"/>
+                </div>
+                <div class="text-[11px] text-cream-muted leading-relaxed" id="athena-caption">
+                  [TUMOR BOARD UI] Multi-disciplinary consensus cockpit scoring secondary clinical variants against 14 PubMed citations with degraded-state safety thresholds.
+                </div>
+              </div>
+
+              <!-- VIEW 2: Interactive Mutation & AutoDock Triage Rig -->
+              <div id="athena-view-sim" class="hidden space-y-3">
+                <div class="text-[11px] text-cream-muted mb-1">Select Clinical Mutation:</div>
+                <div class="grid grid-cols-3 gap-1.5 text-[11px]">
+                  <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-maroon text-cream text-left" onclick="simulateOncologyVariant('BRAF_V600E', -9.4, 'Melanoma / Colorectal', '99.2% Conf', 'Dabrafenib + Trametinib')">
+                    <strong class="text-cream block">BRAF V600E</strong>
+                    <span class="text-[10px] text-cream-muted">Kinase domain</span>
+                  </button>
+                  <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="simulateOncologyVariant('EGFR_T790M', -8.8, 'NSCLC Lung', '96.7% Conf', 'Osimertinib 3rd Gen')">
+                    <strong class="text-cream block">EGFR T790M</strong>
+                    <span class="text-[10px] text-cream-muted">Gatekeeper TKI</span>
+                  </button>
+                  <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="simulateOncologyVariant('TP53_R175H', -10.2, 'Serous Ovarian', '98.5% Conf', 'APR-246 Eprenet')">
+                    <strong class="text-cream block">TP53 R175H</strong>
+                    <span class="text-[10px] text-cream-muted">Core destabilized</span>
+                  </button>
+                </div>
+                <div class="grid grid-cols-3 gap-2 text-center pt-1">
+                  <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                    <div class="text-[10px] text-cream-muted">AUTODOCK ΔG</div>
+                    <div class="text-base font-bold text-cream" id="var-affinity">-9.4 kcal/mol</div>
+                  </div>
+                  <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                    <div class="text-[10px] text-cream-muted">CONFIDENCE</div>
+                    <div class="text-base font-bold text-cream" id="var-conf">99.2% Conf</div>
+                  </div>
+                  <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                    <div class="text-[10px] text-cream-muted">PATHOLOGY</div>
+                    <div class="text-[11px] font-semibold text-cream truncate mt-1" id="var-pathology">Melanoma / Colorectal</div>
+                  </div>
+                </div>
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border text-[11px]">
+                  <span class="text-cream-muted">Recommended Regimen:</span> <strong class="text-cream" id="var-drug">Dabrafenib + Trametinib (FDA Approved)</strong>
+                </div>
+                <div class="p-2 rounded bg-obsidian-surface/60 border border-obsidian-border text-[10px] text-cream-muted">
+                  <strong class="text-cream">Degraded-State Warning:</strong> Forces amber banner requiring manual physician sign-off if RNA-seq coverage drops &lt;30x.
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 2: SysCV (Linux Syscall Visualizer with Stepping Engine) -->
+        <article class="rounded-2xl bg-obsidian-card border border-obsidian-border p-6 sm:p-8 transition-all hover:border-maroon">
+          <div class="flex flex-col lg:flex-row gap-8 items-start">
+            <div class="flex-1 space-y-4">
+              <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-maroon-dim text-cream font-semibold border border-maroon">Systems &amp; Kernel</span>
+                <span class="text-cream-muted">Go · Linux ptrace · eBPF · React Flow · Docker</span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-bold text-cream tracking-tight">
+                SysCV — Interactive Linux Kernel Visualizer &amp; Syscall Stepper
+              </h3>
+              <p class="text-sm sm:text-base text-cream-body leading-relaxed">
+                Terminal outputs like <code class="text-cream font-semibold">strace</code> and <code class="text-cream font-semibold">ltrace</code> inundate developers in flat textual streams. SysCV intercepts Linux kernel syscalls via Go and ptrace in sandboxed Docker containers, transforming raw register states into an interactive stepping graph with memory bus tracking and thread concurrency analysis.
+              </p>
+              <div class="grid grid-cols-2 gap-4 pt-2 font-mono">
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">10x</div>
+                  <div class="text-xs text-cream-muted">Faster Root-Cause Tracing</div>
+                </div>
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">60 FPS</div>
+                  <div class="text-xs text-cream-muted">Smooth React Flow Canvas</div>
+                </div>
+              </div>
+              <div class="pt-2 flex flex-wrap gap-3">
+                <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cream text-obsidian font-semibold text-xs font-mono hover:bg-maroon hover:text-cream transition-all" href="https://github.com/KrishG7/SysCV" rel="noopener noreferrer" target="_blank">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path></svg>
+                  <span>github.com/KrishG7/SysCV ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Interactive Syscall Stepping Rig -->
+            <div class="w-full lg:w-[480px] rounded-xl bg-[#050506] border border-obsidian-border p-4 font-mono text-xs">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-obsidian-border text-[11px]">
+                <span class="text-cream font-semibold flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-maroon"></span>
+                  <span>SysCV ptrace Stepping Debugger</span>
+                </span>
+                <span class="text-cream" id="syscall-step-label">STEP 1 OF 6</span>
+              </div>
+
+              <!-- Controls -->
+              <div class="flex gap-2 mb-3">
+                <button onclick="stepSyscall(1)" class="flex-1 py-1.5 px-3 rounded bg-maroon text-cream font-semibold hover:bg-maroon-rich transition-colors text-[11px] flex items-center justify-center gap-1.5">
+                  <span>▶ Step Next Syscall</span>
+                </button>
+                <button onclick="resetSyscallTrace()" class="py-1.5 px-3 rounded bg-obsidian-surface border border-obsidian-border text-cream-muted hover:text-cream transition-colors text-[11px]">
+                  ⏮ Reset
+                </button>
+              </div>
+
+              <!-- Active Syscall Callout -->
+              <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border mb-3">
+                <div class="text-[10px] text-cream-muted uppercase">Active Syscall:</div>
+                <div class="text-sm font-bold text-cream mt-0.5" id="active-syscall-name">epoll_create1(EPOLL_CLOEXEC) = 3</div>
+                <div class="text-[11px] text-cream-muted mt-1" id="active-syscall-desc">Kernel allocates eventpoll file descriptor #3 with close-on-exec flag set.</div>
+              </div>
+
+              <!-- Live Register Dumps -->
+              <div class="grid grid-cols-2 gap-2 text-[10px] bg-obsidian-card p-2.5 rounded-lg border border-obsidian-border mb-2">
+                <div><span class="text-cream-muted">RAX:</span> <span class="text-cream font-bold" id="reg-rax">0x00000003</span></div>
+                <div><span class="text-cream-muted">RDI:</span> <span class="text-cream" id="reg-rdi">0x00080000</span></div>
+                <div><span class="text-cream-muted">RSI:</span> <span class="text-cream" id="reg-rsi">0x00000000</span></div>
+                <div><span class="text-cream-muted">RDX:</span> <span class="text-cream" id="reg-rdx">0x00000000</span></div>
+              </div>
+              <div class="text-[10px] text-cream-muted flex justify-between">
+                <span>PID: 19844 [tracer: go-ptrace]</span>
+                <span id="syscall-timeline-pos">T+0.12ms</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 3: Brahm-Kosh (13-Lang AST Topography) -->
+        <article class="rounded-2xl bg-obsidian-card border border-obsidian-border p-6 sm:p-8 transition-all hover:border-maroon">
+          <div class="flex flex-col lg:flex-row gap-8 items-start">
+            <div class="flex-1 space-y-4">
+              <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-maroon-dim text-cream font-semibold border border-maroon">Spatial Code Topography</span>
+                <span class="text-cream-muted">Three.js · WebGL Shader · Python AST · Tree-sitter</span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-bold text-cream tracking-tight">
+                Brahm-Kosh — 3D Codebase Spatial Topography &amp; Dependency Graph
+              </h3>
+              <p class="text-sm sm:text-base text-cream-body leading-relaxed">
+                Offline-first codebase intelligence engine parsing 13 programming languages into an interactive 3D WebGL dependency topology. Visualizes architectural entropy, cyclomatic hotspots, and circular cross-package references before code is merged into production.
+              </p>
+              <div class="grid grid-cols-2 gap-4 pt-2 font-mono">
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">13 Languages</div>
+                  <div class="text-xs text-cream-muted">AST Static Parser Engine</div>
+                </div>
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">100%</div>
+                  <div class="text-xs text-cream-muted">Offline Local-Only Privacy</div>
+                </div>
+              </div>
+              <div class="pt-2 flex flex-wrap gap-3">
+                <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cream text-obsidian font-semibold text-xs font-mono hover:bg-maroon hover:text-cream transition-all" href="https://github.com/KrishG7/Brahm-Kosh" rel="noopener noreferrer" target="_blank">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path></svg>
+                  <span>github.com/KrishG7/Brahm-Kosh ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Dual-Mode: 3D Topography Canvas & AST Complexity Inspector -->
+            <div class="w-full lg:w-[480px] rounded-xl bg-[#050506] border border-obsidian-border p-4 font-mono text-xs">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-obsidian-border text-[11px]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-maroon"></span>
+                  <span class="text-cream font-semibold">Brahm-Kosh Spatial Lab</span>
+                </div>
+                <!-- Mode Switcher -->
+                <div class="flex gap-1">
+                  <button id="brahm-btn-canvas" onclick="switchBrahmMode('canvas')" class="px-2 py-0.5 rounded bg-maroon text-cream font-semibold text-[10px] transition-all">3D Topography</button>
+                  <button id="brahm-btn-ast" onclick="switchBrahmMode('ast')" class="px-2 py-0.5 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border text-[10px] transition-all">AST Inspector</button>
+                </div>
+              </div>
+
+              <!-- VIEW 1: 3D Topography Interactive Canvas -->
+              <div id="brahm-view-canvas" class="space-y-3">
+                <div class="relative w-full h-[180px] rounded-lg overflow-hidden bg-obsidian-surface border border-obsidian-border">
+                  <canvas class="w-full h-full cursor-crosshair" height="180" id="topo-canvas" onclick="scrambleGraph()" width="480"></canvas>
+                  <div class="absolute bottom-2 left-2 text-[9px] font-mono text-cream-muted bg-obsidian-surface/80 px-2 py-0.5 rounded border border-obsidian-border">
+                    Click canvas to randomize force springs · Nodes: 3,412
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 text-[11px]">
+                  <div>
+                    <div class="flex justify-between text-cream-muted mb-1">
+                      <span>Node Density</span>
+                      <span class="text-cream font-bold" id="density-val">120 nodes</span>
+                    </div>
+                    <input class="w-full h-1.5 bg-obsidian-subtle rounded-lg appearance-none cursor-pointer" id="density-slider" max="300" min="30" oninput="updateGraphNodes()" type="range" value="120"/>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-cream-muted mb-1">
+                      <span>Force Repulsion</span>
+                      <span class="text-cream font-bold" id="repulsion-val">-450 N</span>
+                    </div>
+                    <input class="w-full h-1.5 bg-obsidian-subtle rounded-lg appearance-none cursor-pointer" id="repulsion-slider" max="800" min="100" oninput="updateGraphPhysics()" type="range" value="450"/>
+                  </div>
+                </div>
+              </div>
+
+              <!-- VIEW 2: AST Complexity Inspector -->
+              <div id="brahm-view-ast" class="hidden space-y-3">
+                <div class="flex gap-1 mb-2">
+                  <button id="ast-tab-go" onclick="switchAstView('go')" class="px-2.5 py-1 rounded bg-maroon text-cream font-medium text-[11px]">Go</button>
+                  <button id="ast-tab-rust" onclick="switchAstView('rust')" class="px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border text-[11px]">Rust</button>
+                  <button id="ast-tab-python" onclick="switchAstView('python')" class="px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border text-[11px]">Python</button>
+                  <button id="ast-tab-cpp" onclick="switchAstView('cpp')" class="px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border text-[11px]">C++</button>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-center">
+                  <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                    <div class="text-[10px] text-cream-muted">CYCLOMATIC MAX</div>
+                    <div class="text-lg font-bold text-cream" id="ast-cyclomatic">14</div>
+                    <div class="text-[9px] text-cream-muted" id="ast-file">auth_service.go</div>
+                  </div>
+                  <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                    <div class="text-[10px] text-cream-muted">CIRCULAR CYCLES</div>
+                    <div class="text-lg font-bold text-maroon" id="ast-cycles">2 Cycles</div>
+                    <div class="text-[9px] text-cream-muted" id="ast-blast">Blast Radius: 4 Hops</div>
+                  </div>
+                </div>
+                <div class="p-2.5 rounded bg-obsidian-surface border border-obsidian-border text-[11px] text-cream-muted" id="ast-analysis">
+                  [PARSED] 148 function declarations across 12 packages. Detected circular import loop between auth_service.go and session_token.go.
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 4: Wait Zero (Offline-First OPD) -->
+        <article class="rounded-2xl bg-obsidian-card border border-obsidian-border p-6 sm:p-8 transition-all hover:border-maroon">
+          <div class="flex flex-col lg:flex-row gap-8 items-start">
+            <div class="flex-1 space-y-4">
+              <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-maroon-dim text-cream font-semibold border border-maroon">Offline Telemetry &amp; Healthcare</span>
+                <span class="text-cream-muted">Flutter · SQLite Sync · Node.js · GPS Geofencing</span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-bold text-cream tracking-tight">
+                Wait Zero — Offline-First Clinic OPD Queue Telemetry
+              </h3>
+              <p class="text-sm sm:text-base text-cream-body leading-relaxed">
+                Service design and patient telemetry for congested public hospitals in Delhi. Designed live token progression with emergency priority interrupts, GPS geofenced check-ins, and offline SQLite-to-cloud sync resilience under spotty 2G network drops.
+              </p>
+              <div class="grid grid-cols-2 gap-4 pt-2 font-mono">
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">68%</div>
+                  <div class="text-xs text-cream-muted">Drop in OPD Lobby Crowding</div>
+                </div>
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">100%</div>
+                  <div class="text-xs text-cream-muted">Zero Data Loss on 2G Drop</div>
+                </div>
+              </div>
+              <div class="pt-2 flex flex-wrap gap-3">
+                <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cream text-obsidian font-semibold text-xs font-mono hover:bg-maroon hover:text-cream transition-all" href="https://github.com/KrishG7/smart-clinic-booking" rel="noopener noreferrer" target="_blank">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path></svg>
+                  <span>github.com/KrishG7/smart-clinic-booking ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Interactive Token Queue & 2G Network Inflow Rig -->
+            <div class="w-full lg:w-[480px] rounded-xl bg-[#050506] border border-obsidian-border p-4 font-mono text-xs">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-obsidian-border text-[11px]">
+                <span class="text-cream font-semibold flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-maroon"></span>
+                  <span>AIIMS OPD Inflow &amp; Network Telemetry</span>
+                </span>
+                <span class="px-2 py-0.5 rounded bg-maroon-dim border border-maroon text-cream text-[10px]" id="case-sync-status">LOCAL SYNC BUFFER [OK]</span>
+              </div>
+
+              <!-- Sliders -->
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <div class="flex justify-between text-[11px] text-cream-muted mb-1">
+                    <span>Patient Inflow</span>
+                    <span class="text-cream font-bold" id="rate-val">14 pts/min</span>
+                  </div>
+                  <input class="w-full h-1.5 bg-obsidian-subtle rounded-lg appearance-none cursor-pointer" id="inflow-slider" max="60" min="2" oninput="updateQueueSim()" type="range" value="14"/>
+                </div>
+                <div>
+                  <div class="flex justify-between text-[11px] text-cream-muted mb-1">
+                    <span>2G Latency</span>
+                    <span class="text-cream font-bold" id="latency-val">480 ms</span>
+                  </div>
+                  <input class="w-full h-1.5 bg-obsidian-subtle rounded-lg appearance-none cursor-pointer" id="latency-slider" max="2500" min="50" oninput="updateQueueSim()" type="range" value="480"/>
+                </div>
+              </div>
+
+              <!-- Metrics -->
+              <div class="grid grid-cols-3 gap-2 mb-3 text-center">
+                <div class="p-2.5 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">ACTIVE TOKEN</div>
+                  <div class="text-2xl font-bold text-cream" id="case-token-num">#42</div>
+                  <div class="text-[9px] text-cream-muted">Serving #38</div>
+                </div>
+                <div class="p-2.5 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">EST. WAIT</div>
+                  <div class="text-2xl font-bold text-cream" id="case-wait-mins">12 mins</div>
+                  <div class="text-[9px] text-cream-muted">-68% vs baseline</div>
+                </div>
+                <div class="p-2.5 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">QUEUE BUFFER</div>
+                  <div class="text-2xl font-bold text-cream" id="queue-depth">28 queued</div>
+                  <div class="text-[9px] text-cream-muted">SQLite WAL</div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex gap-2">
+                <button onclick="advanceCaseToken()" class="flex-1 py-1.5 px-2 rounded bg-maroon text-cream font-semibold text-[11px] hover:bg-maroon-rich transition-colors">
+                  + Patient Inflow
+                </button>
+                <button onclick="injectTraumaEmergency()" class="flex-1 py-1.5 px-2 rounded bg-maroon-dark/60 border border-maroon text-cream text-[11px] hover:bg-maroon transition-colors flex items-center justify-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cream animate-pulse"></span>
+                  <span>Inject Trauma</span>
+                </button>
+                <button onclick="toggleCaseOffline()" class="py-1.5 px-2.5 rounded bg-obsidian-surface border border-obsidian-border text-cream-muted hover:text-cream text-[11px]">
+                  Drop 2G
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 5: Aegis-Tensor (Safetensors Malware Scanner) -->
+        <article class="rounded-2xl bg-obsidian-card border border-obsidian-border p-6 sm:p-8 transition-all hover:border-maroon">
+          <div class="flex flex-col lg:flex-row gap-8 items-start">
+            <div class="flex-1 space-y-4">
+              <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-maroon-dim text-cream font-semibold border border-maroon">Model Security &amp; Static Analysis</span>
+                <span class="text-cream-muted">Rust · PyO3 · PyTorch · SIMD AVX2</span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-bold text-cream tracking-tight">
+                Aegis-Tensor — Trojan &amp; Malware Model Security Scanner
+              </h3>
+              <p class="text-sm sm:text-base text-cream-body leading-relaxed">
+                High-performance Rust static scanner and dynamic activation fuzzer designed to detect hidden steganography (LSB float32 mantissa tampering), arbitrary code execution opcodes in legacy pickle weights, and sleeper agent backdoors triggered by anomalous $L_\infty$ activation spikes in <code class="text-cream">.safetensors</code> models.
+              </p>
+              <div class="grid grid-cols-2 gap-4 pt-2 font-mono">
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">4.2 GB/s</div>
+                  <div class="text-xs text-cream-muted">Zero-Copy mmap Scan Throughput</div>
+                </div>
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">100%</div>
+                  <div class="text-xs text-cream-muted">Pickle RCE Opcode Interception</div>
+                </div>
+              </div>
+              <div class="pt-2 flex flex-wrap gap-3">
+                <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cream text-obsidian font-semibold text-xs font-mono hover:bg-maroon hover:text-cream transition-all" href="https://github.com/KrishG7/Aegis_Tensor" rel="noopener noreferrer" target="_blank">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path></svg>
+                  <span>github.com/KrishG7/Aegis_Tensor ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Interactive Shannon Entropy & Malware Scanner Rig -->
+            <div class="w-full lg:w-[480px] rounded-xl bg-[#050506] border border-obsidian-border p-4 font-mono text-xs">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-obsidian-border text-[11px]">
+                <span class="text-cream font-semibold flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-maroon"></span>
+                  <span>Safetensors Shannon Entropy &amp; Malware Inspector</span>
+                </span>
+                <span class="px-2 py-0.5 rounded bg-maroon-dim border border-maroon text-cream text-[10px]" id="scan-verdict">PASSED VERIFIED</span>
+              </div>
+              <div class="text-[11px] text-cream-muted mb-2">Simulate File Ingestion:</div>
+              <div class="grid grid-cols-3 gap-1.5 mb-3 text-[11px]">
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-maroon text-cream text-left" onclick="scanTensorPayload('clean')">
+                  <strong class="text-cream block">llama3-8b</strong>
+                  <span class="text-[10px] text-cream-muted">Clean FP16</span>
+                </button>
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="scanTensorPayload('stego')">
+                  <strong class="text-cream block">weights_v2</strong>
+                  <span class="text-[10px] text-cream-muted">LSB Stego</span>
+                </button>
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="scanTensorPayload('pickle')">
+                  <strong class="text-cream block">pytorch.bin</strong>
+                  <span class="text-[10px] text-cream-muted">Pickle RCE</span>
+                </button>
+              </div>
+              <div class="grid grid-cols-3 gap-2 mb-3 text-center">
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">SHANNON H(X)</div>
+                  <div class="text-base font-bold text-cream" id="scan-entropy">7.994 b/B</div>
+                  <div class="text-[9px] text-cream-muted">Gaussian curve</div>
+                </div>
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">HEADER INSPECT</div>
+                  <div class="text-base font-bold text-cream" id="scan-header">Pure JSON</div>
+                  <div class="text-[9px] text-cream-muted">No bad opcodes</div>
+                </div>
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">THROUGHPUT</div>
+                  <div class="text-base font-bold text-cream">4.2 GB/s</div>
+                  <div class="text-[9px] text-cream-muted">AVX2 zero-copy</div>
+                </div>
+              </div>
+              <div class="p-2.5 rounded bg-obsidian-surface border border-obsidian-border text-[11px] text-cream-muted leading-relaxed" id="scan-details">
+                [INFO] Safetensors header verified (1,048,576 byte offset). Zero arbitrary code execution paths found. Memory mapped zero-copy buffer safe to load.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 6: TriNetra (Agri-Intelligence Stack) -->
+        <article class="rounded-2xl bg-obsidian-card border border-obsidian-border p-6 sm:p-8 transition-all hover:border-maroon">
+          <div class="flex flex-col lg:flex-row gap-8 items-start">
+            <div class="flex-1 space-y-4">
+              <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-maroon-dim text-cream font-semibold border border-maroon">Agri-Intelligence Command</span>
+                <span class="text-cream-muted">Next.js 14 · FastAPI · Sentinel-2 · Gemini 1.5</span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-bold text-cream tracking-tight">
+                TriNetra — Vernacular Telemetry &amp; 3-Layer AI Stack
+              </h3>
+              <p class="text-sm sm:text-base text-cream-body leading-relaxed">
+                A 3-layer agricultural intelligence stack empowering Indian smallholder farmers. Fuses Sentinel-2 satellite multi-spectral NDVI/NDWI imagery for crop health indexing, Google Gemini 1.5 for local vernacular audio agronomy advice, and PyTorch price forecasting.
+              </p>
+              <div class="grid grid-cols-2 gap-4 pt-2 font-mono">
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">87% Accuracy</div>
+                  <div class="text-xs text-cream-muted">7-Day APMC Mandi Price Forecast</div>
+                </div>
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">Sentinel-2</div>
+                  <div class="text-xs text-cream-muted">GEE Multi-Spectral Health Indices</div>
+                </div>
+              </div>
+              <div class="pt-2 flex flex-wrap gap-3">
+                <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cream text-obsidian font-semibold text-xs font-mono hover:bg-maroon hover:text-cream transition-all" href="https://github.com/KrishG7/TriNetra-Farmers-Stack" rel="noopener noreferrer" target="_blank">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path></svg>
+                  <span>github.com/KrishG7/TriNetra-Farmers-Stack ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Interactive Sentinel-2 NDVI & Mandi Price Forecasting Rig -->
+            <div class="w-full lg:w-[480px] rounded-xl bg-[#050506] border border-obsidian-border p-4 font-mono text-xs">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-obsidian-border text-[11px]">
+                <span class="text-cream font-semibold flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-maroon"></span>
+                  <span>Sentinel-2 NDVI &amp; Mandi Price Telemetry</span>
+                </span>
+                <span class="text-cream-muted text-[10px]">Agmarknet Sync</span>
+              </div>
+              <div class="text-[11px] text-cream-muted mb-2">Select Monitored Crop:</div>
+              <div class="flex gap-1.5 mb-3 text-[11px]">
+                <button id="trinetra-crop-wheat" onclick="simulateCropTelemetry('wheat')" class="px-2.5 py-1 rounded bg-maroon text-cream font-medium">Wheat (Kalyan Sona)</button>
+                <button id="trinetra-crop-mustard" onclick="simulateCropTelemetry('mustard')" class="px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border">Mustard (Pusa)</button>
+                <button id="trinetra-crop-paddy" onclick="simulateCropTelemetry('paddy')" class="px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border">Paddy (Basmati)</button>
+              </div>
+              <div class="grid grid-cols-3 gap-2 mb-3 text-center">
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">SENTINEL-2 NDVI</div>
+                  <div class="text-base font-bold text-cream" id="crop-ndvi">0.74 Index</div>
+                  <div class="text-[9px] text-cream-muted" id="crop-canopy">Dense Canopy [OK]</div>
+                </div>
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">SOIL MOISTURE</div>
+                  <div class="text-base font-bold text-cream" id="crop-moisture">38% VWC</div>
+                  <div class="text-[9px] text-cream-muted">Optimal Root Zone</div>
+                </div>
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">7-DAY APMC FORECAST</div>
+                  <div class="text-base font-bold text-cream" id="crop-price">₹2,480 / Q</div>
+                  <div class="text-[9px] text-cream" id="crop-trend">+4.8% Bullish</div>
+                </div>
+              </div>
+              <div class="p-2.5 rounded bg-obsidian-surface border border-obsidian-border text-[11px] text-cream-muted leading-relaxed" id="crop-voice-advisory">
+                <span class="text-cream font-bold">🎙️ Gemini 1.5 Vernacular Advisory:</span> "फसल की स्थिति स्वस्थ है। आगामी 48 घंटों में वर्षा से पूर्व नाइट्रोजन की उचित मात्रा डालें।" (Advisory generated in Hindi/Punjabi).
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 7: Video-Tracer (Multi-Object Tracking Engine) -->
+        <article class="rounded-2xl bg-obsidian-card border border-obsidian-border p-6 sm:p-8 transition-all hover:border-maroon">
+          <div class="flex flex-col lg:flex-row gap-8 items-start">
+            <div class="flex-1 space-y-4">
+              <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-maroon-dim text-cream font-semibold border border-maroon">Computer Vision &amp; Tracking</span>
+                <span class="text-cream-muted">Python · YOLOv8 · BoT-SORT · ByteTrack · OpenCV</span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-bold text-cream tracking-tight">
+                Video-Tracer — Multi-Object Tracking Engine &amp; ROI Tripwires
+              </h3>
+              <p class="text-sm sm:text-base text-cream-body leading-relaxed">
+                Autonomous real-time camera tracking pipeline coupling fine-tuned YOLOv8 bounding boxes with BoT-SORT and ByteTrack motion estimation. Features spatial trajectory tracing, virtual polygon ROI tripwires, and timestamped telemetry dispatching.
+              </p>
+              <div class="grid grid-cols-2 gap-4 pt-2 font-mono">
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">60 FPS</div>
+                  <div class="text-xs text-cream-muted">Real-Time Continuous Inference</div>
+                </div>
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">Zero Swaps</div>
+                  <div class="text-xs text-cream-muted">Occlusion Recovery ID Consistency</div>
+                </div>
+              </div>
+              <div class="pt-2 flex flex-wrap gap-3">
+                <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cream text-obsidian font-semibold text-xs font-mono hover:bg-maroon hover:text-cream transition-all" href="https://github.com/KrishG7/Video-Tracer" rel="noopener noreferrer" target="_blank">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path></svg>
+                  <span>github.com/KrishG7/Video-Tracer ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Interactive Tracking Telemetry & Virtual ROI Tripwire Rig -->
+            <div class="w-full lg:w-[480px] rounded-xl bg-[#050506] border border-obsidian-border p-4 font-mono text-xs">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-obsidian-border text-[11px]">
+                <span class="text-cream font-semibold flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-maroon"></span>
+                  <span>Video-Tracer MOT &amp; Tripwire Telemetry</span>
+                </span>
+                <span class="px-2 py-0.5 rounded bg-maroon-dim border border-maroon text-cream text-[10px]" id="tripwire-badge">TRIPWIRE ARMED</span>
+              </div>
+              <div class="text-[11px] text-cream-muted mb-2">Simulate Active Target:</div>
+              <div class="grid grid-cols-3 gap-1.5 mb-3 text-[11px]">
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-maroon text-cream text-left" onclick="selectTrackingTarget('veh104', 'Vehicle #104', '48.2 km/h', '14.2 ms', 'Passing perimeter Zone B')">
+                  <strong class="text-cream block">Vehicle #104</strong>
+                  <span class="text-[10px] text-cream-muted">Sedan · 48 km/h</span>
+                </button>
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="selectTrackingTarget('ped105', 'Pedestrian #105', '4.1 km/h', '15.1 ms', 'Pedestrian crosswalk active')">
+                  <strong class="text-cream block">Ped #105</strong>
+                  <span class="text-[10px] text-cream-muted">Pedestrian</span>
+                </button>
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="selectTrackingTarget('fork108', 'Forklift #108', '12.6 km/h', '13.9 ms', 'Approaching restricted gate')">
+                  <strong class="text-cream block">Forklift #108</strong>
+                  <span class="text-[10px] text-cream-muted">Industrial</span>
+                </button>
+              </div>
+              <div class="grid grid-cols-3 gap-2 mb-3 text-center">
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">INFERENCE RATE</div>
+                  <div class="text-base font-bold text-cream" id="track-fps">60.2 FPS</div>
+                  <div class="text-[9px] text-cream-muted" id="track-latency">14.2 ms latency</div>
+                </div>
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">ESTIMATED SPEED</div>
+                  <div class="text-base font-bold text-cream" id="track-speed">48.2 km/h</div>
+                  <div class="text-[9px] text-cream-muted">Kalman filtered</div>
+                </div>
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">OCCLUSION SWAPS</div>
+                  <div class="text-base font-bold text-cream">0 Swaps</div>
+                  <div class="text-[9px] text-cream-muted">BoT-SORT re-ID</div>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="triggerTripwireBreach()" class="flex-1 py-2 px-3 rounded bg-maroon text-cream font-semibold text-[11px] hover:bg-maroon-rich transition-colors flex items-center justify-center gap-1.5">
+                  <span>🚨 Trigger Virtual Tripwire Breach</span>
+                </button>
+              </div>
+              <div class="mt-2 p-2 rounded bg-obsidian-surface border border-obsidian-border text-[10px] text-cream-muted" id="tripwire-log">
+                [IDLE] Optical flow steady. All tracked targets within boundary polygon.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 8: Stock Market Anomaly Detection Pipeline -->
+        <article class="rounded-2xl bg-obsidian-card border border-obsidian-border p-6 sm:p-8 transition-all hover:border-maroon">
+          <div class="flex flex-col lg:flex-row gap-8 items-start">
+            <div class="flex-1 space-y-4">
+              <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-maroon-dim text-cream font-semibold border border-maroon">Financial Time-Series</span>
+                <span class="text-cream-muted">Python · Pandas · NumPy · DBSCAN · K-Means</span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-bold text-cream tracking-tight">
+                Stock Market Anomaly Detection Pipeline
+              </h3>
+              <p class="text-sm sm:text-base text-cream-body leading-relaxed">
+                Unsupervised anomaly detection pipeline identifying market spoofing, flash volume spikes, and microstructural regime shifts on tick orderbook data. Built with strict causal rolling features to guarantee zero lookahead data leakage.
+              </p>
+              <div class="grid grid-cols-2 gap-4 pt-2 font-mono">
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">0% Leakage</div>
+                  <div class="text-xs text-cream-muted">Strict Causal Scaling Windows</div>
+                </div>
+                <div class="p-3 rounded-lg bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-2xl font-bold text-cream">DBSCAN + K-Means</div>
+                  <div class="text-xs text-cream-muted">Walk-Forward Consensus Score</div>
+                </div>
+              </div>
+              <div class="pt-2 flex flex-wrap gap-3">
+                <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cream text-obsidian font-semibold text-xs font-mono hover:bg-maroon hover:text-cream transition-all" href="https://github.com/KrishG7/stock-anomaly-detection" rel="noopener noreferrer" target="_blank">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill-rule="evenodd"></path></svg>
+                  <span>github.com/KrishG7/stock-anomaly-detection ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Interactive Orderbook Anomaly Detector Rig -->
+            <div class="w-full lg:w-[480px] rounded-xl bg-[#050506] border border-obsidian-border p-4 font-mono text-xs">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-obsidian-border text-[11px]">
+                <span class="text-cream font-semibold flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-maroon"></span>
+                  <span>Orderbook Microstructure Anomaly Detector</span>
+                </span>
+                <span class="px-2 py-0.5 rounded bg-maroon-dim border border-maroon text-cream text-[10px]" id="stock-regime-status">NORMAL FLOW</span>
+              </div>
+              <div class="text-[11px] text-cream-muted mb-2">Simulate Tick Market Regime:</div>
+              <div class="grid grid-cols-3 gap-1.5 mb-3 text-[11px]">
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-maroon text-cream text-left" onclick="simulateStockRegime('normal')">
+                  <strong class="text-cream block">Normal Flow</strong>
+                  <span class="text-[10px] text-cream-muted">Spread &lt; 2 bps</span>
+                </button>
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="simulateStockRegime('spoofing')">
+                  <strong class="text-cream block">Quote Spoofing</strong>
+                  <span class="text-[10px] text-cream-muted">OTR &gt; 45:1</span>
+                </button>
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="simulateStockRegime('volume')">
+                  <strong class="text-cream block">Volume Shock</strong>
+                  <span class="text-[10px] text-cream-muted">3.9σ Spike</span>
+                </button>
+              </div>
+              <div class="grid grid-cols-3 gap-2 mb-3 text-center">
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">ANOMALY SCORE</div>
+                  <div class="text-base font-bold text-cream" id="stock-anomaly-score">0.04 (Low)</div>
+                  <div class="text-[9px] text-cream-muted" id="stock-prob">In-distribution</div>
+                </div>
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">DBSCAN DISTANCE</div>
+                  <div class="text-base font-bold text-cream" id="stock-cluster-dist">0.18 σ</div>
+                  <div class="text-[9px] text-cream-muted">Within core cluster</div>
+                </div>
+                <div class="p-2 rounded bg-obsidian-surface border border-obsidian-border">
+                  <div class="text-[10px] text-cream-muted">CAUSAL LEAKAGE</div>
+                  <div class="text-base font-bold text-cream">0.00%</div>
+                  <div class="text-[9px] text-cream-muted">Walk-forward verified</div>
+                </div>
+              </div>
+              <div class="p-2.5 rounded bg-obsidian-surface border border-obsidian-border text-[11px] text-cream-muted leading-relaxed" id="stock-regime-details">
+                [TICK FEED] Orderbook liquidity balanced. Bid-ask spread stable at 0.02%. Order-to-trade ratio within historical boundaries.
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 5. STORY NARRATIVE: ACT IV — ACADEMIC PEDIGREE & DOSSIER -->
+    <!-- ========================================================= -->
+    <section class="story-reveal mb-28 scroll-mt-20" id="biography">
+      
+      <div class="mb-8 pb-4 border-b border-obsidian-border">
+        <div class="text-xs font-mono text-maroon tracking-wider uppercase mb-1">Act IV · Academic Pedigree &amp; Extracurricular Record</div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-cream tracking-tight font-sans">
+          Rooted in Delhi. Obsessed with Substance.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        
+        <!-- Dignified Narrative Storytelling (Authoritative & Unrepeated) -->
+        <div class="lg:col-span-8 space-y-6 text-base sm:text-lg text-cream-body leading-relaxed">
+          <p>
+            My technical grounding is forged through academic rigor and continuous execution. Enrolled in the 3rd year at the <strong class="text-cream font-medium">Faculty of Technology, University of Delhi</strong> (Batch 2024–2028, Cumulative CGPA 8.09), my studies bridge <strong class="text-cream font-medium">Machine Learning, Cybersecurity, and Blockchain</strong>.
+          </p>
+
+          <p>
+            My coursework includes foundational computing domains: <strong class="text-cream font-medium">Digital Image Processing (MATLAB)</strong>, <strong class="text-cream font-medium">Linux Operating Systems &amp; Ethical Hacking</strong>, <strong class="text-cream font-medium">Computer Networks</strong>, <strong class="text-cream font-medium">Theory of Computation (ToC)</strong>, and <strong class="text-cream font-medium">Applied Cryptography</strong>.
+          </p>
+
+          <p>
+            In April 2026, I completed the year-long credit-linked specialization in <strong class="text-cream font-medium">Data Science at Daksh Gurukul, IIT Guwahati</strong>, deepening my algorithmic mastery of high-dimensional matrix decomposition, probabilistic data structures, and kernelized learning.
+          </p>
+
+          <p>
+            Prior to university, I graduated as the <strong class="text-cream font-medium">Class of 2024 Valedictorian</strong> and was honored with <strong class="text-cream font-medium">‘The Red Coat’</strong>, the school's highest honor bestowed for exceptional scholarship, character, and integrity. Throughout school, I served as House Captain, captained both the varsity Football and Volleyball teams, won inter-school Debate and General Knowledge Quiz championships, and regularly volunteered with the Rotary Club.
+          </p>
+        </div>
+
+        <!-- Clean Academic Ledger (Elegant, Dignified, Zero Garish Red) -->
+        <div class="lg:col-span-4 space-y-4 font-mono text-xs">
+          
+          <div class="p-4 rounded-xl bg-obsidian-card border border-obsidian-border space-y-1">
+            <div class="text-cream-muted text-[11px]">2024 — 2028 (3RD YEAR)</div>
+            <div class="text-cream font-bold text-sm">Faculty of Technology, University of Delhi</div>
+            <div class="text-cream-muted text-[11px]">B.Tech in Blockchain, Cybersecurity &amp; ML</div>
+            <div class="text-cream font-medium pt-1">Cumulative CGPA: 8.09 / 10.0</div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-obsidian-card border border-obsidian-border space-y-1">
+            <div class="text-cream-muted text-[11px]">COMPLETED APRIL 2026</div>
+            <div class="text-cream font-bold text-sm">Daksh Gurukul, IIT Guwahati</div>
+            <div class="text-cream-muted text-[11px]">Credit-Linked Data Science &amp; Advanced Algorithms</div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-obsidian-card border border-obsidian-border space-y-1">
+            <div class="text-cream-muted text-[11px]">HONOR &amp; LEADERSHIP RECORD</div>
+            <div class="text-cream font-bold text-sm">Class of 2024 Valedictorian · Recipient of 'The Red Coat'</div>
+            <div class="text-cream-muted text-[11px] pt-1 leading-relaxed">
+              House Captain · Football &amp; Volleyball Varsity Captain · Debate &amp; GK Quiz Champion · Rotary Club Volunteer
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-obsidian-card border border-obsidian-border space-y-1">
+            <div class="text-cream-muted text-[11px] flex items-center justify-between">
+              <span>ALGORITHMIC MASTERY</span>
+              <a href="https://leetcode.com/u/KrishGupta0007" target="_blank" class="text-cream hover:underline">@KrishGupta0007 ↗</a>
+            </div>
+            <div class="text-cream font-bold text-sm">LeetCode · 300+ Problems Solved</div>
+            <div class="text-cream-muted text-[11px]">Top 8.4% Globally · 150+ Medium, 40+ Hard</div>
+            <div class="text-cream-muted text-[11px] pt-1 leading-relaxed">
+              Specialized in Bitmask DP, Tarjan's SCC, Dijkstra with Indexed Heaps, Segment Trees, and Monotonic Queues.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- 6. STORY NARRATIVE: EPILOGUE — CONTACT & RESUME -->
+    <!-- ========================================================= -->
+    <section class="story-reveal rounded-2xl bg-gradient-to-b from-obsidian-card to-[#050506] border border-obsidian-border p-8 sm:p-14 text-center relative overflow-hidden" id="contact">
+      <div class="absolute inset-0 dot-pattern opacity-40 pointer-events-none"></div>
+      <div class="relative z-10 max-w-2xl mx-auto space-y-6">
+        
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-maroon-dim border border-maroon text-cream text-xs font-mono">
+          <span class="w-2 h-2 rounded-full bg-maroon animate-ping"></span>
+          <span>Open for Winter Internships 2026–27 &amp; Summer 2027</span>
+        </div>
+
+        <h2 class="text-3xl sm:text-5xl font-bold text-cream tracking-tight">
+          Let’s build something <span class="italic font-serif font-normal text-maroon">unforgettable</span>.
+        </h2>
+
+        <p class="text-cream-muted text-sm sm:text-base leading-relaxed">
+          Open to discussing systems engineering, low-level tooling, AI graph architectures, or design engineering roles. Based in New Delhi, open to remote and on-site opportunities worldwide.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <a class="px-5 py-2.5 rounded-lg bg-cream text-obsidian font-semibold text-xs font-mono hover:bg-maroon hover:text-cream transition-all" href="mailto:krishgupta3879@gmail.com">
+            Open Mail Client (krishgupta3879@gmail.com)
+          </a>
+          <button class="px-4 py-2.5 rounded-lg bg-obsidian-raised border border-obsidian-border text-cream-body font-mono text-xs hover:text-cream transition-all" onclick="copyEmail(this)">
+            Copy Email Address
+          </button>
+          <a class="px-5 py-2.5 rounded-lg bg-obsidian-raised border border-maroon text-cream font-mono text-xs hover:bg-maroon hover:text-cream transition-all" download="" href="KrishGupta_AugustCV.pdf">
+            Download Resume (KrishGupta_AugustCV.pdf)
+          </a>
+        </div>
+
+        <div class="pt-6 flex items-center justify-center gap-6 text-xs font-mono text-cream-muted">
+          <a class="hover:text-cream" href="https://github.com/KrishG7" target="_blank">GitHub (@KrishG7)</a>
+          <span>·</span>
+          <a class="hover:text-cream" href="https://leetcode.com/u/KrishGupta0007" target="_blank">LeetCode (@KrishGupta0007)</a>
+          <span>·</span>
+          <a class="hover:text-cream" href="https://www.linkedin.com/in/krish-gupta007/" target="_blank">LinkedIn</a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MINIMAL FOOTER -->
+  <footer class="border-t border-obsidian-border bg-obsidian-surface py-8 text-xs font-mono text-cream-muted mb-20">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>Krish Gupta — New Delhi, India. Systems, Machine Learning &amp; Tactile Interfaces.</div>
+      <div class="flex items-center gap-4">
+        <a class="hover:text-cream" download="" href="KrishGupta_AugustCV.pdf">KrishGupta_AugustCV.pdf</a>
+        <span>·</span>
+        <a class="hover:text-cream" href="#hero">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    // =========================================================
+    // 1. FULLSCREEN HERO KINEMATIC RIPPLE CANVAS ENGINE
+    // =========================================================
+    let heroCanvas, hCtx;
+    let heroParticles = [];
+    let heroRipples = [];
+    let heroMouse = { x: -9999, y: -9999, active: false };
+
+    function initHeroCanvas() {
+      heroCanvas = document.getElementById('hero-canvas');
+      if (!heroCanvas) return;
+      hCtx = heroCanvas.getContext('2d');
+
+      function resize() {
+        heroCanvas.width = window.innerWidth;
+        heroCanvas.height = window.innerHeight;
+        buildHeroParticles();
+      }
+
+      function buildHeroParticles() {
+        heroParticles = [];
+        const w = heroCanvas.width;
+        const h = heroCanvas.height;
+
+        // Scale and center the facial matrix in the hero background
+        const faceW = Math.min(w * 0.72, Math.min(540, h * 0.68));
+        const faceH = faceW * (75 / 60);
+        const startX = (w - faceW) / 2;
+        const startY = (h - faceH) / 2;
+
+        const rawPoints = window.KRISH_FACE_POINTS || [];
+        for (let i = 0; i < rawPoints.length; i++) {
+          const pt = rawPoints[i];
+          const bx = startX + pt[0] * faceW;
+          const by = startY + pt[1] * faceH;
+          heroParticles.push({
+            baseX: bx,
+            baseY: by,
+            x: bx + (Math.random() - 0.5) * 8,
+            y: by + (Math.random() - 0.5) * 8,
+            vx: 0,
+            vy: 0,
+            radius: Math.max(0.7, pt[2] * (faceW / 360) * 1.05),
+            type: pt[3], // 1: feature, 2: midtone, 3: shadow
+            intensity: pt[4],
+            isFace: true
+          });
+        }
+
+        // Ambient particles across the wider canvas to produce full-screen water ripples
+        const ambientCount = Math.min(500, Math.round((w * h) / 3800));
+        for (let i = 0; i < ambientCount; i++) {
+          const ax = Math.random() * w;
+          const ay = Math.random() * h;
+          heroParticles.push({
+            baseX: ax,
+            baseY: ay,
+            x: ax,
+            y: ay,
+            vx: 0,
+            vy: 0,
+            radius: Math.random() * 1.2 + 0.5,
+            type: 3,
+            intensity: 0.25,
+            isFace: false
+          });
+        }
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      window.addEventListener('mousemove', (e) => {
+        if (window.scrollY > window.innerHeight) return;
+        heroMouse.x = e.clientX;
+        heroMouse.y = e.clientY;
+        heroMouse.active = true;
+
+        // Emit subtle fluid micro-ripples as cursor moves
+        if (Math.random() < 0.22) {
+          heroRipples.push({
+            x: e.clientX,
+            y: e.clientY,
+            radius: 5,
+            maxRadius: 180,
+            speed: 4.2,
+            strength: 7.5
+          });
+        }
+      });
+
+      window.addEventListener('mouseleave', () => {
+        heroMouse.active = false;
+        heroMouse.x = -9999;
+        heroMouse.y = -9999;
+      });
+
+      window.addEventListener('click', (e) => {
+        if (window.scrollY > window.innerHeight) return;
+        heroRipples.push({
+          x: e.clientX,
+          y: e.clientY,
+          radius: 8,
+          maxRadius: Math.max(window.innerWidth, window.innerHeight) * 0.85,
+          speed: 6.2,
+          strength: 16
+        });
+      });
+
+      requestAnimationFrame(renderHeroLoop);
+    }
+
+    function renderHeroLoop() {
+      if (!hCtx || !heroCanvas) return;
+
+      // PERFORMANCE OPTIMIZATION: Pause intensive particle loop when hero is off-screen
+      if (window.scrollY > window.innerHeight * 1.05) {
+        requestAnimationFrame(renderHeroLoop);
+        return;
+      }
+
+      const w = heroCanvas.width;
+      const h = heroCanvas.height;
+
+      hCtx.fillStyle = '#050506';
+      hCtx.fillRect(0, 0, w, h);
+
+      // Advance ripples
+      for (let i = heroRipples.length - 1; i >= 0; i--) {
+        const rip = heroRipples[i];
+        rip.radius += rip.speed;
+        if (rip.radius > rip.maxRadius) {
+          heroRipples.splice(i, 1);
+        }
+      }
+
+      const mouseRadius = 85;
+      for (let i = 0; i < heroParticles.length; i++) {
+        const p = heroParticles[i];
+
+        // Cursor repulsion
+        if (heroMouse.active) {
+          const dx = p.x - heroMouse.x;
+          const dy = p.y - heroMouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouseRadius && dist > 0.1) {
+            const force = (mouseRadius - dist) / mouseRadius;
+            const angle = Math.atan2(dy, dx);
+            p.vx += Math.cos(angle) * force * 4.8;
+            p.vy += Math.sin(angle) * force * 4.8;
+          }
+        }
+
+        // Ripple interaction
+        for (let j = 0; j < heroRipples.length; j++) {
+          const rip = heroRipples[j];
+          const rdx = p.x - rip.x;
+          const rdy = p.y - rip.y;
+          const rdist = Math.sqrt(rdx * rdx + rdy * rdy);
+          const diff = Math.abs(rdist - rip.radius);
+          if (diff < 26) {
+            const rforce = (1 - diff / 26) * (1 - rip.radius / rip.maxRadius) * rip.strength;
+            const rangle = Math.atan2(rdy, rdx);
+            p.vx += Math.cos(rangle) * rforce * 0.75;
+            p.vy += Math.sin(rangle) * rforce * 0.75;
+          }
+        }
+
+        // Elastic spring restitution
+        const kx = p.baseX - p.x;
+        const ky = p.baseY - p.y;
+        p.vx += kx * 0.082;
+        p.vy += ky * 0.082;
+        p.vx *= 0.81;
+        p.vy *= 0.81;
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Color selection
+        if (p.isFace) {
+          if (p.type === 1) {
+            hCtx.fillStyle = '#fcf9f2'; // Facial features
+          } else if (p.type === 2) {
+            hCtx.fillStyle = `rgba(245, 240, 228, ${0.48 + p.intensity * 0.4})`; // Contours
+          } else {
+            hCtx.fillStyle = 'rgba(139, 30, 47, 0.45)'; // Shading
+          }
+        } else {
+          hCtx.fillStyle = 'rgba(139, 30, 47, 0.28)'; // Ambient background nodes
+        }
+
+        hCtx.beginPath();
+        hCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        hCtx.fill();
+      }
+
+      requestAnimationFrame(renderHeroLoop);
+    }
+
+    // =========================================================
+    // 2. CINEMATIC SCROLL-REVEAL OBSERVER ENGINE
+    // =========================================================
+    function initScrollReveals() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      document.querySelectorAll('.story-reveal').forEach(el => observer.observe(el));
+    }
+
+    // =========================================================
+    // 3. ATHENA REAL SCREEN SWITCHER
+    // =========================================================
+    const athenaViews = {
+      tumor: {
+        src: 'assets/fig6_tumor_board.png',
+        caption: '[TUMOR BOARD UI] Multi-disciplinary consensus cockpit scoring secondary clinical variants against 14 PubMed citations with degraded-state safety thresholds.'
+      },
+      graph: {
+        src: 'assets/fig3_falkordb_graph.png',
+        caption: '[FALKORDB KNOWLEDGE GRAPH] Tier-1 Cypher subgraph linking oncological genes, clinical mutation hotspots, and actionable PubMed IDs for secondary verification.'
+      },
+      dock: {
+        src: 'assets/fig4_structural.png',
+        caption: '[AUTODOCK VINA BINDING] Tier-2 computational structural docking calculating binding free energy (ΔG = -9.4 kcal/mol) when experimental literature is exhausted.'
+      },
+      cockpit: {
+        src: 'assets/fig7_cockpit.png',
+        caption: '[CLINICAL EHR COCKPIT] Production hospital deployment interface featuring ARIA roving-tabindex accessibility and high-contrast clinical readouts.'
+      }
+    };
+
+    function switchAthenaView(viewKey) {
+      const data = athenaViews[viewKey];
+      if (!data) return;
+      const img = document.getElementById('athena-img');
+      const caption = document.getElementById('athena-caption');
+      
+      img.style.opacity = '0.3';
+      setTimeout(() => {
+        img.src = data.src;
+        caption.innerText = data.caption;
+        img.style.opacity = '1';
+      }, 150);
+
+      ['tumor', 'graph', 'dock', 'cockpit'].forEach(key => {
+        const tab = document.getElementById('athena-tab-' + key);
+        if (tab) {
+          if (key === viewKey) {
+            tab.className = 'px-2.5 py-1 rounded bg-maroon text-cream font-medium transition-all';
+          } else {
+            tab.className = 'px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border transition-all';
+          }
+        }
+      });
+    }
+
+    // =========================================================
+    // 4. SYSCV STEPPING DEBUGGER ENGINE
+    // =========================================================
+    const syscallTrace = [
+      {
+        step: 1,
+        name: 'epoll_create1(EPOLL_CLOEXEC) = 3',
+        desc: 'Kernel allocates eventpoll file descriptor #3 with close-on-exec flag set.',
+        rax: '0x00000003',
+        rdi: '0x00080000',
+        rsi: '0x00000000',
+        rdx: '0x00000000',
+        time: 'T+0.12ms'
+      },
+      {
+        step: 2,
+        name: 'socket(AF_INET, SOCK_STREAM, 0) = 4',
+        desc: 'Allocates TCP stream socket descriptor #4 for inbound listener queue.',
+        rax: '0x00000004',
+        rdi: '0x00000002',
+        rsi: '0x00000001',
+        rdx: '0x00000000',
+        time: 'T+1.45ms'
+      },
+      {
+        step: 3,
+        name: 'bind(4, {sa_family=AF_INET, sin_port=8080}, 16) = 0',
+        desc: 'Binds socket #4 to INADDR_ANY:8080. Returns 0 (SUCCESS).',
+        rax: '0x00000000',
+        rdi: '0x00000004',
+        rsi: '0x7fff892a00',
+        rdx: '0x00000010',
+        time: 'T+2.80ms'
+      },
+      {
+        step: 4,
+        name: 'mmap(NULL, 65536, PROT_READ|WRITE, MAP_ANON, -1, 0) = 0x7f9a8000',
+        desc: 'Allocates 64KB virtual memory buffer with page-aligned read/write protections.',
+        rax: '0x7f9a8000',
+        rdi: '0x00000000',
+        rsi: '0x00010000',
+        rdx: '0x00000003',
+        time: 'T+4.10ms'
+      },
+      {
+        step: 5,
+        name: 'sendfile64(out:4, in:3, offset=NULL, count=65536) = 65536',
+        desc: 'Zero-copy kernel pipeline transfers 64KB payload directly from file to socket.',
+        rax: '0x00010000',
+        rdi: '0x00000004',
+        rsi: '0x00000003',
+        rdx: '0x00010000',
+        time: 'T+5.95ms'
+      },
+      {
+        step: 6,
+        name: 'futex(0x7f9a8040, FUTEX_WAKE_PRIVATE, 1) = 1',
+        desc: 'Wakes 1 waiting thread in user-space synchronization queue without context switch.',
+        rax: '0x00000001',
+        rdi: '0x7f9a8040',
+        rsi: '0x00000081',
+        rdx: '0x00000001',
+        time: 'T+8.20ms'
+      }
+    ];
+
+    let currentSyscallIndex = 0;
+
+    function stepSyscall(delta = 1) {
+      currentSyscallIndex = (currentSyscallIndex + delta) % syscallTrace.length;
+      updateSyscallUI();
+    }
+
+    function resetSyscallTrace() {
+      currentSyscallIndex = 0;
+      updateSyscallUI();
+    }
+
+    function updateSyscallUI() {
+      const item = syscallTrace[currentSyscallIndex];
+      document.getElementById('syscall-step-label').innerText = `STEP ${item.step} OF ${syscallTrace.length}`;
+      document.getElementById('active-syscall-name').innerText = item.name;
+      document.getElementById('active-syscall-desc').innerText = item.desc;
+      document.getElementById('reg-rax').innerText = item.rax;
+      document.getElementById('reg-rdi').innerText = item.rdi;
+      document.getElementById('reg-rsi').innerText = item.rsi;
+      document.getElementById('reg-rdx').innerText = item.rdx;
+      document.getElementById('syscall-timeline-pos').innerText = item.time;
+    }
+
+    // =========================================================
+    // 5. BRAHM-KOSH AST EXPLORER
+    // =========================================================
+    const astData = {
+      go: {
+        cyclo: 14,
+        file: 'auth_service.go',
+        cycles: '2 Cycles',
+        blast: 'Blast Radius: 4 Hops',
+        analysis: '[PARSED] 148 function declarations across 12 packages. Detected circular import loop between auth_service.go and session_token.go.'
+      },
+      rust: {
+        cyclo: 8,
+        file: 'tensor_loader.rs',
+        cycles: '0 Cycles (Clean)',
+        blast: 'Blast Radius: 2 Hops',
+        analysis: '[PARSED] Zero-copy memory mapped allocator safe. Lifetime annotations prevent aliasing. Pure directed acyclic graph (DAG).'
+      },
+      python: {
+        cyclo: 19,
+        file: 'docking_pipeline.py',
+        cycles: '1 Soft Cycle',
+        blast: 'Blast Radius: 6 Hops',
+        analysis: '[PARSED] High cyclomatic variance in AutoDock Vina argument validator. Recommend decomposing into monolithic-free subroutines.'
+      },
+      cpp: {
+        cyclo: 26,
+        file: 'memory_allocator.cpp',
+        cycles: '3 Cycles',
+        blast: 'Blast Radius: 7 Hops',
+        analysis: '[PARSED] Deep inheritance chain (depth 5). Static analyzer flagged tight coupling between SlabAllocator and ThreadPool.'
+      }
+    };
+
+    function switchAstView(lang) {
+      const d = astData[lang];
+      if (!d) return;
+      document.getElementById('ast-cyclomatic').innerText = d.cyclo;
+      document.getElementById('ast-file').innerText = d.file;
+      document.getElementById('ast-cycles').innerText = d.cycles;
+      document.getElementById('ast-blast').innerText = d.blast;
+      document.getElementById('ast-analysis').innerText = d.analysis;
+
+      ['go', 'rust', 'python', 'cpp'].forEach(k => {
+        const t = document.getElementById('ast-tab-' + k);
+        if (t) {
+          if (k === lang) {
+            t.className = 'px-2.5 py-1 rounded bg-maroon text-cream font-medium text-[11px]';
+          } else {
+            t.className = 'px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border text-[11px]';
+          }
+        }
+      });
+    }
+
+    // =========================================================
+    // 6. WAIT ZERO QUEUE ACTIONS
+    // =========================================================
+    let caseToken = 42;
+    let isOffline = false;
+
+    function advanceCaseToken() {
+      caseToken++;
+      document.getElementById('case-token-num').innerText = '#' + caseToken;
+      const wait = Math.max(6, Math.round(14 + (caseToken - 42) * 1.5));
+      document.getElementById('case-wait-mins').innerText = wait + ' mins';
+    }
+
+    function toggleCaseOffline() {
+      isOffline = !isOffline;
+      const status = document.getElementById('case-sync-status');
+      if (isOffline) {
+        status.className = 'text-cream px-2 py-0.5 rounded bg-maroon text-[10px] animate-pulse';
+        status.innerText = 'OFFLINE (SQLITE WAL BUFFER)';
+      } else {
+        status.className = 'text-cream text-[11px]';
+        status.innerText = 'LOCAL SYNC BUFFER [OK]';
+      }
+    }
+
+    // =========================================================
+    // 7. PROJECT RIG CONTROLS & INTERACTIVE SIMULATORS
+    // =========================================================
+    function switchAthenaMode(mode) {
+      const screensView = document.getElementById('athena-view-screens');
+      const simView = document.getElementById('athena-view-sim');
+      const btnScreens = document.getElementById('athena-btn-screens');
+      const btnSim = document.getElementById('athena-btn-sim');
+
+      if (mode === 'screens') {
+        screensView.classList.remove('hidden');
+        simView.classList.add('hidden');
+        btnScreens.className = 'px-2 py-0.5 rounded bg-maroon text-cream font-semibold text-[10px] transition-all';
+        btnSim.className = 'px-2 py-0.5 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border text-[10px] transition-all';
+      } else {
+        screensView.classList.add('hidden');
+        simView.classList.remove('hidden');
+        btnSim.className = 'px-2 py-0.5 rounded bg-maroon text-cream font-semibold text-[10px] transition-all';
+        btnScreens.className = 'px-2 py-0.5 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border text-[10px] transition-all';
+      }
+    }
+
+    function switchBrahmMode(mode) {
+      const canvasView = document.getElementById('brahm-view-canvas');
+      const astView = document.getElementById('brahm-view-ast');
+      const btnCanvas = document.getElementById('brahm-btn-canvas');
+      const btnAst = document.getElementById('brahm-btn-ast');
+
+      if (mode === 'canvas') {
+        canvasView.classList.remove('hidden');
+        astView.classList.add('hidden');
+        btnCanvas.className = 'px-2 py-0.5 rounded bg-maroon text-cream font-semibold text-[10px] transition-all';
+        btnAst.className = 'px-2 py-0.5 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border text-[10px] transition-all';
+        setTimeout(() => initTopoCanvas(), 50);
+      } else {
+        canvasView.classList.add('hidden');
+        astView.classList.remove('hidden');
+        btnAst.className = 'px-2 py-0.5 rounded bg-maroon text-cream font-semibold text-[10px] transition-all';
+        btnCanvas.className = 'px-2 py-0.5 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border text-[10px] transition-all';
+      }
+    }
+
+    function simulateCropTelemetry(crop) {
+      const crops = {
+        wheat: {
+          ndvi: '0.74 Index',
+          canopy: 'Dense Canopy [OK]',
+          moisture: '38% VWC',
+          price: '₹2,480 / Q',
+          trend: '+4.8% Bullish',
+          voice: '<span class="text-cream font-bold">🎙️ Gemini 1.5 Vernacular Advisory:</span> "फसल की स्थिति स्वस्थ है। आगामी 48 घंटों में वर्षा से पूर्व नाइट्रोजन की उचित मात्रा डालें।" (Advisory in Hindi/Punjabi).'
+        },
+        mustard: {
+          ndvi: '0.68 Index',
+          canopy: 'Flowering Stage [OK]',
+          moisture: '32% VWC',
+          price: '₹5,640 / Q',
+          trend: '+2.1% Bullish',
+          voice: '<span class="text-cream font-bold">🎙️ Gemini 1.5 Vernacular Advisory:</span> "सरसों में एफिड्स कीट निगरानी रखें। मिट्टी की नमी अनुकूल है।" (Advisory in Hindi).'
+        },
+        paddy: {
+          ndvi: '0.81 Index',
+          canopy: 'Vegetative Tillering',
+          moisture: '54% VWC',
+          price: '₹3,890 / Q',
+          trend: '+6.3% High Demand',
+          voice: '<span class="text-cream font-bold">🎙️ Gemini 1.5 Vernacular Advisory:</span> "धान के खेत में जल स्तर 3-5 सेमी बनाए रखें। मंडी भाव अनुकूल दिशा में अग्रसर है।" (Advisory in Hindi).'
+        }
+      };
+
+      const c = crops[crop];
+      if (!c) return;
+      document.getElementById('crop-ndvi').innerText = c.ndvi;
+      document.getElementById('crop-canopy').innerText = c.canopy;
+      document.getElementById('crop-moisture').innerText = c.moisture;
+      document.getElementById('crop-price').innerText = c.price;
+      document.getElementById('crop-trend').innerText = c.trend;
+      document.getElementById('crop-voice-advisory').innerHTML = c.voice;
+
+      ['wheat', 'mustard', 'paddy'].forEach(k => {
+        const btn = document.getElementById('trinetra-crop-' + k);
+        if (btn) {
+          if (k === crop) {
+            btn.className = 'px-2.5 py-1 rounded bg-maroon text-cream font-medium';
+          } else {
+            btn.className = 'px-2.5 py-1 rounded bg-obsidian-surface text-cream-muted hover:text-cream border border-obsidian-border';
+          }
+        }
+      });
+    }
+
+    function selectTrackingTarget(id, name, speed, latency, desc) {
+      document.getElementById('track-speed').innerText = speed;
+      document.getElementById('track-latency').innerText = latency + ' latency';
+      document.getElementById('tripwire-log').innerText = `[TRACKING ${name}] Speed: ${speed}. Status: ${desc}.`;
+    }
+
+    function triggerTripwireBreach() {
+      const badge = document.getElementById('tripwire-badge');
+      const log = document.getElementById('tripwire-log');
+      if (!badge || !log) return;
+      
+      badge.className = 'px-2 py-0.5 rounded bg-maroon border border-cream text-cream text-[10px] animate-pulse';
+      badge.innerText = '🚨 BREACH DETECTED';
+      
+      log.innerHTML = `<span class="text-cream font-bold">🚨 [BREACH ALERT]</span> Target crossed virtual polygon Zone B at T+0.04s. Webhook payload dispatched to edge broker.`;
+      
+      setTimeout(() => {
+        badge.className = 'px-2 py-0.5 rounded bg-maroon-dim border border-maroon text-cream text-[10px]';
+        badge.innerText = 'TRIPWIRE ARMED';
+      }, 4000);
+    }
+
+    function simulateStockRegime(regime) {
+      const badge = document.getElementById('stock-regime-status');
+      const score = document.getElementById('stock-anomaly-score');
+      const prob = document.getElementById('stock-prob');
+      const dist = document.getElementById('stock-cluster-dist');
+      const details = document.getElementById('stock-regime-details');
+
+      if (!badge) return;
+
+      if (regime === 'normal') {
+        badge.className = 'px-2 py-0.5 rounded bg-maroon-dim border border-maroon text-cream text-[10px]';
+        badge.innerText = 'NORMAL FLOW';
+        score.innerText = '0.04 (Low)';
+        prob.innerText = 'In-distribution';
+        dist.innerText = '0.18 σ';
+        details.innerText = '[TICK FEED] Orderbook liquidity balanced. Bid-ask spread stable at 0.02%. Order-to-trade ratio within historical boundaries.';
+      } else if (regime === 'spoofing') {
+        badge.className = 'px-2 py-0.5 rounded bg-maroon border border-cream text-cream text-[10px] animate-pulse';
+        badge.innerText = '🚨 SPOOFING FLAGGED';
+        score.innerText = '0.94 (CRITICAL)';
+        prob.innerText = 'Severe Outlier';
+        dist.innerText = '2.84 σ [BREACH]';
+        details.innerHTML = '⚠️ <span class="text-cream font-bold">[ALERT]</span> Order-to-Trade ratio breached threshold (47.8:1). Rapid bid cancelations (92% within 12ms) detected on Level-2 book. Spoofing flagged.';
+      } else if (regime === 'volume') {
+        badge.className = 'px-2 py-0.5 rounded bg-maroon border border-cream text-cream text-[10px] animate-pulse';
+        badge.innerText = '⚠️ VOLUME SHOCK';
+        score.innerText = '0.87 (HIGH)';
+        prob.innerText = 'Regime Shift';
+        dist.innerText = '2.15 σ [ANOMALY]';
+        details.innerHTML = '🚨 <span class="text-cream font-bold">[ALERT]</span> Causal rolling volume spiked 3.9-sigma above exponential moving average. High slippage regime identified across nearest 5 ticks.';
+      }
+    }
+
+    // Interactive Terminal Logic
+    const termScreen = document.getElementById('terminal-screen');
+    const termInput = document.getElementById('term-input');
+
+    function appendTerminal(cmd, output) {
+      const entry = document.createElement('div');
+      entry.innerHTML = `<div><span class="text-cream-muted">krish@delhi:~$</span> <span class="text-cream">${cmd}</span></div><div class="text-cream-muted pl-3 border-l border-obsidian-subtle">${output}</div>`;
+      termScreen.appendChild(entry);
+      termScreen.scrollTop = termScreen.scrollHeight;
+    }
+
+    function runCommand(cmd) {
+      const clean = cmd.trim().toLowerCase();
+      if (clean === 'clear') {
+        termScreen.innerHTML = '<div class="text-cream-muted">Screen cleared. Type <span class="text-cream">\'help\'</span> or <span class="text-cream">\'skills\'</span> for options.</div>';
+        return;
+      }
+      if (clean === 'help') {
+        appendTerminal(cmd, `Available commands:<br>
+        - <span class="text-cream font-bold">skills</span>: Inspect complete technical competencies matrix (type e.g. 'skills pytorch')<br>
+        - <span class="text-cream font-bold">projects</span>: View all 8 systems and verified GitHub repositories<br>
+        - <span class="text-cream font-bold">leetcode</span>: View LeetCode algorithmic telemetry (300+ solved, Top 8.4%)<br>
+        - <span class="text-cream font-bold">bio</span>: View University of Delhi &amp; IIT Guwahati credentials<br>
+        - <span class="text-cream font-bold">curl cv</span>: Direct link to KrishGupta_AugustCV.pdf<br>
+        - <span class="text-cream-muted">clear</span>: Flush console buffer`);
+      } else if (clean === 'skills') {
+        appendTerminal(cmd, `Krish Gupta — Engineering Skills Matrix:<br>
+        • <span class="text-cream font-bold">Languages:</span> Python, C, Go, JavaScript, TypeScript, Oracle SQL, VHDL, MATLAB<br>
+        • <span class="text-cream font-bold">Deep Learning &amp; Vision:</span> PyTorch, CNNs (ResNet, Inception, YOLOv8/v5), Vision Transformers (ViT), GANs, Image Segmentation, OpenCV<br>
+        • <span class="text-cream font-bold">Machine Learning &amp; NLP:</span> Pandas, NumPy, scikit-learn, Word2Vec, GloVe, Time Series Forecasting, DBSCAN, AutoDock Vina, FalkorDB<br>
+        • <span class="text-cream font-bold">Systems &amp; Backend:</span> Linux Kernel (ptrace, Ethical Hacking), Go, Node.js, Express, FastAPI, Docker, WebSockets, REST APIs<br>
+        • <span class="text-cream font-bold">Databases &amp; DevOps:</span> SQLite (WAL Sync), MySQL, PostgreSQL (Supabase), Git, GitHub Actions, Docker, Vercel, Railway, AWS Elastic Beanstalk<br>
+        • <span class="text-cream font-bold">Tools &amp; Frameworks:</span> React, Vite, Tailwind CSS, Google Earth Engine, Three.js / WebGL<br><br>
+        <span class="text-maroon font-semibold">Type a particular skill (e.g. 'skills pytorch', 'skills ptrace', 'skills go') to know more...</span>`);
+      } else if (clean.startsWith('skills ') || clean.startsWith('inspect ') || (clean in skillDetailMap) || Object.keys(skillDetailMap).some(k => k.toLowerCase() === clean)) {
+        let skillQuery = clean.replace('skills ', '').replace('inspect ', '').replace('--skill ', '').replace(/"/g, '').trim();
+        const matchedKey = Object.keys(skillDetailMap).find(k => k.toLowerCase() === skillQuery.toLowerCase());
+        if (matchedKey) {
+          appendTerminal(cmd, `<span class="text-cream font-bold">[SKILL DOSSIER · ${matchedKey.toUpperCase()}]</span><br>${skillDetailMap[matchedKey]}<br><span class="text-cream-muted text-[10px]">Verified in Krish Gupta's production GitHub systems.</span>`);
+        } else {
+          appendTerminal(cmd, `Skill '${skillQuery}' not indexed. Type <span class="text-cream font-bold">'skills'</span> to view complete matrix.`);
+        }
+      } else if (clean === 'projects') {
+        appendTerminal(cmd, `8 Production Systems &amp; GitHub Repositories:<br>
+        1. Athena (AI Cancer Copilot) -> <a href="https://github.com/healers-second-look/Athena" target="_blank" class="text-cream underline">github.com/healers-second-look/Athena</a><br>
+        2. SysCV (Syscall Visualizer) -> <a href="https://github.com/KrishG7/SysCV" target="_blank" class="text-cream underline">github.com/KrishG7/SysCV</a><br>
+        3. Brahm-Kosh (3D Codebase AST) -> <a href="https://github.com/KrishG7/Brahm-Kosh" target="_blank" class="text-cream underline">github.com/KrishG7/Brahm-Kosh</a><br>
+        4. Wait Zero (Offline OPD Telemetry) -> <a href="https://github.com/KrishG7/smart-clinic-booking" target="_blank" class="text-cream underline">github.com/KrishG7/smart-clinic-booking</a><br>
+        5. Aegis-Tensor (Safetensors Malware Scanner) -> <a href="https://github.com/KrishG7/Aegis_Tensor" target="_blank" class="text-cream underline">github.com/KrishG7/Aegis_Tensor</a><br>
+        6. TriNetra (Agri-Intelligence Stack) -> <a href="https://github.com/KrishG7/TriNetra-Farmers-Stack" target="_blank" class="text-cream underline">github.com/KrishG7/TriNetra-Farmers-Stack</a><br>
+        7. Video-Tracer (Multi-Object Tracking) -> <a href="https://github.com/KrishG7/Video-Tracer" target="_blank" class="text-cream underline">github.com/KrishG7/Video-Tracer</a><br>
+        8. Stock Anomaly Detection (Equities Pipeline) -> <a href="https://github.com/KrishG7/stock-anomaly-detection" target="_blank" class="text-cream underline">github.com/KrishG7/stock-anomaly-detection</a>`);
+      } else if (clean === 'leetcode') {
+        appendTerminal(cmd, `[LeetCode Algorithmic Telemetry]<br>
+        • <span class="text-cream font-bold">300+ Problems Solved</span> across Dynamic Programming, Graphs, Trees &amp; Monotonic Stacks<br>
+        • <span class="text-cream font-bold">Percentile:</span> Top 8.4% globally (150+ Medium, 40+ Hard, 140+ Foundational)<br>
+        • <span class="text-cream font-bold">Key Masteries:</span> Bitmask DP, Tarjan's Strongly Connected Components, Dijkstra with Indexed Heaps, Fenwick Trees, Trie Indexing<br>
+        • <span class="text-cream font-bold">Profile:</span> <a href="https://leetcode.com/u/KrishGupta0007" target="_blank" class="text-cream underline">leetcode.com/u/KrishGupta0007</a>`);
+      } else if (clean === 'bio') {
+        appendTerminal(cmd, `Krish Gupta | Faculty of Technology, University of Delhi (CGPA 8.09)<br>Batch: 2024-2028 | Spec: Blockchain, Cybersecurity &amp; Machine Learning<br>Class of 2024 Valedictorian &amp; Recipient of 'The Red Coat'`);
+      } else if (clean === 'curl cv' || clean === 'cv') {
+        appendTerminal(cmd, `HTTP/1.1 200 OK<br>Document: <a href="KrishGupta_AugustCV.pdf" download class="text-cream underline">KrishGupta_AugustCV.pdf</a> (Ready for download)`);
+      } else {
+        appendTerminal(cmd, `Command not recognized: '${clean}'. Type 'help' or 'skills' for command list.`);
+      }
+    }
+
+    const skillDetailMap = {
+      'Python': 'Primary language applied in Athena (AI oncology copilot), TriNetra, Brahm-Kosh AST parsing, Video-Tracer, and stock anomaly detection.',
+      'C': 'Systems programming and low-level target binary execution for SysCV ptrace inspection; University OS and ToC coursework.',
+      'Go': 'Engineered high-throughput SysCV tracer backend with architecture-specific (x86_64/ARM64) register reading and WebSocket streaming.',
+      'JavaScript': 'Full-stack engineering across Node.js, Express, React, and browser simulation interfaces.',
+      'TypeScript': 'Type-safe development for Next.js 14 applications (TriNetra) and interactive telemetry tooling.',
+      'Oracle SQL': 'Relational schema design, normalization, complex joins, and enterprise data modeling.',
+      'VHDL': 'Hardware description language for digital system design and register-transfer level (RTL) logic.',
+      'MATLAB': 'Digital image processing, 2D Fourier transforms, spatial filtering, and matrix transformations.',
+      'PyTorch': 'Trained 7-day crop price forecasting model (87% acc in TriNetra), YOLOv8 transfer learning, and deep vision models.',
+      'YOLOv8': 'Fine-tuned vision pipeline in Video-Tracer with ByteTrack/BoT-SORT tracking and ROI tripwire dispatch.',
+      'CNNs': 'Applied ResNet, Inception, and EfficientNet architectures for medical imaging and visual feature extraction.',
+      'Vision Transformers': 'Explored self-attention mechanisms over image patches (ViT) for multi-class classification.',
+      'OpenCV': 'Real-time video frame processing, bounding box rendering, and homography projection in Video-Tracer.',
+      'GANs': 'Studied generative adversarial networks for synthetic training set expansion and data augmentation.',
+      'scikit-learn': 'Engineered DBSCAN and K-Means consensus anomaly detection for tick orderbook financial data.',
+      'Pandas': 'High-frequency tick data cleaning, rolling window volatility calculation, and causal feature engineering.',
+      'NumPy': 'Vectorized matrix operations, high-dimensional distance calculations, and fast numeric transforms.',
+      'DBSCAN': 'Density-based spatial clustering for unsupervised equity market anomaly and flash crash detection.',
+      'Time-Series': 'Forecasting models with strict data leakage discipline and walk-forward validation.',
+      'AutoDock Vina': 'Structural computational protein-ligand docking engine in Athena for assessing mutation affinity shifts.',
+      'FalkorDB': 'Graph database in Athena modeling clinical evidence relationships between cancer mutations and FDA drugs.',
+      'Linux Kernel ptrace': 'Process tracing interface in SysCV to intercept syscalls, inspect RAX/RDI registers, and step execution.',
+      'Node.js': 'Backend runtime powering Wait Zero and REST microservices.',
+      'Express': 'Lightweight HTTP REST API framework for clinic booking and queue synchronization.',
+      'FastAPI': 'Asynchronous Python microservice framework serving satellite NDVI inferences in TriNetra.',
+      'Docker': 'Sandboxed container execution environment for safe untrusted C program tracing in SysCV.',
+      'WebSockets': 'Real-time bidirectional event streaming from Go kernel tracer to React Flow client.',
+      'Ethical Hacking': 'Linux penetration testing, security audit libraries, network packet dissection, and vulnerability analysis.',
+      'SQLite WAL': 'Write-Ahead Logging architecture in Wait Zero for offline-first zero-loss queue sync during network drops.',
+      'MySQL': 'Production cloud database storing synchronized clinic appointments and patient records.',
+      'PostgreSQL': 'Supabase PostgreSQL database with row-level security and relational integrity.',
+      'Git': 'Version control, atomic commit history, branch management, and continuous CI workflows.',
+      'Google Earth Engine': 'Processed Sentinel-2 multi-spectral satellite imagery (NDVI/NDWI) for agricultural health index.',
+      'React': 'Reactive component interfaces, state machines, custom hooks, and interactive canvas components.'
+    };
+
+    function inspectSkill(name) {
+      const desc = skillDetailMap[name] || 'Production engineering skill applied across systems, ML, and tactile interfaces.';
+      appendTerminal(`inspect --skill "${name}"`, `<span class="text-cream font-bold">${name}:</span> ${desc}`);
+    }
+
+    function handleTerminalKey(e) {
+      if (e.key === 'Enter') {
+        const val = termInput.value;
+        if (val.trim()) {
+          runCommand(val);
+          termInput.value = '';
+        }
+      }
+    }
+
+    // Wait Zero Queue Simulation
+    function updateQueueSim() {
+      const inflow = document.getElementById('inflow-slider').value;
+      const latency = document.getElementById('latency-slider').value;
+      document.getElementById('rate-val').innerText = inflow + ' pts/min';
+      document.getElementById('latency-val').innerText = latency + ' ms';
+      
+      const wait = Math.max(4, Math.round(inflow * 0.9));
+      document.getElementById('case-wait-mins').innerText = wait + ' mins';
+      document.getElementById('queue-depth').innerText = Math.round(inflow * 2.2) + ' queued';
+    }
+
+    function injectTraumaEmergency() {
+      const badge = document.getElementById('case-sync-status');
+      if (!badge) return;
+      badge.className = 'px-2 py-0.5 rounded bg-maroon border border-cream text-cream text-[10px] animate-pulse';
+      badge.innerText = 'TRAUMA OVERRIDE [PRIORITY]';
+
+      const tokenEl = document.getElementById('case-token-num');
+      if (tokenEl) tokenEl.innerText = '🚨 BAY-1';
+
+      setTimeout(() => {
+        badge.className = 'px-2 py-0.5 rounded bg-maroon-dim border border-maroon text-cream text-[10px]';
+        badge.innerText = 'LOCAL SYNC BUFFER [OK]';
+        if (tokenEl) tokenEl.innerText = '#' + caseToken;
+      }, 4000);
+    }
+
+    // Athena Variant Simulation
+    function simulateOncologyVariant(name, affinity, path, conf, drug) {
+      document.getElementById('var-affinity').innerText = affinity + ' kcal/mol';
+      document.getElementById('var-pathology').innerText = path;
+      document.getElementById('var-conf').innerText = conf;
+      document.getElementById('var-drug').innerText = drug;
+    }
+
+    // Aegis-Tensor Scanner Simulator
+    function scanTensorPayload(type) {
+      const verdict = document.getElementById('scan-verdict');
+      const entropy = document.getElementById('scan-entropy');
+      const header = document.getElementById('scan-header');
+      const details = document.getElementById('scan-details');
+
+      if (type === 'clean') {
+        verdict.className = 'px-2 py-0.5 rounded bg-maroon-dim border border-maroon text-cream text-[10px]';
+        verdict.innerText = 'PASSED VERIFIED';
+        entropy.innerText = '7.994 bits/byte';
+        header.innerText = 'Pure JSON';
+        details.innerHTML = '[INFO] Safetensors header verified (1,048,576 byte offset). Zero arbitrary code execution paths found. Memory mapped zero-copy buffer safe to load.';
+      } else if (type === 'stego') {
+        verdict.className = 'px-2 py-0.5 rounded bg-maroon border border-cream text-cream text-[10px]';
+        verdict.innerText = 'SUSPICIOUS STEGANOGRAPHY';
+        entropy.innerText = '8.421 bits/byte [ANOMALOUS]';
+        header.innerText = 'High Entropy Block';
+        details.innerHTML = '⚠️ [ALERT] LSB Float32 mantissa variance exceeds 3.8-sigma threshold. Hidden high-entropy payload detected in tensor layer: model.layers.24.mlp.gate_proj.weight.';
+      } else if (type === 'pickle') {
+        verdict.className = 'px-2 py-0.5 rounded bg-maroon-dark border border-cream text-cream text-[10px]';
+        verdict.innerText = 'MALICIOUS RCE EXPLOIT';
+        entropy.innerText = '5.120 bits/byte';
+        header.innerText = 'Pickle Opcode Detected';
+        details.innerHTML = '🚨 [CRITICAL DROP] Found byte sequence `cposix\\nsystem\\n` at offset 0x004F. Payload attempts to execute unauthorized subprocess via unpickler. Injection blocked by Aegis-Tensor.';
+      }
+    }
+
+    // Brahm-Kosh Canvas Physics Simulation
+    let topoCanvas, topoCtx;
+    let topoNodes = [];
+    let topoVisible = false;
+
+    function initTopoCanvas() {
+      topoCanvas = document.getElementById('topo-canvas');
+      if (!topoCanvas) return;
+      topoCtx = topoCanvas.getContext('2d');
+      resetNodes(32);
+
+      const observer = new IntersectionObserver(([entry]) => {
+        topoVisible = entry.isIntersecting;
+        if (topoVisible) animateTopoGraph();
+      }, { threshold: 0.05 });
+      observer.observe(topoCanvas);
+
+      if (topoVisible) animateTopoGraph();
+    }
+
+    function resetNodes(count) {
+      topoNodes = [];
+      const w = topoCanvas.width;
+      const h = topoCanvas.height;
+      for (let i = 0; i < count; i++) {
+        topoNodes.push({
+          x: Math.random() * (w - 60) + 30,
+          y: Math.random() * (h - 60) + 30,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: (Math.random() - 0.5) * 0.8,
+          radius: Math.random() * 4 + 3,
+          color: i % 3 === 0 ? '#fcf9f2' : (i % 3 === 1 ? '#8b1e2f' : '#a89e90')
+        });
+      }
+    }
+
+    function animateTopoGraph() {
+      if (!topoCtx || !topoCanvas || !topoVisible) return;
+      topoCtx.fillStyle = '#050506';
+      topoCtx.fillRect(0, 0, topoCanvas.width, topoCanvas.height);
+
+      for (let i = 0; i < topoNodes.length; i++) {
+        for (let j = i + 1; j < topoNodes.length; j++) {
+          const dx = topoNodes[i].x - topoNodes[j].x;
+          const dy = topoNodes[i].y - topoNodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 85) {
+            topoCtx.strokeStyle = `rgba(139, 30, 47, ${1 - dist / 85 * 0.75})`;
+            topoCtx.lineWidth = 0.7;
+            topoCtx.beginPath();
+            topoCtx.moveTo(topoNodes[i].x, topoNodes[i].y);
+            topoCtx.lineTo(topoNodes[j].x, topoNodes[j].y);
+            topoCtx.stroke();
+          }
+        }
+      }
+
+      for (let i = 0; i < topoNodes.length; i++) {
+        const n = topoNodes[i];
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < 15 || n.x > topoCanvas.width - 15) n.vx *= -1;
+        if (n.y < 15 || n.y > topoCanvas.height - 15) n.vy *= -1;
+
+        topoCtx.fillStyle = n.color;
+        topoCtx.beginPath();
+        topoCtx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+        topoCtx.fill();
+      }
+
+      requestAnimationFrame(animateTopoGraph);
+    }
+
+    function updateGraphNodes() {
+      const val = document.getElementById('density-slider').value;
+      document.getElementById('density-val').innerText = val + ' nodes';
+      resetNodes(Math.min(60, Math.round(val / 4)));
+    }
+
+    function updateGraphPhysics() {
+      const val = document.getElementById('repulsion-slider').value;
+      document.getElementById('repulsion-val').innerText = '-' + val + ' N';
+      topoNodes.forEach(n => {
+        n.vx = (Math.random() - 0.5) * (val / 200);
+        n.vy = (Math.random() - 0.5) * (val / 200);
+      });
+    }
+
+    function scrambleGraph() {
+      resetNodes(topoNodes.length);
+    }
+
+    function copyEmail(btn) {
+      navigator.clipboard.writeText('krishgupta3879@gmail.com').then(() => {
+        const orig = btn.innerText;
+        btn.innerText = 'Copied to Clipboard!';
+        setTimeout(() => { btn.innerText = orig; }, 2000);
+      });
+    }
+
+    // Fast High-End Preloader Buffer Sequence
+    function runPreloader() {
+      const preloader = document.getElementById('kernel-preloader');
+      const loadBar = document.getElementById('load-bar');
+      const loadPct = document.getElementById('load-pct');
+      const loadStatus = document.getElementById('load-status');
+      const log1 = document.getElementById('load-log-1');
+      const log2 = document.getElementById('load-log-2');
+      const log3 = document.getElementById('load-log-3');
+
+      let pct = 0;
+      const interval = setInterval(() => {
+        pct += Math.floor(Math.random() * 20) + 16;
+        if (pct > 100) pct = 100;
+        
+        if (loadBar) loadBar.style.width = pct + '%';
+        if (loadPct) loadPct.innerText = pct + '%';
+
+        if (pct > 30 && log1) {
+          log1.innerHTML = '<span class="text-cream font-bold">[OK]</span> 2,877 Facial Mesh Nodes Cached';
+          if (loadStatus) loadStatus.innerText = 'MOUNTING PHYSICS ENGINE...';
+        }
+        if (pct > 65 && log2) {
+          log2.innerHTML = '<span class="text-cream font-bold">[OK]</span> Tactile Physics &amp; Shockwave Engine';
+          if (loadStatus) loadStatus.innerText = 'HYDRATING SYSTEM ARCHITECTURES...';
+        }
+        if (pct >= 100) {
+          if (log3) log3.innerHTML = '<span class="text-cream font-bold">[OK]</span> 8 Production Architecture Dossiers';
+          if (loadStatus) loadStatus.innerText = 'SYSTEM KERNEL MOUNTED';
+          clearInterval(interval);
+          setTimeout(() => {
+            if (preloader) {
+              preloader.classList.add('opacity-0', 'pointer-events-none');
+              setTimeout(() => { preloader.style.display = 'none'; }, 500);
+            }
+          }, 180);
+        }
+      }, 35);
+    }
+
+    // Initialize all canvas and UI components when DOM is ready
+    window.addEventListener('DOMContentLoaded', () => {
+      runPreloader();
+      initHeroCanvas();
+      initScrollReveals();
+      initTopoCanvas();
+    });
+  </script>
+</body>
+</html>
