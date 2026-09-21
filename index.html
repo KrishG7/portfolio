@@ -94,21 +94,23 @@
       transform: translateY(0);
     }
 
-    /* Terminal blinking caret */
+    /* Terminal blinking block cursor */
     #term-input {
       caret-color: #8b1e2f;
     }
-    #term-input:focus {
-      caret-color: #fcf9f2;
+    @keyframes term-block-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
     }
-    @keyframes blink-cursor {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    .terminal-cursor::after {
-      content: '█';
+    .terminal-block-cursor {
+      display: inline-block;
       color: #8b1e2f;
-      animation: blink-cursor 1s step-end infinite;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1;
+      animation: term-block-blink 0.85s infinite;
+      user-select: none;
+      pointer-events: none;
       margin-left: 2px;
     }
   </style>
@@ -142,6 +144,15 @@
 
   <!-- Run preloader IMMEDIATELY, don't wait for DOMContentLoaded -->
   <script>
+    // Ensure viewport ALWAYS starts at very top hero section on initial load or reload
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    if (window.location.hash) {
+      history.replaceState(null, null, window.location.pathname);
+    }
+
     (function() {
       var preloader = document.getElementById('kernel-preloader');
       var loadBar = document.getElementById('load-bar');
@@ -173,6 +184,7 @@
           clearInterval(interval);
           setTimeout(function() {
             if (preloader) {
+              window.scrollTo(0, 0);
               preloader.style.opacity = '0';
               preloader.style.pointerEvents = 'none';
               setTimeout(function() { preloader.style.display = 'none'; }, 500);
@@ -205,7 +217,7 @@
         <svg class="w-3.5 h-3.5 fill-[#0077b5]" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
         <span>LinkedIn</span>
       </a>
-      <a href="https://leetcode.com/u/KrishGupta0007/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-surface border border-maroon-border text-cream hover:border-maroon transition-all">
+      <a href="https://leetcode.com/u/KrishGupta0007/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-obsidian-surface border border-obsidian-border text-cream-muted hover:text-[#ffa116] hover:border-cream-muted transition-all">
         <span class="w-1.5 h-1.5 rounded-full bg-[#ffa116]"></span>
         <span>LeetCode 300+</span>
       </a>
@@ -231,7 +243,7 @@
       <a class="hidden lg:flex items-center gap-1 text-cream-muted hover:text-cream transition-colors" href="https://github.com/KrishG7" target="_blank" rel="noopener noreferrer">Git</a>
       <a class="hidden lg:flex items-center gap-1 text-cream-muted hover:text-cream transition-colors" href="https://linkedin.com/in/krish-gupta007" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       <a class="hidden md:flex items-center gap-1 text-cream-muted hover:text-[#ffa116] transition-colors" href="https://leetcode.com/u/KrishGupta0007/" target="_blank" rel="noopener noreferrer">LeetCode (300+)</a>
-      <a class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-obsidian-raised border border-maroon-border text-cream hover:bg-maroon transition-all" download="" href="KrishGupta_AugustCV.pdf">
+      <a class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-obsidian-raised border border-obsidian-border text-cream hover:bg-maroon transition-all" download="" href="KrishGupta_AugustCV.pdf">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
         <span class="hidden sm:inline">CV.pdf</span>
       </a>
@@ -278,7 +290,7 @@
         <svg class="w-4 h-4 fill-[#0077b5]" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
         <span class="font-medium">LinkedIn: krish-gupta007</span>
       </a>
-      <a href="https://leetcode.com/u/KrishGupta0007/" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-obsidian-surface/90 border border-maroon-border hover:border-maroon text-cream backdrop-blur-md transition-all flex items-center gap-2 shadow-lg">
+      <a href="https://leetcode.com/u/KrishGupta0007/" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-obsidian-surface/90 border border-obsidian-border hover:border-cream text-cream backdrop-blur-md transition-all flex items-center gap-2 shadow-lg">
         <span class="w-2 h-2 rounded-full bg-[#ffa116]"></span>
         <span class="font-medium">LeetCode: 300+ Solved</span>
       </a>
@@ -301,7 +313,7 @@
       <div class="sm:hidden pt-2 flex flex-wrap items-center justify-center gap-2 text-xs font-mono">
         <a class="px-2.5 py-1 rounded bg-obsidian-surface border border-obsidian-border text-cream" href="https://github.com/KrishG7" target="_blank">GitHub</a>
         <a class="px-2.5 py-1 rounded bg-obsidian-surface border border-obsidian-border text-cream" href="https://linkedin.com/in/krish-gupta007" target="_blank">LinkedIn</a>
-        <a class="px-2.5 py-1 rounded bg-obsidian-surface border border-maroon-border text-cream" href="https://leetcode.com/u/KrishGupta0007" target="_blank">LeetCode (300+)</a>
+        <a class="px-2.5 py-1 rounded bg-obsidian-surface border border-obsidian-border text-cream" href="https://leetcode.com/u/KrishGupta0007" target="_blank">LeetCode (300+)</a>
       </div>
 
     </div>
@@ -397,7 +409,7 @@
       </div>
 
       <!-- Full-width terminal -->
-      <div class="rounded-2xl bg-obsidian-surface border border-obsidian-border p-5 glow-maroon" id="rig-terminal">
+      <div class="rounded-2xl bg-obsidian-surface border border-obsidian-border p-5 glow-maroon" id="rig-terminal" onclick="document.getElementById('term-input').focus()">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-4 border-b border-obsidian-border text-xs font-mono gap-2">
           <div class="flex items-center gap-2">
             <div class="flex gap-1.5">
@@ -407,12 +419,12 @@
             </div>
             <span class="text-cream-muted ml-2">krish@delhi-node:~ (zsh) — v6.8.0-ptrace</span>
           </div>
-          <span class="text-cream-muted text-[11px]">Type 'skills', 'projects', 'help' or click any skill badge below</span>
+          <span class="text-cream-muted text-[11px]">Type <span class="text-cream font-bold">'help'</span> to view available commands</span>
         </div>
 
-        <!-- Terminal Output -->
-        <div class="bg-[#050506] rounded-xl p-4 font-mono text-xs text-cream-body min-h-[320px] max-h-[480px] overflow-y-auto space-y-2 border border-obsidian-border/50" id="terminal-screen">
-          <div class="text-cream-muted">Welcome to Krish Gupta's Interactive CLI. Type <span class="text-cream font-bold">'help'</span> or <span class="text-cream font-bold">'skills'</span>.</div>
+        <!-- Terminal Output Screen -->
+        <div class="bg-[#050506] rounded-xl p-4 font-mono text-xs text-cream-body min-h-[340px] max-h-[500px] overflow-y-auto space-y-2 border border-obsidian-border/50 cursor-text" id="terminal-screen" onclick="document.getElementById('term-input').focus()">
+          <div class="text-cream-muted">Welcome to Krish Gupta's Interactive CLI. Type <span class="text-cream font-bold">'help'</span> to view available commands.</div>
           <div class="text-maroon font-medium">Faculty of Technology, University of Delhi (CGPA 8.09) · IIT Guwahati Data Science</div>
           <div><span class="text-cream-muted">krish@delhi:~$</span> <span class="text-cream">cat system_overview.log</span></div>
           <div class="text-cream-muted pl-3 border-l border-obsidian-subtle space-y-1">
@@ -422,80 +434,11 @@
           </div>
         </div>
 
-        <!-- Terminal Input Box with blinking cursor -->
-        <div class="mt-4 flex flex-col sm:flex-row gap-2">
-          <div class="relative flex-1 flex items-center bg-[#050506] border border-obsidian-border rounded-lg px-3 py-2 text-xs font-mono">
-            <span class="text-maroon mr-2">krish@delhi:~$</span>
-            <input class="bg-transparent text-cream outline-none w-full caret-maroon placeholder:text-cream-muted/50" id="term-input" onkeydown="handleTerminalKey(event)" placeholder="Type help, skills, projects, leetcode, bio, clear..." type="text" spellcheck="false" autocomplete="off"/>
-          </div>
-          <div class="flex items-center gap-1.5 overflow-x-auto text-[11px] font-mono text-cream-muted">
-            <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-maroon-border text-cream hover:bg-maroon transition-colors" onclick="runCommand('skills')">skills</button>
-            <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('projects')">projects</button>
-            <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('leetcode')">leetcode</button>
-            <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('curl cv')">curl cv</button>
-            <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-maroon transition-colors" onclick="runCommand('clear')">clear</button>
-          </div>
-        </div>
-
-        <!-- Inline Skill Badges (integrated into terminal, not a separate panel) -->
-        <div class="mt-4 bg-[#050506] rounded-xl p-4 border border-obsidian-border/50 font-mono text-xs space-y-3">
-          <div class="flex items-center gap-2 text-cream-muted text-[10px]">
-            <span class="text-maroon">$</span>
-            <span>skill-index --list-all</span>
-            <span class="text-cream-muted/50 ml-auto">Click any to inspect</span>
-          </div>
-
-          <div class="space-y-2.5">
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-[10px] text-cream-muted w-20 shrink-0">LANG</span>
-              <button onclick="inspectSkill('Python')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Python</button>
-              <button onclick="inspectSkill('C')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">C</button>
-              <button onclick="inspectSkill('Go')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Go</button>
-              <button onclick="inspectSkill('JavaScript')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">JavaScript</button>
-              <button onclick="inspectSkill('TypeScript')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">TypeScript</button>
-              <button onclick="inspectSkill('Oracle SQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Oracle SQL</button>
-              <button onclick="inspectSkill('VHDL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">VHDL</button>
-              <button onclick="inspectSkill('MATLAB')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">MATLAB</button>
-            </div>
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-[10px] text-cream-muted w-20 shrink-0">DL/CV</span>
-              <button onclick="inspectSkill('PyTorch')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-maroon-border text-cream hover:border-maroon transition-colors text-[11px]">PyTorch</button>
-              <button onclick="inspectSkill('YOLOv8')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">YOLOv8/v5</button>
-              <button onclick="inspectSkill('CNNs')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">CNNs (ResNet/Inception)</button>
-              <button onclick="inspectSkill('Vision Transformers')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">ViT</button>
-              <button onclick="inspectSkill('OpenCV')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">OpenCV</button>
-              <button onclick="inspectSkill('GANs')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">GANs</button>
-            </div>
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-[10px] text-cream-muted w-20 shrink-0">ML/NLP</span>
-              <button onclick="inspectSkill('scikit-learn')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">scikit-learn</button>
-              <button onclick="inspectSkill('Pandas')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Pandas</button>
-              <button onclick="inspectSkill('NumPy')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">NumPy</button>
-              <button onclick="inspectSkill('DBSCAN')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">DBSCAN</button>
-              <button onclick="inspectSkill('Time-Series')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Time Series</button>
-              <button onclick="inspectSkill('AutoDock Vina')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">AutoDock Vina</button>
-              <button onclick="inspectSkill('FalkorDB')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">FalkorDB</button>
-            </div>
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-[10px] text-cream-muted w-20 shrink-0">SYS/BE</span>
-              <button onclick="inspectSkill('Linux Kernel ptrace')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-maroon-border text-cream hover:border-maroon transition-colors text-[11px]">Linux ptrace</button>
-              <button onclick="inspectSkill('Node.js')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Node.js</button>
-              <button onclick="inspectSkill('Express')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Express</button>
-              <button onclick="inspectSkill('FastAPI')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">FastAPI</button>
-              <button onclick="inspectSkill('Docker')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Docker</button>
-              <button onclick="inspectSkill('WebSockets')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">WebSockets</button>
-              <button onclick="inspectSkill('Ethical Hacking')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Linux Security</button>
-            </div>
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-[10px] text-cream-muted w-20 shrink-0">DB/OPS</span>
-              <button onclick="inspectSkill('SQLite WAL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">SQLite WAL</button>
-              <button onclick="inspectSkill('MySQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">MySQL</button>
-              <button onclick="inspectSkill('PostgreSQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">PostgreSQL</button>
-              <button onclick="inspectSkill('Git')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Git / Actions</button>
-              <button onclick="inspectSkill('Google Earth Engine')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Google Earth Engine</button>
-              <button onclick="inspectSkill('React')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">React / Vite</button>
-            </div>
-          </div>
+        <!-- Terminal Command Input with Persistent Blinking Block Cursor -->
+        <div class="mt-4 flex items-center bg-[#050506] border border-obsidian-border focus-within:border-maroon rounded-lg px-3.5 py-2.5 text-xs font-mono cursor-text transition-colors" onclick="document.getElementById('term-input').focus()">
+          <span class="text-maroon mr-2 select-none font-bold shrink-0">krish@delhi:~$</span>
+          <input class="bg-transparent text-cream outline-none flex-1 font-mono placeholder:text-cream-muted/40" id="term-input" onkeydown="handleTerminalKey(event)" placeholder="Type 'help' to begin..." type="text" spellcheck="false" autocomplete="off"/>
+          <span class="terminal-block-cursor" id="term-cursor">█</span>
         </div>
       </div>
 
@@ -588,15 +531,15 @@
               <div id="athena-view-sim" class="hidden space-y-3">
                 <div class="text-[11px] text-cream-muted mb-1">Select Clinical Mutation:</div>
                 <div class="grid grid-cols-3 gap-1.5 text-[11px]">
-                  <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-maroon text-cream text-left" onclick="simulateOncologyVariant('BRAF_V600E', -9.4, 'Melanoma / Colorectal', '99.2% Conf', 'Dabrafenib + Trametinib')">
+                  <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border hover:border-maroon text-cream text-left transition-colors" onclick="simulateOncologyVariant('BRAF_V600E', -9.4, 'Melanoma / Colorectal', '99.2% Conf', 'Dabrafenib + Trametinib')">
                     <strong class="text-cream block">BRAF V600E</strong>
                     <span class="text-[10px] text-cream-muted">Kinase domain</span>
                   </button>
-                  <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="simulateOncologyVariant('EGFR_T790M', -8.8, 'NSCLC Lung', '96.7% Conf', 'Osimertinib 3rd Gen')">
+                  <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border hover:border-maroon text-cream text-left transition-colors" onclick="simulateOncologyVariant('EGFR_T790M', -8.8, 'NSCLC Lung', '96.7% Conf', 'Osimertinib 3rd Gen')">
                     <strong class="text-cream block">EGFR T790M</strong>
                     <span class="text-[10px] text-cream-muted">Gatekeeper TKI</span>
                   </button>
-                  <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="simulateOncologyVariant('TP53_R175H', -10.2, 'Serous Ovarian', '98.5% Conf', 'APR-246 Eprenet')">
+                  <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border hover:border-maroon text-cream text-left transition-colors" onclick="simulateOncologyVariant('TP53_R175H', -10.2, 'Serous Ovarian', '98.5% Conf', 'APR-246 Eprenet')">
                     <strong class="text-cream block">TP53 R175H</strong>
                     <span class="text-[10px] text-cream-muted">Core destabilized</span>
                   </button>
@@ -939,15 +882,15 @@
               </div>
               <div class="text-[11px] text-cream-muted mb-2">Simulate File Ingestion:</div>
               <div class="grid grid-cols-3 gap-1.5 mb-3 text-[11px]">
-                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-maroon text-cream text-left" onclick="scanTensorPayload('clean')">
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border hover:border-maroon text-cream text-left transition-colors" onclick="scanTensorPayload('clean')">
                   <strong class="text-cream block">llama3-8b</strong>
                   <span class="text-[10px] text-cream-muted">Clean FP16</span>
                 </button>
-                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="scanTensorPayload('stego')">
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border hover:border-maroon text-cream text-left transition-colors" onclick="scanTensorPayload('stego')">
                   <strong class="text-cream block">weights_v2</strong>
                   <span class="text-[10px] text-cream-muted">LSB Stego</span>
                 </button>
-                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border text-cream-body text-left" onclick="scanTensorPayload('pickle')">
+                <button class="p-2 rounded bg-obsidian-surface hover:bg-obsidian-raised border border-obsidian-border hover:border-maroon text-cream text-left transition-colors" onclick="scanTensorPayload('pickle')">
                   <strong class="text-cream block">pytorch.bin</strong>
                   <span class="text-[10px] text-cream-muted">Pickle RCE</span>
                 </button>
@@ -1929,72 +1872,9 @@
       }
     }
 
-    // Interactive Terminal Logic
+    // Interactive Terminal Logic & Skill Dossiers
     const termScreen = document.getElementById('terminal-screen');
     const termInput = document.getElementById('term-input');
-
-    function appendTerminal(cmd, output) {
-      const entry = document.createElement('div');
-      entry.innerHTML = `<div><span class="text-cream-muted">krish@delhi:~$</span> <span class="text-cream">${cmd}</span></div><div class="text-cream-muted pl-3 border-l border-obsidian-subtle">${output}</div>`;
-      termScreen.appendChild(entry);
-      termScreen.scrollTop = termScreen.scrollHeight;
-    }
-
-    function runCommand(cmd) {
-      const clean = cmd.trim().toLowerCase();
-      if (clean === 'clear') {
-        termScreen.innerHTML = '<div class="text-cream-muted">Screen cleared. Type <span class="text-cream">\'help\'</span> or <span class="text-cream">\'skills\'</span> for options.</div>';
-        return;
-      }
-      if (clean === 'help') {
-        appendTerminal(cmd, `Available commands:<br>
-        - <span class="text-cream font-bold">skills</span>: Inspect complete technical competencies matrix (type e.g. 'skills pytorch')<br>
-        - <span class="text-cream font-bold">projects</span>: View all 8 systems and verified GitHub repositories<br>
-        - <span class="text-cream font-bold">leetcode</span>: View LeetCode algorithmic telemetry (300+ solved, Top 8.4%)<br>
-        - <span class="text-cream font-bold">bio</span>: View University of Delhi &amp; IIT Guwahati credentials<br>
-        - <span class="text-cream font-bold">curl cv</span>: Direct link to KrishGupta_AugustCV.pdf<br>
-        - <span class="text-cream-muted">clear</span>: Flush console buffer`);
-      } else if (clean === 'skills') {
-        appendTerminal(cmd, `Krish Gupta — Engineering Skills Matrix:<br>
-        • <span class="text-cream font-bold">Languages:</span> Python, C, Go, JavaScript, TypeScript, Oracle SQL, VHDL, MATLAB<br>
-        • <span class="text-cream font-bold">Deep Learning &amp; Vision:</span> PyTorch, CNNs (ResNet, Inception, YOLOv8/v5), Vision Transformers (ViT), GANs, Image Segmentation, OpenCV<br>
-        • <span class="text-cream font-bold">Machine Learning &amp; NLP:</span> Pandas, NumPy, scikit-learn, Word2Vec, GloVe, Time Series Forecasting, DBSCAN, AutoDock Vina, FalkorDB<br>
-        • <span class="text-cream font-bold">Systems &amp; Backend:</span> Linux Kernel (ptrace, Ethical Hacking), Go, Node.js, Express, FastAPI, Docker, WebSockets, REST APIs<br>
-        • <span class="text-cream font-bold">Databases &amp; DevOps:</span> SQLite (WAL Sync), MySQL, PostgreSQL (Supabase), Git, GitHub Actions, Docker, Vercel, Railway, AWS Elastic Beanstalk<br>
-        • <span class="text-cream font-bold">Tools &amp; Frameworks:</span> React, Vite, Tailwind CSS, Google Earth Engine, Three.js / WebGL<br><br>
-        <span class="text-maroon font-semibold">Type a particular skill (e.g. 'skills pytorch', 'skills ptrace', 'skills go') to know more...</span>`);
-      } else if (clean.startsWith('skills ') || clean.startsWith('inspect ') || (clean in skillDetailMap) || Object.keys(skillDetailMap).some(k => k.toLowerCase() === clean)) {
-        let skillQuery = clean.replace('skills ', '').replace('inspect ', '').replace('--skill ', '').replace(/"/g, '').trim();
-        const matchedKey = Object.keys(skillDetailMap).find(k => k.toLowerCase() === skillQuery.toLowerCase());
-        if (matchedKey) {
-          appendTerminal(cmd, `<span class="text-cream font-bold">[SKILL DOSSIER · ${matchedKey.toUpperCase()}]</span><br>${skillDetailMap[matchedKey]}<br><span class="text-cream-muted text-[10px]">Verified in Krish Gupta's production GitHub systems.</span>`);
-        } else {
-          appendTerminal(cmd, `Skill '${skillQuery}' not indexed. Type <span class="text-cream font-bold">'skills'</span> to view complete matrix.`);
-        }
-      } else if (clean === 'projects') {
-        appendTerminal(cmd, `8 Production Systems &amp; GitHub Repositories:<br>
-        1. Athena (AI Cancer Copilot) -> <a href="https://github.com/healers-second-look/Athena" target="_blank" class="text-cream underline">github.com/healers-second-look/Athena</a><br>
-        2. SysCV (Syscall Visualizer) -> <a href="https://github.com/KrishG7/SysCV" target="_blank" class="text-cream underline">github.com/KrishG7/SysCV</a><br>
-        3. Brahm-Kosh (3D Codebase AST) -> <a href="https://github.com/KrishG7/Brahm-Kosh" target="_blank" class="text-cream underline">github.com/KrishG7/Brahm-Kosh</a><br>
-        4. Wait Zero (Offline OPD Telemetry) -> <a href="https://github.com/KrishG7/smart-clinic-booking" target="_blank" class="text-cream underline">github.com/KrishG7/smart-clinic-booking</a><br>
-        5. Aegis-Tensor (Safetensors Malware Scanner) -> <a href="https://github.com/KrishG7/Aegis_Tensor" target="_blank" class="text-cream underline">github.com/KrishG7/Aegis_Tensor</a><br>
-        6. TriNetra (Agri-Intelligence Stack) -> <a href="https://github.com/KrishG7/TriNetra-Farmers-Stack" target="_blank" class="text-cream underline">github.com/KrishG7/TriNetra-Farmers-Stack</a><br>
-        7. Video-Tracer (Multi-Object Tracking) -> <a href="https://github.com/KrishG7/Video-Tracer" target="_blank" class="text-cream underline">github.com/KrishG7/Video-Tracer</a><br>
-        8. Stock Anomaly Detection (Equities Pipeline) -> <a href="https://github.com/KrishG7/stock-anomaly-detection" target="_blank" class="text-cream underline">github.com/KrishG7/stock-anomaly-detection</a>`);
-      } else if (clean === 'leetcode') {
-        appendTerminal(cmd, `[LeetCode Algorithmic Telemetry]<br>
-        • <span class="text-cream font-bold">300+ Problems Solved</span> across Dynamic Programming, Graphs, Trees &amp; Monotonic Stacks<br>
-        • <span class="text-cream font-bold">Percentile:</span> Top 8.4% globally (150+ Medium, 40+ Hard, 140+ Foundational)<br>
-        • <span class="text-cream font-bold">Key Masteries:</span> Bitmask DP, Tarjan's Strongly Connected Components, Dijkstra with Indexed Heaps, Fenwick Trees, Trie Indexing<br>
-        • <span class="text-cream font-bold">Profile:</span> <a href="https://leetcode.com/u/KrishGupta0007" target="_blank" class="text-cream underline">leetcode.com/u/KrishGupta0007</a>`);
-      } else if (clean === 'bio') {
-        appendTerminal(cmd, `Krish Gupta | Faculty of Technology, University of Delhi (CGPA 8.09)<br>Batch: 2024-2028 | Spec: Blockchain, Cybersecurity &amp; Machine Learning<br>Class of 2024 Valedictorian &amp; Recipient of 'The Red Coat'`);
-      } else if (clean === 'curl cv' || clean === 'cv') {
-        appendTerminal(cmd, `HTTP/1.1 200 OK<br>Document: <a href="KrishGupta_AugustCV.pdf" download class="text-cream underline">KrishGupta_AugustCV.pdf</a> (Ready for download)`);
-      } else {
-        appendTerminal(cmd, `Command not recognized: '${clean}'. Type 'help' or 'skills' for command list.`);
-      }
-    }
 
     const skillDetailMap = {
       'Python': 'Primary language applied in Athena (AI oncology copilot), TriNetra, Brahm-Kosh AST parsing, Video-Tracer, and stock anomaly detection.',
@@ -2033,9 +1913,166 @@
       'React': 'Reactive component interfaces, state machines, custom hooks, and interactive canvas components.'
     };
 
+    function resolveSkill(raw) {
+      if (!raw) return null;
+      let clean = raw.toLowerCase().trim()
+        .replace(/^(skills|inspect|skill)\s+/, '')
+        .replace(/^(--skill\s+)/, '')
+        .replace(/["']/g, '')
+        .trim();
+
+      if (!clean) return null;
+
+      // 1. Direct case-insensitive key match
+      for (const k in skillDetailMap) {
+        if (k.toLowerCase() === clean) return k;
+      }
+
+      // 2. Comprehensive alias dictionary
+      const aliases = {
+        'ptrace': 'Linux Kernel ptrace',
+        'linux ptrace': 'Linux Kernel ptrace',
+        'kernel': 'Linux Kernel ptrace',
+        'linux kernel': 'Linux Kernel ptrace',
+        'kernel ptrace': 'Linux Kernel ptrace',
+        'linux': 'Linux Kernel ptrace',
+        'yolo': 'YOLOv8',
+        'yolov5': 'YOLOv8',
+        'yolov8/v5': 'YOLOv8',
+        'vit': 'Vision Transformers',
+        'transformer': 'Vision Transformers',
+        'transformers': 'Vision Transformers',
+        'vision transformer': 'Vision Transformers',
+        'vision transformers': 'Vision Transformers',
+        'cnn': 'CNNs',
+        'cnns': 'CNNs',
+        'resnet': 'CNNs',
+        'inception': 'CNNs',
+        'efficientnet': 'CNNs',
+        'cv': 'OpenCV',
+        'computer vision': 'OpenCV',
+        'vision': 'OpenCV',
+        'gan': 'GANs',
+        'gans': 'GANs',
+        'sklearn': 'scikit-learn',
+        'time series': 'Time-Series',
+        'timeseries': 'Time-Series',
+        'time-series forecasting': 'Time-Series',
+        'vina': 'AutoDock Vina',
+        'autodock': 'AutoDock Vina',
+        'autodock vina': 'AutoDock Vina',
+        'docking': 'AutoDock Vina',
+        'falkor': 'FalkorDB',
+        'falkordb': 'FalkorDB',
+        'graph': 'FalkorDB',
+        'node': 'Node.js',
+        'nodejs': 'Node.js',
+        'expressjs': 'Express',
+        'fast api': 'FastAPI',
+        'websocket': 'WebSockets',
+        'sockets': 'WebSockets',
+        'security': 'Ethical Hacking',
+        'hacking': 'Ethical Hacking',
+        'ethical hacking': 'Ethical Hacking',
+        'linux security': 'Ethical Hacking',
+        'sqlite': 'SQLite WAL',
+        'wal': 'SQLite WAL',
+        'postgres': 'PostgreSQL',
+        'postgresql': 'PostgreSQL',
+        'supabase': 'PostgreSQL',
+        'sql': 'Oracle SQL',
+        'oracle': 'Oracle SQL',
+        'actions': 'Git',
+        'github': 'Git',
+        'github actions': 'Git',
+        'earth engine': 'Google Earth Engine',
+        'gee': 'Google Earth Engine',
+        'sentinel': 'Google Earth Engine',
+        'vite': 'React',
+        'js': 'JavaScript',
+        'ts': 'TypeScript'
+      };
+
+      if (aliases[clean]) return aliases[clean];
+
+      // 3. Substring match
+      for (const k in skillDetailMap) {
+        const kl = k.toLowerCase();
+        if (kl.includes(clean) || clean.includes(kl)) return k;
+      }
+
+      return null;
+    }
+
+    function appendTerminal(cmd, output) {
+      const entry = document.createElement('div');
+      entry.innerHTML = `<div><span class="text-cream-muted">krish@delhi:~$</span> <span class="text-cream">${cmd}</span></div><div class="text-cream-muted pl-3 border-l border-obsidian-subtle">${output}</div>`;
+      termScreen.appendChild(entry);
+      termScreen.scrollTop = termScreen.scrollHeight;
+    }
+
+    function runCommand(cmd) {
+      const clean = cmd.trim().toLowerCase();
+      if (!clean) return;
+
+      if (clean === 'clear') {
+        termScreen.innerHTML = '<div class="text-cream-muted">Screen cleared. Type <span class="text-cream font-bold">\'help\'</span> to view available commands.</div>';
+        return;
+      }
+      if (clean === 'help') {
+        appendTerminal(cmd, `Available commands:<br>
+        - <span class="text-cream font-bold">help</span>: Show this manual<br>
+        - <span class="text-cream font-bold">skills</span>: Technical competencies matrix<br>
+        - <span class="text-cream font-bold">skills &lt;name&gt;</span>: Inspect specific skill dossier (e.g. 'skills ptrace', 'skills pytorch', 'skills go')<br>
+        - <span class="text-cream font-bold">&lt;name&gt;</span>: Direct skill query (e.g. 'ptrace', 'docker', 'yolo', 'python')<br>
+        - <span class="text-cream font-bold">projects</span>: View all 8 systems and verified GitHub repositories<br>
+        - <span class="text-cream font-bold">leetcode</span>: View LeetCode algorithmic telemetry (300+ solved, Top 8.4%)<br>
+        - <span class="text-cream font-bold">bio</span>: View University of Delhi &amp; IIT Guwahati credentials<br>
+        - <span class="text-cream font-bold">curl cv</span>: Direct link to KrishGupta_AugustCV.pdf<br>
+        - <span class="text-cream-muted">clear</span>: Flush console buffer`);
+      } else if (clean === 'skills') {
+        appendTerminal(cmd, `Krish Gupta — Engineering Skills Matrix:<br>
+        • <span class="text-cream font-bold">Languages:</span> Python, C, Go, JavaScript, TypeScript, Oracle SQL, VHDL, MATLAB<br>
+        • <span class="text-cream font-bold">Deep Learning &amp; Vision:</span> PyTorch, CNNs (ResNet, Inception), YOLOv8/v5, Vision Transformers (ViT), GANs, OpenCV<br>
+        • <span class="text-cream font-bold">Machine Learning &amp; NLP:</span> Pandas, NumPy, scikit-learn, Time Series Forecasting, DBSCAN, AutoDock Vina, FalkorDB<br>
+        • <span class="text-cream font-bold">Systems &amp; Backend:</span> Linux Kernel (ptrace, Ethical Hacking), Go, Node.js, Express, FastAPI, Docker, WebSockets, REST APIs<br>
+        • <span class="text-cream font-bold">Databases &amp; DevOps:</span> SQLite (WAL Sync), MySQL, PostgreSQL (Supabase), Git, GitHub Actions, Docker, Vercel<br>
+        • <span class="text-cream font-bold">Tools &amp; Frameworks:</span> React, Vite, Tailwind CSS, Google Earth Engine, Three.js / WebGL<br><br>
+        <span class="text-maroon font-semibold">Type any skill name (e.g. 'skills ptrace', 'ptrace', 'pytorch', 'go', 'docker') to inspect verified dossier...</span>`);
+      } else if (clean === 'projects') {
+        appendTerminal(cmd, `8 Production Systems &amp; GitHub Repositories:<br>
+        1. Athena (AI Cancer Copilot) -> <a href="https://github.com/healers-second-look/Athena" target="_blank" class="text-cream underline">github.com/healers-second-look/Athena</a><br>
+        2. SysCV (Syscall Visualizer) -> <a href="https://github.com/KrishG7/SysCV" target="_blank" class="text-cream underline">github.com/KrishG7/SysCV</a><br>
+        3. Brahm-Kosh (3D Codebase AST) -> <a href="https://github.com/KrishG7/Brahm-Kosh" target="_blank" class="text-cream underline">github.com/KrishG7/Brahm-Kosh</a><br>
+        4. Wait Zero (Offline OPD Telemetry) -> <a href="https://github.com/KrishG7/smart-clinic-booking" target="_blank" class="text-cream underline">github.com/KrishG7/smart-clinic-booking</a><br>
+        5. Aegis-Tensor (Safetensors Malware Scanner) -> <a href="https://github.com/KrishG7/Aegis_Tensor" target="_blank" class="text-cream underline">github.com/KrishG7/Aegis_Tensor</a><br>
+        6. TriNetra (Agri-Intelligence Stack) -> <a href="https://github.com/KrishG7/TriNetra-Farmers-Stack" target="_blank" class="text-cream underline">github.com/KrishG7/TriNetra-Farmers-Stack</a><br>
+        7. Video-Tracer (Multi-Object Tracking) -> <a href="https://github.com/KrishG7/Video-Tracer" target="_blank" class="text-cream underline">github.com/KrishG7/Video-Tracer</a><br>
+        8. Stock Anomaly Detection (Equities Pipeline) -> <a href="https://github.com/KrishG7/stock-anomaly-detection" target="_blank" class="text-cream underline">github.com/KrishG7/stock-anomaly-detection</a>`);
+      } else if (clean === 'leetcode') {
+        appendTerminal(cmd, `[LeetCode Algorithmic Telemetry]<br>
+        • <span class="text-cream font-bold">300+ Problems Solved</span> across Dynamic Programming, Graphs, Trees &amp; Monotonic Stacks<br>
+        • <span class="text-cream font-bold">Percentile:</span> Top 8.4% globally (150+ Medium, 40+ Hard, 140+ Foundational)<br>
+        • <span class="text-cream font-bold">Key Masteries:</span> Bitmask DP, Tarjan's Strongly Connected Components, Dijkstra with Indexed Heaps, Fenwick Trees, Trie Indexing<br>
+        • <span class="text-cream font-bold">Profile:</span> <a href="https://leetcode.com/u/KrishGupta0007" target="_blank" class="text-cream underline">leetcode.com/u/KrishGupta0007</a>`);
+      } else if (clean === 'bio') {
+        appendTerminal(cmd, `Krish Gupta | Faculty of Technology, University of Delhi (CGPA 8.09)<br>Batch: 2024-2028 | Spec: Blockchain, Cybersecurity &amp; Machine Learning<br>Class of 2024 Valedictorian &amp; Recipient of 'The Red Coat'`);
+      } else if (clean === 'curl cv' || clean === 'cv') {
+        appendTerminal(cmd, `HTTP/1.1 200 OK<br>Document: <a href="KrishGupta_AugustCV.pdf" download class="text-cream underline">KrishGupta_AugustCV.pdf</a> (Ready for download)`);
+      } else {
+        const matched = resolveSkill(cmd);
+        if (matched && skillDetailMap[matched]) {
+          appendTerminal(cmd, `<span class="text-cream font-bold">[SKILL DOSSIER · ${matched.toUpperCase()}]</span><br>${skillDetailMap[matched]}<br><span class="text-cream-muted text-[10px]">Verified in Krish Gupta's production GitHub systems.</span>`);
+        } else {
+          appendTerminal(cmd, `Command not recognized: '${clean}'. Type <span class="text-cream font-bold">'help'</span> to view available commands.`);
+        }
+      }
+    }
+
     function inspectSkill(name) {
-      const desc = skillDetailMap[name] || 'Production engineering skill applied across systems, ML, and tactile interfaces.';
-      appendTerminal(`inspect --skill "${name}"`, `<span class="text-cream font-bold">${name}:</span> ${desc}`);
+      const resolved = resolveSkill(name) || name;
+      const desc = skillDetailMap[resolved] || 'Production engineering skill applied across systems, ML, and tactile interfaces.';
+      appendTerminal(`inspect --skill "${resolved}"`, `<span class="text-cream font-bold">${resolved}:</span> ${desc}`);
     }
 
     function handleTerminalKey(e) {
@@ -2216,9 +2253,14 @@
 
     // Initialize all canvas and UI components when DOM is ready
     window.addEventListener('DOMContentLoaded', () => {
+      window.scrollTo(0, 0);
       initHeroCanvas();
       initScrollReveals();
       initTopoCanvas();
+    });
+
+    window.addEventListener('load', () => {
+      window.scrollTo(0, 0);
     });
   </script>
 </body>
