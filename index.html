@@ -93,6 +93,24 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* Terminal blinking caret */
+    #term-input {
+      caret-color: #8b1e2f;
+    }
+    #term-input:focus {
+      caret-color: #fcf9f2;
+    }
+    @keyframes blink-cursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .terminal-cursor::after {
+      content: '█';
+      color: #8b1e2f;
+      animation: blink-cursor 1s step-end infinite;
+      margin-left: 2px;
+    }
   </style>
 </head>
 <body class="bg-[#050506] text-cream-body font-sans antialiased selection:bg-maroon selection:text-cream overflow-x-hidden">
@@ -121,6 +139,49 @@
       </div>
     </div>
   </div>
+
+  <!-- Run preloader IMMEDIATELY, don't wait for DOMContentLoaded -->
+  <script>
+    (function() {
+      var preloader = document.getElementById('kernel-preloader');
+      var loadBar = document.getElementById('load-bar');
+      var loadPct = document.getElementById('load-pct');
+      var loadStatus = document.getElementById('load-status');
+      var log1 = document.getElementById('load-log-1');
+      var log2 = document.getElementById('load-log-2');
+      var log3 = document.getElementById('load-log-3');
+
+      var pct = 0;
+      var interval = setInterval(function() {
+        pct += Math.floor(Math.random() * 12) + 8;
+        if (pct > 100) pct = 100;
+        
+        if (loadBar) loadBar.style.width = pct + '%';
+        if (loadPct) loadPct.innerText = pct + '%';
+
+        if (pct > 30 && log1) {
+          log1.innerHTML = '<span style="color:#fcf9f2;font-weight:bold">[OK]</span> 2,877 Facial Mesh Nodes Cached';
+          if (loadStatus) loadStatus.innerText = 'MOUNTING PHYSICS ENGINE...';
+        }
+        if (pct > 65 && log2) {
+          log2.innerHTML = '<span style="color:#fcf9f2;font-weight:bold">[OK]</span> Particle Physics & Ripple Engine';
+          if (loadStatus) loadStatus.innerText = 'HYDRATING SYSTEM ARCHITECTURES...';
+        }
+        if (pct >= 100) {
+          if (log3) log3.innerHTML = '<span style="color:#fcf9f2;font-weight:bold">[OK]</span> 8 Production Architecture Dossiers';
+          if (loadStatus) loadStatus.innerText = 'SYSTEM KERNEL MOUNTED';
+          clearInterval(interval);
+          setTimeout(function() {
+            if (preloader) {
+              preloader.style.opacity = '0';
+              preloader.style.pointerEvents = 'none';
+              setTimeout(function() { preloader.style.display = 'none'; }, 500);
+            }
+          }, 400);
+        }
+      }, 80);
+    })();
+  </script>
 
   <!-- Ambient Backdrop Grid -->
   <div class="fixed inset-0 grid-pattern pointer-events-none z-0 opacity-70"></div>
@@ -328,14 +389,14 @@
       <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-obsidian-border">
         <div>
           <div class="text-xs font-mono text-maroon tracking-wider uppercase mb-1">Act II · The Developer Shell</div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-cream tracking-tight">Interactive Systems CLI &amp; Skills Matrix</h2>
+          <h2 class="text-3xl sm:text-4xl font-bold text-cream tracking-tight">Interactive Systems CLI</h2>
         </div>
         <p class="text-xs font-mono text-cream-muted mt-2 sm:mt-0">
-          Direct terminal access to developer environment, kernel trace utilities &amp; competency dossier
+          Direct terminal access to developer environment &amp; competency dossier
         </p>
       </div>
 
-      <!-- krish_cli interactive terminal & skills matrix -->
+      <!-- Full-width terminal -->
       <div class="rounded-2xl bg-obsidian-surface border border-obsidian-border p-5 glow-maroon" id="rig-terminal">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-4 border-b border-obsidian-border text-xs font-mono gap-2">
           <div class="flex items-center gap-2">
@@ -346,118 +407,94 @@
             </div>
             <span class="text-cream-muted ml-2">krish@delhi-node:~ (zsh) — v6.8.0-ptrace</span>
           </div>
-          <span class="text-cream-muted text-[11px]">Type 'skills', 'projects', 'help' or click any skill badge to inspect</span>
+          <span class="text-cream-muted text-[11px]">Type 'skills', 'projects', 'help' or click any skill badge below</span>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          <!-- Left Column: Terminal CLI (7 cols) -->
-          <div class="lg:col-span-7 flex flex-col justify-between">
-            <div class="bg-[#050506] rounded-xl p-4 font-mono text-xs text-cream-body min-h-[320px] max-h-[400px] overflow-y-auto space-y-2 border border-obsidian-border/50" id="terminal-screen">
-              <div class="text-cream-muted">Welcome to Krish Gupta's Interactive CLI. Type <span class="text-cream font-bold">'help'</span> or <span class="text-cream font-bold">'skills'</span>.</div>
-              <div class="text-maroon font-medium">Faculty of Technology, University of Delhi (CGPA 8.09) · IIT Guwahati Data Science</div>
-              <div><span class="text-cream-muted">krish@delhi:~$</span> <span class="text-cream">cat system_overview.log</span></div>
-              <div class="text-cream-muted pl-3 border-l border-obsidian-subtle space-y-1">
-                <div>[+] 8 Production systems engineered across Linux Kernel tracing, Clinical AI &amp; Model Security.</div>
-                <div>[+] LeetCode: 300+ Problems Solved (150+ Medium, 40+ Hard) · Top 8.4% globally.</div>
-                <div>[+] Class of 2024 Valedictorian · Recipient of 'The Red Coat' (Highest School Honor).</div>
-              </div>
-            </div>
+        <!-- Terminal Output -->
+        <div class="bg-[#050506] rounded-xl p-4 font-mono text-xs text-cream-body min-h-[320px] max-h-[480px] overflow-y-auto space-y-2 border border-obsidian-border/50" id="terminal-screen">
+          <div class="text-cream-muted">Welcome to Krish Gupta's Interactive CLI. Type <span class="text-cream font-bold">'help'</span> or <span class="text-cream font-bold">'skills'</span>.</div>
+          <div class="text-maroon font-medium">Faculty of Technology, University of Delhi (CGPA 8.09) · IIT Guwahati Data Science</div>
+          <div><span class="text-cream-muted">krish@delhi:~$</span> <span class="text-cream">cat system_overview.log</span></div>
+          <div class="text-cream-muted pl-3 border-l border-obsidian-subtle space-y-1">
+            <div>[+] 8 Production systems engineered across Linux Kernel tracing, Clinical AI &amp; Model Security.</div>
+            <div>[+] LeetCode: 300+ Problems Solved (150+ Medium, 40+ Hard) · Top 8.4% globally.</div>
+            <div>[+] Class of 2024 Valedictorian · Recipient of 'The Red Coat' (Highest School Honor).</div>
+          </div>
+        </div>
 
-            <!-- Terminal Input Box & Quick Buttons -->
-            <div class="mt-4 flex flex-col sm:flex-row gap-2">
-              <div class="relative flex-1 flex items-center bg-[#050506] border border-obsidian-border rounded-lg px-3 py-2 text-xs font-mono">
-                <span class="text-maroon mr-2">krish@delhi:~$</span>
-                <input class="bg-transparent text-cream outline-none w-full placeholder:text-cream-muted/50" id="term-input" onkeydown="handleTerminalKey(event)" placeholder="Type help, skills, projects, leetcode, bio, clear..." type="text"/>
-              </div>
-              <div class="flex items-center gap-1.5 overflow-x-auto text-[11px] font-mono text-cream-muted">
-                <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-maroon-border text-cream hover:bg-maroon transition-colors" onclick="runCommand('skills')">skills</button>
-                <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('projects')">projects</button>
-                <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('leetcode')">leetcode</button>
-                <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('curl cv')">curl cv</button>
-                <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-maroon transition-colors" onclick="runCommand('clear')">clear</button>
-              </div>
-            </div>
+        <!-- Terminal Input Box with blinking cursor -->
+        <div class="mt-4 flex flex-col sm:flex-row gap-2">
+          <div class="relative flex-1 flex items-center bg-[#050506] border border-obsidian-border rounded-lg px-3 py-2 text-xs font-mono">
+            <span class="text-maroon mr-2">krish@delhi:~$</span>
+            <input class="bg-transparent text-cream outline-none w-full caret-maroon placeholder:text-cream-muted/50" id="term-input" onkeydown="handleTerminalKey(event)" placeholder="Type help, skills, projects, leetcode, bio, clear..." type="text" spellcheck="false" autocomplete="off"/>
+          </div>
+          <div class="flex items-center gap-1.5 overflow-x-auto text-[11px] font-mono text-cream-muted">
+            <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-maroon-border text-cream hover:bg-maroon transition-colors" onclick="runCommand('skills')">skills</button>
+            <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('projects')">projects</button>
+            <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('leetcode')">leetcode</button>
+            <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-cream transition-colors" onclick="runCommand('curl cv')">curl cv</button>
+            <button class="px-2.5 py-1.5 rounded bg-obsidian-card border border-obsidian-border hover:text-maroon transition-colors" onclick="runCommand('clear')">clear</button>
+          </div>
+        </div>
+
+        <!-- Inline Skill Badges (integrated into terminal, not a separate panel) -->
+        <div class="mt-4 bg-[#050506] rounded-xl p-4 border border-obsidian-border/50 font-mono text-xs space-y-3">
+          <div class="flex items-center gap-2 text-cream-muted text-[10px]">
+            <span class="text-maroon">$</span>
+            <span>skill-index --list-all</span>
+            <span class="text-cream-muted/50 ml-auto">Click any to inspect</span>
           </div>
 
-          <!-- Right Column: Skills Matrix (5 cols) -->
-          <div class="lg:col-span-5 bg-[#050506] p-4 rounded-xl border border-obsidian-border space-y-3 font-mono text-xs max-h-[440px] overflow-y-auto">
-            <div class="flex items-center justify-between border-b border-obsidian-border pb-2">
-              <span class="text-cream font-bold text-xs flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-maroon"></span>
-                <span>TECHNICAL SKILLS MATRIX</span>
-              </span>
-              <span class="text-[10px] text-cream-muted">Click to inspect</span>
+          <div class="space-y-2.5">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-[10px] text-cream-muted w-20 shrink-0">LANG</span>
+              <button onclick="inspectSkill('Python')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Python</button>
+              <button onclick="inspectSkill('C')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">C</button>
+              <button onclick="inspectSkill('Go')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Go</button>
+              <button onclick="inspectSkill('JavaScript')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">JavaScript</button>
+              <button onclick="inspectSkill('TypeScript')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">TypeScript</button>
+              <button onclick="inspectSkill('Oracle SQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Oracle SQL</button>
+              <button onclick="inspectSkill('VHDL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">VHDL</button>
+              <button onclick="inspectSkill('MATLAB')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">MATLAB</button>
             </div>
-
-            <!-- Languages -->
-            <div class="space-y-1.5">
-              <div class="text-[10px] text-cream-muted uppercase tracking-wider font-semibold">Languages</div>
-              <div class="flex flex-wrap gap-1.5 text-[11px]">
-                <button onclick="inspectSkill('Python')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Python</button>
-                <button onclick="inspectSkill('C')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">C</button>
-                <button onclick="inspectSkill('Go')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Go</button>
-                <button onclick="inspectSkill('JavaScript')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">JavaScript</button>
-                <button onclick="inspectSkill('TypeScript')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">TypeScript</button>
-                <button onclick="inspectSkill('Oracle SQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Oracle SQL</button>
-                <button onclick="inspectSkill('VHDL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">VHDL</button>
-                <button onclick="inspectSkill('MATLAB')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">MATLAB</button>
-              </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-[10px] text-cream-muted w-20 shrink-0">DL/CV</span>
+              <button onclick="inspectSkill('PyTorch')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-maroon-border text-cream hover:border-maroon transition-colors text-[11px]">PyTorch</button>
+              <button onclick="inspectSkill('YOLOv8')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">YOLOv8/v5</button>
+              <button onclick="inspectSkill('CNNs')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">CNNs (ResNet/Inception)</button>
+              <button onclick="inspectSkill('Vision Transformers')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">ViT</button>
+              <button onclick="inspectSkill('OpenCV')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">OpenCV</button>
+              <button onclick="inspectSkill('GANs')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">GANs</button>
             </div>
-
-            <!-- Deep Learning & Computer Vision -->
-            <div class="space-y-1.5">
-              <div class="text-[10px] text-cream-muted uppercase tracking-wider font-semibold">Deep Learning &amp; Vision</div>
-              <div class="flex flex-wrap gap-1.5 text-[11px]">
-                <button onclick="inspectSkill('PyTorch')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-maroon-border text-cream hover:border-maroon transition-colors">PyTorch</button>
-                <button onclick="inspectSkill('YOLOv8')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">YOLOv8/v5</button>
-                <button onclick="inspectSkill('CNNs')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">CNNs (ResNet/Inception)</button>
-                <button onclick="inspectSkill('Vision Transformers')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">ViT</button>
-                <button onclick="inspectSkill('OpenCV')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">OpenCV</button>
-                <button onclick="inspectSkill('GANs')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">GANs</button>
-              </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-[10px] text-cream-muted w-20 shrink-0">ML/NLP</span>
+              <button onclick="inspectSkill('scikit-learn')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">scikit-learn</button>
+              <button onclick="inspectSkill('Pandas')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Pandas</button>
+              <button onclick="inspectSkill('NumPy')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">NumPy</button>
+              <button onclick="inspectSkill('DBSCAN')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">DBSCAN</button>
+              <button onclick="inspectSkill('Time-Series')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Time Series</button>
+              <button onclick="inspectSkill('AutoDock Vina')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">AutoDock Vina</button>
+              <button onclick="inspectSkill('FalkorDB')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">FalkorDB</button>
             </div>
-
-            <!-- Machine Learning & NLP -->
-            <div class="space-y-1.5">
-              <div class="text-[10px] text-cream-muted uppercase tracking-wider font-semibold">Machine Learning &amp; NLP</div>
-              <div class="flex flex-wrap gap-1.5 text-[11px]">
-                <button onclick="inspectSkill('scikit-learn')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">scikit-learn</button>
-                <button onclick="inspectSkill('Pandas')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Pandas</button>
-                <button onclick="inspectSkill('NumPy')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">NumPy</button>
-                <button onclick="inspectSkill('DBSCAN')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">DBSCAN</button>
-                <button onclick="inspectSkill('Time-Series')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Time Series</button>
-                <button onclick="inspectSkill('AutoDock Vina')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">AutoDock Vina</button>
-                <button onclick="inspectSkill('FalkorDB')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">FalkorDB</button>
-              </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-[10px] text-cream-muted w-20 shrink-0">SYS/BE</span>
+              <button onclick="inspectSkill('Linux Kernel ptrace')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-maroon-border text-cream hover:border-maroon transition-colors text-[11px]">Linux ptrace</button>
+              <button onclick="inspectSkill('Node.js')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Node.js</button>
+              <button onclick="inspectSkill('Express')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Express</button>
+              <button onclick="inspectSkill('FastAPI')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">FastAPI</button>
+              <button onclick="inspectSkill('Docker')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Docker</button>
+              <button onclick="inspectSkill('WebSockets')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">WebSockets</button>
+              <button onclick="inspectSkill('Ethical Hacking')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Linux Security</button>
             </div>
-
-            <!-- Systems & Backend -->
-            <div class="space-y-1.5">
-              <div class="text-[10px] text-cream-muted uppercase tracking-wider font-semibold">Systems, Kernel &amp; Backend</div>
-              <div class="flex flex-wrap gap-1.5 text-[11px]">
-                <button onclick="inspectSkill('Linux Kernel ptrace')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-maroon-border text-cream hover:border-maroon transition-colors">Linux ptrace</button>
-                <button onclick="inspectSkill('Node.js')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Node.js</button>
-                <button onclick="inspectSkill('Express')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Express</button>
-                <button onclick="inspectSkill('FastAPI')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">FastAPI</button>
-                <button onclick="inspectSkill('Docker')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Docker</button>
-                <button onclick="inspectSkill('WebSockets')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">WebSockets</button>
-                <button onclick="inspectSkill('Ethical Hacking')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Linux Security</button>
-              </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-[10px] text-cream-muted w-20 shrink-0">DB/OPS</span>
+              <button onclick="inspectSkill('SQLite WAL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">SQLite WAL</button>
+              <button onclick="inspectSkill('MySQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">MySQL</button>
+              <button onclick="inspectSkill('PostgreSQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">PostgreSQL</button>
+              <button onclick="inspectSkill('Git')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Git / Actions</button>
+              <button onclick="inspectSkill('Google Earth Engine')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">Google Earth Engine</button>
+              <button onclick="inspectSkill('React')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors text-[11px]">React / Vite</button>
             </div>
-
-            <!-- Databases & Cloud -->
-            <div class="space-y-1.5">
-              <div class="text-[10px] text-cream-muted uppercase tracking-wider font-semibold">Databases &amp; DevOps</div>
-              <div class="flex flex-wrap gap-1.5 text-[11px]">
-                <button onclick="inspectSkill('SQLite WAL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">SQLite WAL</button>
-                <button onclick="inspectSkill('MySQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">MySQL</button>
-                <button onclick="inspectSkill('PostgreSQL')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">PostgreSQL</button>
-                <button onclick="inspectSkill('Git')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Git / Actions</button>
-                <button onclick="inspectSkill('Google Earth Engine')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">Google Earth Engine</button>
-                <button onclick="inspectSkill('React')" class="px-2 py-0.5 rounded bg-obsidian-surface border border-obsidian-border text-cream hover:border-maroon transition-colors">React / Vite</button>
-              </div>
-            </div>
-
           </div>
         </div>
       </div>
@@ -2175,49 +2212,10 @@
       });
     }
 
-    // Fast High-End Preloader Buffer Sequence
-    function runPreloader() {
-      const preloader = document.getElementById('kernel-preloader');
-      const loadBar = document.getElementById('load-bar');
-      const loadPct = document.getElementById('load-pct');
-      const loadStatus = document.getElementById('load-status');
-      const log1 = document.getElementById('load-log-1');
-      const log2 = document.getElementById('load-log-2');
-      const log3 = document.getElementById('load-log-3');
-
-      let pct = 0;
-      const interval = setInterval(() => {
-        pct += Math.floor(Math.random() * 20) + 16;
-        if (pct > 100) pct = 100;
-        
-        if (loadBar) loadBar.style.width = pct + '%';
-        if (loadPct) loadPct.innerText = pct + '%';
-
-        if (pct > 30 && log1) {
-          log1.innerHTML = '<span class="text-cream font-bold">[OK]</span> 2,877 Facial Mesh Nodes Cached';
-          if (loadStatus) loadStatus.innerText = 'MOUNTING PHYSICS ENGINE...';
-        }
-        if (pct > 65 && log2) {
-          log2.innerHTML = '<span class="text-cream font-bold">[OK]</span> Tactile Physics &amp; Shockwave Engine';
-          if (loadStatus) loadStatus.innerText = 'HYDRATING SYSTEM ARCHITECTURES...';
-        }
-        if (pct >= 100) {
-          if (log3) log3.innerHTML = '<span class="text-cream font-bold">[OK]</span> 8 Production Architecture Dossiers';
-          if (loadStatus) loadStatus.innerText = 'SYSTEM KERNEL MOUNTED';
-          clearInterval(interval);
-          setTimeout(() => {
-            if (preloader) {
-              preloader.classList.add('opacity-0', 'pointer-events-none');
-              setTimeout(() => { preloader.style.display = 'none'; }, 500);
-            }
-          }, 180);
-        }
-      }, 35);
-    }
+    // Preloader runs inline immediately after its HTML (see above)
 
     // Initialize all canvas and UI components when DOM is ready
     window.addEventListener('DOMContentLoaded', () => {
-      runPreloader();
       initHeroCanvas();
       initScrollReveals();
       initTopoCanvas();
