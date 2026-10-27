@@ -1,0 +1,85 @@
+---
+import { site } from '../data/projects';
+---
+<section class="hero" data-x="hero · cipher portrait">
+  <div class="field" aria-hidden="true">
+    <canvas data-portrait></canvas>
+    <img class="still" src="/img/portrait.webp" alt="" width="1100" height="1063" fetchpriority="high" decoding="async" />
+  </div>
+
+  <div class="wrap copy">
+    <p class="eyebrow e1">Portfolio <b>·</b> v10 <b>·</b> {new Date().getFullYear()}</p>
+    <h1 class="name">
+      <span class="l1" data-decode="1400">Krish</span>
+      <span class="l2"><em data-decode="1700">Gupta</em></span>
+    </h1>
+    <div class="sub e2">
+      <p><strong>{site.role}.</strong> I build systems where security and machine learning meet, and I don’t stop at the demo.</p>
+      <p class="meta">B.Tech, University of Delhi <span>·</span> open to 2027 internships</p>
+    </div>
+    <div class="cues e3">
+      <a class="btn solid" href="#work">See the work</a>
+      <span class="drag" aria-hidden="true"><i></i> Move over the portrait to decrypt it</span>
+    </div>
+  </div>
+
+  <div class="wrap scroll-cue e3" aria-hidden="true"><span>Scroll</span><i></i></div>
+</section>
+
+<style>
+  .hero { position: relative; min-height: 100svh; display: grid; align-items: end; overflow: clip; padding-bottom: clamp(48px, 8vh, 96px); }
+  .field { position: absolute; inset: 0 0 0 auto; width: min(64vw, 1000px); }
+  .field::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg) 0%, transparent 34%), linear-gradient(0deg, var(--bg) 0%, transparent 22%); pointer-events: none; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y; }
+  .still { position: absolute; right: 0; bottom: 0; width: 100%; height: 100%; object-fit: contain; object-position: right bottom; opacity: 0; filter: grayscale(1) contrast(1.05); }
+  :global(html.lite) .still, :global(html.no-canvas) .still { opacity: .55; }
+  :global(html[data-theme='ivory']) .still { mix-blend-mode: multiply; }
+  :global(html.lite) canvas { display: none; }
+
+  .copy { position: relative; z-index: 2; pointer-events: none; }
+  .copy a, .copy button { pointer-events: auto; }
+  .name {
+    margin: 22px 0 0;
+    font-family: var(--display); font-variation-settings: 'opsz' 144;
+    font-weight: 330; letter-spacing: -.045em; line-height: .84;
+    font-size: clamp(84px, 17.5vw, 300px);
+  }
+  .name span { display: block; }
+  .l2 { padding-left: .42em; }
+  .name em { font-style: italic; font-weight: 300; color: var(--gold); }
+  .sub { margin-top: clamp(28px, 4vw, 48px); max-width: 520px; color: var(--ink-2); font-size: clamp(17px, 1.4vw, 20px); line-height: 1.5; }
+  .sub p { margin: 0; }
+  .sub strong { color: var(--ink); font-weight: 600; }
+  .sub .meta { margin-top: 14px; font: 500 12px/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .sub .meta span { color: var(--gold); }
+  .cues { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; margin-top: 32px; }
+  .drag { display: inline-flex; align-items: center; gap: 10px; font: 500 12px/1 var(--mono); letter-spacing: .08em; color: var(--ink-3); }
+  .drag i { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gold); position: relative; }
+  .drag i::after { content: ''; position: absolute; inset: 7px; border-radius: 50%; background: var(--gold); animation: pulse 2.4s var(--ease) infinite; }
+  @keyframes pulse { 50% { transform: scale(1.8); opacity: .3; } }
+
+  .scroll-cue { position: absolute; left: 0; right: 0; bottom: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 12px; font: 500 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-3); pointer-events: none; }
+  .scroll-cue i { width: 1px; height: 40px; background: linear-gradient(var(--gold), transparent); animation: drip 2.2s var(--ease-io) infinite; transform-origin: top; }
+  @keyframes drip { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+  .e1, .e2, .e3 { opacity: 0; transform: translateY(14px); animation: rise 1s var(--ease) forwards; }
+  .e1 { animation-delay: .2s; } .e2 { animation-delay: 1.1s; } .e3 { animation-delay: 1.5s; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  @media (pointer: coarse) { .drag { display: none; } }
+  @media (max-width: 760px) {
+    .hero { align-items: end; }
+    .hero { display: block; min-height: 0; padding-top: max(64px, env(safe-area-inset-top)); }
+    .field { position: relative; inset: auto; width: 100%; height: auto; aspect-ratio: 1100 / 1063; max-height: 56svh; margin-bottom: -18%; }
+    .field::after { background: linear-gradient(0deg, var(--bg) 0%, transparent 30%); }
+    .still { object-position: right top; }
+    .name { font-size: clamp(72px, 23vw, 140px); margin-top: 14px; }
+    .scroll-cue { display: none; }
+  }
+</style>
+
+<script>
+  import { mountPortrait } from '../scripts/portrait';
+  const c = document.querySelector<HTMLCanvasElement>('[data-portrait]');
+  if (c && !document.documentElement.classList.contains('lite')) mountPortrait(c, '/img/portrait.webp');
+</script>

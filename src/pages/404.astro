@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Access denied · Krish Gupta" description="This page doesn’t exist." footer={false}>
+  <section class="wrap nf">
+    <p class="eyebrow"><b>404</b> · segmentation of the site map</p>
+    <h1 data-decode="1600">Nothing is <em>stored</em> at this address.</h1>
+    <pre class="log" aria-hidden="true"><span>[ 0.000412] page fault at {Astro.url.pathname}</span>
+<span>[ 0.000419] no mapping found, refusing to guess</span>
+<span>[ 0.000431] returning you somewhere real</span></pre>
+    <p class="go"><a class="btn solid" href="/">Back to the start</a> <a class="btn" href="/#work">See the work</a></p>
+  </section>
+</Base>
+<style>
+  .nf { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; gap: 28px; }
+  h1 { margin: 0; font: 340 clamp(52px, 9vw, 140px)/.92 var(--display); font-variation-settings: 'opsz' 144; letter-spacing: -.04em; max-width: 14ch; }
+  h1 em { font-style: italic; color: var(--gold); }
+  .log { margin: 0; font: 500 13px/1.8 var(--mono); color: var(--ink-3); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .go { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0 0; }
+</style>

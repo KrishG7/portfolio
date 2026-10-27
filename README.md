@@ -1,62 +1,44 @@
-# Krish Gupta — Systems, Machine Learning & Tactile Interfaces
+# krishgupta.vercel.app · v10
 
-Personal engineering portfolio and systems showcase for **Krish Gupta**, undergraduate at the Faculty of Technology, University of Delhi (Batch 2024–2028, B.Tech in Blockchain, Cybersecurity & Machine Learning) with Data Science specialization from IIT Guwahati.
+Personal site of **Krish Gupta**, Security × ML engineer, B.Tech (Blockchain, Cybersecurity & ML) at the University of Delhi.
 
-Live site: [krishgupta.vercel.app](https://krishgupta.vercel.app) *(or your deployed Vercel domain)*
+The idea is **Sealed**: a royal private archive with a cipher underneath. Text arrives encrypted and decodes as you reach it; the hero is a portrait drawn in hex glyphs, with a loupe that shows the real photo under your cursor.
 
----
+## Stack
 
-## Systems & Case Studies Featured
+- [Astro](https://astro.build) 7, static output, no framework runtime. JavaScript ships only where something moves.
+- Lenis for weighted scrolling on desktop; native scrolling on touch screens.
+- Self-hosted variable fonts: Fraunces (display), Hanken Grotesk (body), JetBrains Mono (cipher).
+- Cross-document View Transitions for page changes (Chrome, Edge, Safari 18.2+; other browsers just navigate).
 
-1. **Athena** — Clinical decision support & rare-cancer evidence graph combining FalkorDB Cypher subgraphs with AutoDock Vina computational docking. [Repo](https://github.com/healers-second-look/Athena)
-2. **SysCV** — Interactive Linux kernel visualizer intercepting syscalls via Go and `ptrace` in sandboxed Docker containers. [Repo](https://github.com/KrishG7/SysCV)
-3. **Brahm-Kosh** — 3D codebase spatial topography and AST complexity analyzer across 13 programming languages. [Repo](https://github.com/KrishG7/Brahm-Kosh)
-4. **Wait Zero** — Offline-first OPD queue telemetry for public hospitals under spotty 2G network drops with local SQLite WAL synchronization. [Repo](https://github.com/KrishG7/smart-clinic-booking)
-5. **Aegis-Tensor** — Static security scanner inspecting `.safetensors` headers and detecting mantissa steganography at 4.2 GB/s. [Repo](https://github.com/KrishG7/Aegis_Tensor)
-6. **TriNetra** — Agricultural intelligence stack fusing Sentinel-2 satellite multi-spectral indices, Gemini vernacular advisories, and APMC price forecasting. [Repo](https://github.com/KrishG7/TriNetra-Farmers-Stack)
-7. **Video-Tracer** — Multi-object tracking (MOT) pipeline coupling fine-tuned YOLOv8 bounding boxes with BoT-SORT / ByteTrack motion re-identification. [Repo](https://github.com/KrishG7/Video-Tracer)
-8. **Stock Anomaly Detection Pipeline** — Microstructural orderbook anomaly detector with strict walk-forward causal rolling features and zero lookahead leakage. [Repo](https://github.com/KrishG7/stock-anomaly-detection)
+## Run it
 
----
-
-## Technical Architecture
-
-- **Aesthetic**: Obsidian Black (`#050506`), Maroon (`#8b1e2f`), and Cream (`#fcf9f2`, `#f5f0e4`).
-- **Typography**: Geist (Sans), JetBrains Mono (Technical/Telemetry), Newsreader (Serif editorial accents).
-- **Kinematic Ripple Engine**: Fullscreen HTML5 2D Canvas rendering 2,877 facial mesh nodes with damp spring restitution and wave dispersion physics. Automatically pauses when out of viewport for 120 FPS performance.
-- **Interactive Topography Engine**: Force-directed physics canvas for codebase AST analysis with dynamic node density and repulsion controls.
-- **Systems CLI**: Embedded `$ krish_cli` terminal supporting interactive commands (`help`, `skills`, `projects`, `leetcode`, `bio`, `curl cv`, `clear`) and deep inspection queries.
-- **Error Handling**: Custom Ring-0 security violation `403.html` error page with eBPF audit logs and interactive privilege escalation terminal.
-
----
-
-## Local Development
-
-No Node.js build step or compiler required. Run using any local HTTP static server:
+Needs Node 24.
 
 ```bash
-# Python 3
-python3 -m http.server 8080
-
-# Or Node npx
-npx serve .
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # static site in dist/
 ```
 
-Open [http://localhost:8080](http://localhost:8080) in your browser.
+## Where things live
 
----
+| Path | What |
+|---|---|
+| `src/data/projects.ts` | All project copy: flagships, archive, links. Edit this first. |
+| `src/components/` | Hero, Intro, Work (horizontal track), Archive, About, Footer, Nav, Command (⌘K) |
+| `src/pages/work/[slug].astro` | Case-study template |
+| `src/scripts/portrait.ts` | Cipher portrait and loupe |
+| `src/scripts/demos.ts` | The live figure for each flagship |
+| `src/scripts/core.ts` | Scroll, decode reveal, theme, menu, ⌘K, easter eggs |
+| `public/img/` | Photos (WebP) |
+| `public/og/` | Share cards, regenerated with `node scripts/og.cjs` |
 
-## Deployment to Vercel
+## Things to find
 
-The repository includes a production-ready `vercel.json` with clean URLs and immutable edge cache headers:
+`⌘K` or `/` opens the command palette (try `whoami`, `ls`, `decrypt`, `sudo`). `G` shows the layout grid, `X` turns on X-ray mode.
 
-1. Push this repository to GitHub:
-   ```bash
-   git init
-   git add .
-   git commit -m "feat: initial systems portfolio commit"
-   git branch -M main
-   git remote add origin https://github.com/KrishG7/portfolio.git
-   git push -u origin main
-   ```
-2. In Vercel, click **Add New Project**, import the GitHub repository, and click **Deploy**. No build commands or environment variables needed.
+## Rules this site keeps
+
+- No figure goes on the site until it has been re-run and verified.
+- Reduced-motion and Save-Data visitors get a lite mode: no canvas animation, no smooth scroll.

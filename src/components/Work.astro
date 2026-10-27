@@ -1,0 +1,133 @@
+---
+import { flagships } from '../data/projects';
+---
+<section class="work" id="work" data-x="work · horizontal track" data-track>
+  <div class="pin">
+    <div class="rail" data-rail>
+      <div class="panel head">
+        <p class="eyebrow">01 <b>·</b> Selected work</p>
+        <h2 class="h-section">Four systems,<br /><em>no one of them</em><br />the whole story.</h2>
+        <p class="lede">Each one is a different problem and a different discipline. Scroll sideways through them, or open one for the full case study, including what didn’t work.</p>
+        <p class="count" aria-hidden="true"><span data-count>01</span> / 0{flagships.length}</p>
+      </div>
+      {flagships.map((f) => (
+        <article class="panel card" data-x={`case · ${f.slug}`}>
+          <a href={`/work/${f.slug}`} class="hit" aria-label={`${f.name} case study`}></a>
+          <div class="fig" style={`view-transition-name: fig-${f.slug}`}>
+            <canvas data-demo={f.demo} aria-label={`Animated figure for ${f.name}`} role="img"></canvas>
+          </div>
+          <div class="txt">
+            <p class="eyebrow"><b>{f.n}</b> · {f.kicker}</p>
+            <h3 style={`view-transition-name: title-${f.slug}`}>{f.name}</h3>
+            <p class="line">{f.line}</p>
+            <ul class="stack">{f.stack.slice(0, 4).map((s) => <li>{s}</li>)}</ul>
+            <span class="open">Open case study <i aria-hidden="true">→</i></span>
+          </div>
+        </article>
+      ))}
+      <div class="panel tail">
+        <p class="eyebrow">Plus five more</p>
+        <a href="#archive" class="more">The archive <i aria-hidden="true">↓</i></a>
+      </div>
+    </div>
+    <div class="progress" aria-hidden="true"><i data-progress></i></div>
+  </div>
+</section>
+
+<style>
+  .work { position: relative; }
+  .pin { position: sticky; top: 0; height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+  .rail { display: flex; gap: clamp(20px, 3vw, 48px); padding-inline: var(--gutter); will-change: transform; align-items: stretch; }
+  .panel { flex: none; }
+  .head { width: min(520px, 80vw); display: flex; flex-direction: column; gap: 24px; justify-content: center; }
+  .head .h-section { font-size: clamp(44px, 5.2vw, 84px); }
+  .count { font: 500 12px/1 var(--mono); letter-spacing: .14em; color: var(--ink-3); margin: 0; }
+  .count span { color: var(--gold); }
+
+  .card {
+    position: relative; width: min(1060px, 78vw); height: min(620px, 72svh);
+    display: grid; grid-template-columns: 1.25fr 1fr;
+    border: 1px solid var(--line); border-radius: var(--r); background: var(--bg-2);
+    overflow: hidden; transition: border-color .4s var(--ease);
+  }
+  .card:hover { border-color: color-mix(in srgb, var(--gold) 60%, transparent); }
+  .hit { position: absolute; inset: 0; z-index: 3; }
+  .fig { position: relative; border-right: 1px solid var(--line); background: var(--bg); }
+  .fig canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .txt { padding: clamp(24px, 3vw, 44px); display: flex; flex-direction: column; gap: 16px; }
+  .txt h3 { margin: 8px 0 0; font: 360 clamp(40px, 4.4vw, 72px)/.95 var(--display); font-variation-settings: 'opsz' 144; letter-spacing: -.03em; width: fit-content; }
+  .line { margin: 0; color: var(--ink-2); font-size: 18px; line-height: 1.45; max-width: 34ch; }
+  .stack { list-style: none; padding: 0; margin: auto 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .stack li { font: 500 11px/1 var(--mono); padding: 7px 9px; border: 1px solid var(--line-2); border-radius: 99px; color: var(--ink-2); }
+  .open { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); display: inline-flex; gap: 8px; }
+  .open i { font-style: normal; transition: transform .4s var(--ease); }
+  .card:hover .open i { transform: translateX(6px); }
+
+  .tail { width: min(420px, 70vw); display: flex; flex-direction: column; justify-content: center; gap: 16px; }
+  .more { font: 340 clamp(40px, 4.4vw, 72px)/1 var(--display); font-style: italic; color: var(--gold); }
+  .more i { font-style: normal; display: inline-block; transition: transform .4s var(--ease); }
+  .more:hover i { transform: translateY(6px); }
+
+  .progress { position: absolute; left: var(--gutter); right: var(--gutter); bottom: max(28px, 4svh); height: 1px; background: var(--line); }
+  .progress i { position: absolute; inset: 0; background: var(--gold); transform-origin: left; transform: scaleX(0); }
+
+  /* phones and tablets: a native swipe track, no pinning */
+  @media (max-width: 899px), (pointer: coarse) {
+    .work { height: auto !important; padding-block: 96px 48px; }
+    .pin { position: relative; height: auto; overflow: visible; }
+    .rail {
+      overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
+      transform: none !important; padding-bottom: 8px; scrollbar-width: none; overscroll-behavior-x: contain;
+    }
+    .rail::-webkit-scrollbar { display: none; }
+    .panel { scroll-snap-align: start; }
+    .head { width: 84vw; }
+    .card { width: 84vw; height: auto; grid-template-columns: 1fr; grid-template-rows: 240px auto; }
+    .fig { border-right: 0; border-bottom: 1px solid var(--line); }
+    .line { font-size: 16px; }
+    .tail { width: 60vw; }
+    .progress { position: relative; left: auto; right: auto; bottom: auto; margin: 24px var(--gutter) 0; }
+  }
+</style>
+
+<script>
+  import { mountDemo } from '../scripts/demos';
+  document.querySelectorAll<HTMLCanvasElement>('[data-demo]').forEach((c) => mountDemo(c, c.dataset.demo as any));
+
+  const sec = document.querySelector<HTMLElement>('[data-track]')!;
+  const rail = sec.querySelector<HTMLElement>('[data-rail]')!;
+  const bar = sec.querySelector<HTMLElement>('[data-progress]')!;
+  const count = sec.querySelector<HTMLElement>('[data-count]')!;
+  const cards = rail.querySelectorAll('.card');
+  const pinned = () => matchMedia('(min-width: 900px) and (pointer: fine)').matches;
+
+  let dist = 0;
+  function measure() {
+    if (!pinned()) { sec.style.height = ''; return; }
+    dist = rail.scrollWidth - innerWidth;
+    sec.style.height = `${dist + innerHeight}px`;
+    update();
+  }
+  function setCount(p: number) {
+    const i = Math.min(cards.length, Math.max(1, Math.round(p * (cards.length + 1))));
+    count.textContent = String(i).padStart(2, '0');
+  }
+  function update() {
+    if (pinned()) {
+      const top = sec.getBoundingClientRect().top;
+      const p = Math.min(1, Math.max(0, -top / (dist || 1)));
+      rail.style.transform = `translate3d(${-p * dist}px,0,0)`;
+      bar.style.transform = `scaleX(${p})`;
+      setCount(p);
+    } else {
+      const p = rail.scrollLeft / Math.max(1, rail.scrollWidth - rail.clientWidth);
+      bar.style.transform = `scaleX(${p})`;
+      setCount(p);
+    }
+  }
+  measure();
+  addEventListener('resize', measure);
+  document.fonts?.ready.then(measure);
+  addEventListener('scroll', update, { passive: true });
+  rail.addEventListener('scroll', update, { passive: true });
+</script>

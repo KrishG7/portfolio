@@ -1,0 +1,179 @@
+---
+import Base from '../../layouts/Base.astro';
+import { flagships, type Flagship } from '../../data/projects';
+
+export function getStaticPaths() {
+  return flagships.map((f, i) => ({ params: { slug: f.slug }, props: { f, next: flagships[(i + 1) % flagships.length] } }));
+}
+const { f, next } = Astro.props as { f: Flagship; next: Flagship };
+const outLabel = { held: 'Held', failed: 'Didn’t hold', open: 'Still open' };
+---
+<Base title={`${f.name} · Krish Gupta`} description={f.line} og={`/og/${f.slug}.png`}>
+  <article class="cs">
+    <header class="wrap head">
+      <a class="back" href="/#work"><i aria-hidden="true">←</i> All work</a>
+      <p class="eyebrow"><b>{f.n}</b> · {f.kicker}</p>
+      <h1 style={`view-transition-name: title-${f.slug}`}>{f.name}</h1>
+      <p class="lede">{f.line}</p>
+      <dl class="meta">
+        <div><dt>When</dt><dd>{f.year}</dd></div>
+        <div><dt>Role</dt><dd>{f.role}</dd></div>
+        <div><dt>Built with</dt><dd>{f.stack.join(', ')}</dd></div>
+        <div><dt>Source</dt><dd><a href={f.repo} target="_blank" rel="noopener">{f.repo.replace('https://github.com/', '')} ↗</a></dd></div>
+      </dl>
+    </header>
+
+    <div class="wrap">
+      <div class="figure" style={`view-transition-name: fig-${f.slug}`}>
+        <canvas data-demo={f.demo} data-auto role="img" aria-label={`Animated figure for ${f.name}`}></canvas>
+      </div>
+    </div>
+
+    <section class="wrap two">
+      <h2 class="label">The problem</h2>
+      <p class="big">{f.problem}</p>
+    </section>
+
+    <section class="wrap story" data-story>
+      <h2 class="label">How it works</h2>
+      <div class="story-grid">
+        <ol class="steps">
+          {f.steps.map((s, i) => (
+            <li data-step={i}>
+              <span class="k">{String(i + 1).padStart(2, '0')} · {s.k}</span>
+              <h3>{s.t}</h3>
+              <p>{s.p}</p>
+            </li>
+          ))}
+        </ol>
+        <div class="stick">
+          <div class="pane"><canvas data-demo={f.demo} data-scroll role="img" aria-label={`Step-by-step figure for ${f.name}`}></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap two">
+      <h2 class="label">What I built</h2>
+      <ul class="built">{f.built.map((b) => <li>{b}</li>)}</ul>
+    </section>
+
+    <section class="wrap two">
+      <h2 class="label">What didn’t work</h2>
+      <div>
+        <p class="note">Every project has a ledger of the hypotheses it tested. The ones that failed are kept, because they are why the design looks the way it does.</p>
+        <ul class="ledger">
+          {f.ledger.map((l) => (
+            <li>
+              <span class={`out ${l.out}`}>{outLabel[l.out]}</span>
+              <div><h3>{l.h}</h3><p>{l.note}</p></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="wrap two">
+      <h2 class="label">Honest limits</h2>
+      <ul class="built limits">{f.limits.map((b) => <li>{b}</li>)}</ul>
+    </section>
+
+    {f.team && (
+      <section class="wrap two">
+        <h2 class="label">Team</h2>
+        <p class="note">Built with the {f.team} team. The repository credits everyone who worked on it.</p>
+      </section>
+    )}
+
+    <a class="next" href={`/work/${next.slug}`}>
+      <span class="wrap">
+        <span class="eyebrow">Next case study</span>
+        <span class="nn">{next.name} <i aria-hidden="true">→</i></span>
+      </span>
+    </a>
+  </article>
+</Base>
+
+<style>
+  .cs { padding-top: clamp(110px, 14vw, 170px); }
+  .back { display: inline-flex; gap: 10px; font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 48px; }
+  .back:hover { color: var(--gold); }
+  h1 { margin: 18px 0 clamp(28px, 4vw, 56px); font: 330 clamp(64px, 13vw, 220px)/.86 var(--display); font-variation-settings: 'opsz' 144; letter-spacing: -.045em; width: fit-content; }
+  .meta { display: grid; grid-template-columns: repeat(4, 1fr); margin: 56px 0 0; border-top: 1px solid var(--line); }
+  .meta div { padding: 18px 18px 0 0; }
+  .meta div + div { padding-left: 18px; border-left: 1px solid var(--line); }
+  dt { font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+  dd { margin: 10px 0 0; font-size: 15px; color: var(--ink); }
+  dd a { color: var(--gold); }
+  .figure { position: relative; margin-top: clamp(48px, 7vw, 96px); aspect-ratio: 16 / 8; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg-2); overflow: hidden; }
+  .figure canvas, .pane canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .two { display: grid; grid-template-columns: 260px 1fr; gap: 24px 48px; padding-block: clamp(64px, 9vw, 128px) 0; }
+  .label { margin: 0; font: 500 12px/1.6 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+  .big { margin: 0; font: 360 clamp(26px, 2.8vw, 42px)/1.25 var(--display); font-variation-settings: 'opsz' 72; letter-spacing: -.015em; max-width: 30ch; text-wrap: pretty; }
+  .built { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; counter-reset: b; max-width: 70ch; }
+  .built li { position: relative; padding: 20px 0 20px 48px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 18px; line-height: 1.55; counter-increment: b; }
+  .built li::before { content: counter(b, decimal-leading-zero); position: absolute; left: 0; top: 23px; font: 500 12px/1 var(--mono); color: var(--gold); }
+  .limits li::before { content: '!'; }
+  .note { margin: 0 0 24px; color: var(--ink-3); max-width: 60ch; }
+
+  .story { padding-block: clamp(64px, 9vw, 128px) 0; }
+  .story-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 80px); margin-top: 40px; }
+  .steps { list-style: none; margin: 0; padding: 0; }
+  .steps li { min-height: 62vh; display: flex; flex-direction: column; justify-content: center; opacity: .3; transition: opacity .5s var(--ease); }
+  .steps li.on { opacity: 1; }
+  .steps .k { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+  .steps h3 { margin: 14px 0 12px; font: 380 clamp(30px, 3vw, 46px)/1.05 var(--display); font-variation-settings: 'opsz' 96; letter-spacing: -.02em; }
+  .steps p { margin: 0; color: var(--ink-2); font-size: 18px; line-height: 1.55; max-width: 44ch; }
+  .stick { position: relative; }
+  .pane { position: sticky; top: 18vh; aspect-ratio: 4 / 3; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg-2); overflow: hidden; }
+
+  .ledger { list-style: none; margin: 0; padding: 0; max-width: 78ch; }
+  .ledger li { display: grid; grid-template-columns: 130px 1fr; gap: 20px; padding: 22px 0; border-top: 1px solid var(--line); }
+  .ledger h3 { margin: 0 0 6px; font: 500 18px/1.4 var(--body); color: var(--ink); }
+  .ledger p { margin: 0; color: var(--ink-2); line-height: 1.55; }
+  .out { align-self: start; font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 7px 9px; border-radius: 6px; width: fit-content; }
+  .out.held { color: #5fd38d; background: rgba(95, 211, 141, .12); }
+  .out.failed { color: #e57a88; background: rgba(229, 122, 136, .12); }
+  .out.open { color: var(--gold); background: color-mix(in srgb, var(--gold) 14%, transparent); }
+  :global(html[data-theme='ivory']) .out.held { color: #11663f; }
+  :global(html[data-theme='ivory']) .out.failed { color: #9b1f32; }
+
+  .next { display: block; margin-top: clamp(96px, 14vw, 180px); padding-block: clamp(56px, 8vw, 110px); border-top: 1px solid var(--line); transition: background .5s var(--ease); }
+  .next:hover { background: var(--bg-2); }
+  .next .wrap { display: grid; gap: 16px; }
+  .nn { font: 340 clamp(48px, 9vw, 150px)/.9 var(--display); font-variation-settings: 'opsz' 144; letter-spacing: -.04em; }
+  .nn i { font-style: normal; color: var(--gold); display: inline-block; transition: transform .5s var(--ease); }
+  .next:hover .nn i { transform: translateX(16px); }
+
+  @media (max-width: 860px) {
+    .meta { grid-template-columns: 1fr 1fr; }
+    .meta > div:nth-child(odd) { padding-left: 0; border-left: 0; }
+    .meta > div:nth-child(n + 3) { margin-top: 18px; border-top: 1px solid var(--line); }
+    .two { grid-template-columns: 1fr; }
+    .figure { aspect-ratio: 4 / 3; }
+    .story-grid { grid-template-columns: 1fr; }
+    .stick { order: -1; position: sticky; top: 64px; z-index: 2; }
+    .pane { position: relative; top: 0; aspect-ratio: 16 / 10; box-shadow: 0 16px 30px var(--bg); }
+    .steps li { min-height: 56vh; }
+    .ledger li { grid-template-columns: 1fr; gap: 10px; }
+  }
+</style>
+
+<script>
+  import { mountDemo } from '../../scripts/demos';
+  const hero = document.querySelector<HTMLCanvasElement>('canvas[data-auto]');
+  if (hero) mountDemo(hero, hero.dataset.demo as any, true);
+  const sc = document.querySelector<HTMLCanvasElement>('canvas[data-scroll]');
+  if (sc) {
+    const d = mountDemo(sc, sc.dataset.demo as any, false);
+    const steps = document.querySelectorAll<HTMLElement>('[data-step]');
+    const io = new IntersectionObserver((es) => {
+      for (const e of es) if (e.isIntersecting) {
+        steps.forEach((s) => s.classList.toggle('on', s === e.target));
+        d.setStep(Number((e.target as HTMLElement).dataset.step));
+      }
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    steps.forEach((s) => io.observe(s));
+    steps[0]?.classList.add('on');
+  }
+</script>

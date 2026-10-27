@@ -1,0 +1,55 @@
+---
+import { flagships } from '../data/projects';
+const items = [
+  { g: 'Go to', t: 'Work', k: 'work projects', a: 'go:/#work' },
+  ...flagships.map((f) => ({ g: 'Go to', t: f.name, k: `${f.kicker} case study`, a: `go:/work/${f.slug}` })),
+  { g: 'Go to', t: 'About', k: 'bio story', a: 'go:/#about' },
+  { g: 'Go to', t: 'CV', k: 'resume', a: 'go:/cv' },
+  { g: 'Do', t: 'Copy email', k: 'contact mail', a: 'copy' },
+  { g: 'Do', t: 'Switch theme', k: 'dark light ivory night', a: 'theme' },
+  { g: 'Do', t: 'Show the grid', k: 'layout columns G', a: 'grid' },
+  { g: 'Do', t: 'X-ray mode', k: 'boxes outline debug X', a: 'xray' },
+  { g: 'Elsewhere', t: 'GitHub', k: 'code KrishG7', a: 'go:https://github.com/KrishG7' },
+  { g: 'Elsewhere', t: 'LinkedIn', k: 'linkedin', a: 'go:https://www.linkedin.com/in/krish-gupta007/' },
+];
+---
+<dialog class="cmdk" data-cmdk aria-label="Command palette">
+  <div class="box">
+    <label class="in">
+      <span class="sr">Search commands</span>
+      <span class="pr" aria-hidden="true">›</span>
+      <input type="text" placeholder="Type a command, or try sudo" autocomplete="off" spellcheck="false" data-cmdk-input />
+      <kbd>esc</kbd>
+    </label>
+    <ul role="listbox" data-cmdk-list>
+      {items.map((it) => (
+        <li role="option" data-a={it.a} data-k={`${it.t} ${it.k}`.toLowerCase()}>
+          <span>{it.t}</span><em>{it.g}</em>
+        </li>
+      ))}
+    </ul>
+    <p class="out" aria-live="polite" data-cmdk-out></p>
+  </div>
+</dialog>
+
+<style>
+  .cmdk { padding: 0; border: 0; background: transparent; max-width: none; max-height: none; width: 100%; height: 100%; margin: 0; }
+  .cmdk::backdrop { background: rgba(5, 6, 10, .55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+  .box {
+    width: min(620px, calc(100% - 32px)); margin: min(18vh, 140px) auto 0;
+    background: var(--surface); color: var(--ink);
+    border: 1px solid var(--line-2); border-radius: 16px; overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, .5);
+  }
+  .in { display: flex; align-items: center; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+  .pr { color: var(--gold); font: 500 18px/1 var(--mono); }
+  input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--ink); font: 400 17px/1.2 var(--body); }
+  kbd { font: 500 11px/1 var(--mono); color: var(--ink-3); border: 1px solid var(--line-2); border-radius: 5px; padding: 4px 6px; }
+  ul { list-style: none; margin: 0; padding: 8px; max-height: min(50vh, 420px); overflow: auto; }
+  li { display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 10px; cursor: pointer; color: var(--ink-2); }
+  li em { font: 500 11px/1.6 var(--mono); font-style: normal; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; }
+  li[aria-selected='true'] { background: color-mix(in srgb, var(--gold) 14%, transparent); color: var(--ink); }
+  li[hidden] { display: none; }
+  .out { margin: 0; padding: 0 22px; font: 500 13px/1.6 var(--mono); color: var(--gold); white-space: pre-wrap; }
+  .out:not(:empty) { padding-block: 4px 18px; }
+</style>
