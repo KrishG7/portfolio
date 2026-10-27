@@ -1,157 +1,114 @@
-@import '@fontsource-variable/fraunces/opsz.css';
-@import '@fontsource-variable/fraunces/opsz-italic.css';
-@import '@fontsource-variable/hanken-grotesk/index.css';
-@import '@fontsource-variable/jetbrains-mono/index.css';
+@import '@fontsource/anton/latin-400.css';
+@import '@fontsource-variable/geist/wght.css';
+@import '@fontsource-variable/geist-mono/wght.css';
 
 /* ------------------------------------------------------------------
-   Tokens. Night is the default; "ivory" is the light theme.
-   Gold is a seal, not a paint: borders, numerals, one word per screen.
+   Direction A, "Signal". Black, paper white, one electric-blue cut.
+   Poster-scale Anton for names and statements, Geist for reading,
+   Geist Mono for the instrument labels. The particle film sits on a
+   fixed canvas between the background and the content.
 ------------------------------------------------------------------- */
 :root {
-  --bg: #0a0c12;
-  --bg-2: #10131c;
-  --surface: #151925;
-  --line: #242a3a;
-  --line-2: #323a4f;
-  --ink: #efe8da;
-  --ink-2: #b9b2a3;
-  --ink-3: #847e72;
-  --gold: #c9a35a;
-  --gold-2: #e3c88e;
-  --oxblood: #8e2433;
-  --lapis: #2c3c6e;
-  --glyph: 201, 163, 90;
+  --bg: #0b0c0e;
+  --bg-2: #111215;
+  --surface: #16171b;
+  --ink: #ecebe6;
+  --ink-2: #b6b7bc;
+  --ink-3: #7c7e85;
+  --ghost: #1c1e23;
+  --line: #24262c;
+  --line-2: #34373f;
+  --cut: #3b52ff;
+  --alert: #ff5a4e;
 
-  --display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
-  --body: 'Hanken Grotesk Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* names the older pages (cv, 404, case studies) still use */
+  --gold: var(--cut);
+  --gold-2: #7d8cff;
+  --oxblood: var(--alert);
+  --glyph: 59, 82, 255;
+
+  --display: 'Anton', Impact, 'Arial Narrow', sans-serif;
+  --body: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
 
   --ease: cubic-bezier(.16, 1, .3, 1);
-  --ease-io: cubic-bezier(.65, 0, .35, 1);
-  --gutter: clamp(16px, 4vw, 56px);
-  --max: 1440px;
-  --r: 14px;
-
+  --ease-io: cubic-bezier(.76, 0, .24, 1);
+  --gutter: clamp(16px, 3.4vw, 48px);
+  --max: 1600px;
+  --r: 6px;
   color-scheme: dark;
-}
-:root[data-theme='ivory'] {
-  --bg: #f3ede1;
-  --bg-2: #ebe3d4;
-  --surface: #fbf7ef;
-  --line: #d9cfbc;
-  --line-2: #c5b89f;
-  --ink: #15171f;
-  --ink-2: #4a4a50;
-  --ink-3: #7b7466;
-  --gold: #8c6a26;
-  --gold-2: #6e5119;
-  --oxblood: #7a1e2c;
-  --lapis: #22336a;
-  --glyph: 110, 81, 25;
-  color-scheme: light;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: var(--bg); }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font: 400 17px/1.6 var(--body);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-optical-sizing: auto;
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 17px/1.55 var(--body);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
-  transition: background-color .5s var(--ease), color .5s var(--ease);
 }
 img, video, canvas, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
-::selection { background: var(--gold); color: var(--bg); }
-:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+::selection { background: var(--cut); color: #fff; }
+:focus-visible { outline: 2px solid var(--cut); outline-offset: 3px; border-radius: 2px; }
 
-.wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
+.wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px)) max(var(--gutter), env(safe-area-inset-right, 0px)); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.up { position: relative; z-index: 2; }
 
-.eyebrow {
-  font: 500 12px/1.2 var(--mono);
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-.eyebrow b { color: var(--gold); font-weight: 500; }
-
-.display {
-  font-family: var(--display);
-  font-weight: 380;
-  font-variation-settings: 'opsz' 144;
-  letter-spacing: -.025em;
-  line-height: .92;
-}
-.display em { font-style: italic; font-weight: 300; color: var(--gold); }
-
-.h-section {
-  font-family: var(--display);
-  font-variation-settings: 'opsz' 144;
-  font-weight: 360;
-  font-size: clamp(40px, 7vw, 104px);
-  line-height: .95;
-  letter-spacing: -.03em;
-  margin: 0;
-  text-wrap: balance;
-}
-.h-section em { font-style: italic; color: var(--gold); font-weight: 300; }
-
-.lede { font-size: clamp(18px, 1.6vw, 22px); line-height: 1.5; color: var(--ink-2); max-width: 58ch; text-wrap: pretty; }
-
-.rule { height: 1px; background: var(--line); border: 0; margin: 0; }
+.tag { font: 500 11px/1.5 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.tag b { color: var(--ink); font-weight: 500; }
+.tag .c { color: var(--cut); }
+.poster { font-family: var(--display); font-weight: 400; text-transform: uppercase; line-height: .86; letter-spacing: -.005em; margin: 0; }
+.poster em { font-style: normal; color: var(--cut); }
+.lede { font-size: clamp(18px, 1.5vw, 22px); line-height: 1.45; color: var(--ink-2); max-width: 46ch; margin: 0; }
+.lede b { color: var(--ink); font-weight: 500; }
 
 .btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  font: 500 14px/1 var(--body);
-  padding: 14px 20px;
-  border-radius: 99px;
-  border: 1px solid var(--line-2);
-  transition: border-color .3s, background .3s, color .3s;
+  display: inline-flex; align-items: center; gap: 12px;
+  font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase;
+  padding: 16px 22px; border-radius: 99px; border: 1px solid var(--line-2);
+  transition: background .4s var(--ease), color .4s var(--ease), border-color .4s var(--ease);
 }
-.btn:hover { border-color: var(--gold); color: var(--gold); }
-.btn.solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.btn.solid:hover { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+.btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn.cut { background: var(--cut); border-color: var(--cut); color: #fff; }
+.btn.cut:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
 
-/* decode reveal: text is scrambled by JS until in view */
-[data-decode] { font-variant-ligatures: none; }
-.cipher-char { color: var(--gold); opacity: .75; }
+/* split-text line masks */
+.line-mask { overflow: clip; padding-bottom: .04em; margin-bottom: -.04em; }
 
-section { position: relative; }
+/* the particle film */
+.film { position: fixed; inset: 0; width: 100vw; height: 100lvh; z-index: 1; pointer-events: none; }
 
-/* cross-document view transitions (Chrome, Edge, Safari 18.2+; others just navigate) */
-@view-transition { navigation: auto; }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: .45s; animation-timing-function: var(--ease); }
-
-/* grid overlay (press G) */
-.grid-overlay {
-  position: fixed; inset: 0; z-index: 90; pointer-events: none; display: none;
-  padding-inline: var(--gutter);
+/* cursor (fine pointers only) */
+.cursor { position: fixed; z-index: 95; left: 0; top: 0; pointer-events: none; mix-blend-mode: difference; display: none; }
+@media (pointer: fine) { .cursor { display: block; } html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; } }
+.cursor i { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #fff; transition: transform .3s var(--ease); }
+.cursor span {
+  position: absolute; left: 0; top: 0; transform: translate(-50%, -50%) scale(0); transform-origin: center;
+  width: 92px; height: 92px; border-radius: 50%; background: #fff; color: #000; mix-blend-mode: normal;
+  display: grid; place-items: center; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase;
+  transition: transform .45s var(--ease);
 }
-.grid-overlay > div {
-  max-width: calc(var(--max) - 2 * var(--gutter)); height: 100%; margin-inline: auto;
-  display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px;
-}
-.grid-overlay i { background: rgba(142, 36, 51, .09); border-inline: 1px solid rgba(142, 36, 51, .25); }
+.cursor.label span { transform: translate(-50%, -50%) scale(1); }
+.cursor.label i { transform: scale(0); }
+.cursor.down i { transform: scale(2.4); }
+
+/* grid overlay (G) and x-ray (X) */
+.grid-overlay { position: fixed; inset: 0; z-index: 90; pointer-events: none; display: none; }
+.grid-overlay > div { height: 100%; display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+.grid-overlay i { background: rgba(59, 82, 255, .07); border-inline: 1px solid rgba(59, 82, 255, .3); }
 html.show-grid .grid-overlay { display: block; }
-@media (max-width: 720px) { .grid-overlay > div { grid-template-columns: repeat(4, 1fr); gap: 12px; } .grid-overlay i:nth-child(n+5) { display: none; } }
+@media (max-width: 720px) { .grid-overlay > div { grid-template-columns: repeat(4, 1fr); gap: 12px; } .grid-overlay i:nth-child(n + 5) { display: none; } }
+html.xray body *:not(.film) { outline: 1px solid rgba(59, 82, 255, .45) !important; }
+html.xray .film { opacity: .25; }
 
-/* x-ray (press X): every box shows its bones */
-html.xray body * { outline: 1px solid rgba(201, 163, 90, .35) !important; background-image: none !important; }
-html.xray img, html.xray canvas, html.xray video { opacity: .15 !important; }
-html.xray [data-x]::after {
-  content: attr(data-x); position: absolute; left: 0; top: 0; z-index: 5;
-  font: 500 10px/1 var(--mono); background: var(--gold); color: #0a0c12; padding: 3px 5px;
-}
+@view-transition { navigation: auto; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  @view-transition { navigation: none; }
 }

@@ -21,6 +21,11 @@ export interface Flagship {
   areas: Area[];
   repo: string;
   demo: 'bits' | 'graph' | 'rain' | 'syscalls';
+  film: 'bits' | 'graph' | 'rain' | 'sys';
+  area: string;
+  hook: string;
+  body: string;
+  caps: [string, string, string];
   problem: string;
   built: string[];
   steps: Step[];
@@ -41,6 +46,11 @@ export interface Minor {
 export const flagships: Flagship[] = [
   {
     slug: 'aegis-tensor',
+    film: 'bits',
+    area: 'Security for machine learning',
+    hook: 'A model file is a program you didn’t write.',
+    body: 'Aegis reads safetensors, GGUF, PyTorch pickles, ONNX and Keras files without ever loading them, and gives one verdict with a next step. Then it disarms the weights anyway, because anyone who reads the public rules can tune a payload to slip under them.',
+    caps: ['Reading float32 weights without loading them', 'Payload found in the low mantissa bits', 'Disarmed: low bits rounded away'],
     n: '01',
     name: 'Aegis-Tensor',
     kicker: 'Security × Machine Learning',
@@ -77,6 +87,11 @@ export const flagships: Flagship[] = [
   },
   {
     slug: 'athena',
+    film: 'graph',
+    area: 'Clinical evidence graph',
+    hook: 'A second opinion that shows its sources.',
+    body: 'For oncologists who have run out of standard leads on a rare cancer. Athena pulls a cited subgraph of evidence from CIViC and PubMed, remembers the case, and flags exactly which earlier findings a new result breaks.',
+    caps: ['Case loaded: gene, variant, cancer type', 'Cited evidence pulled from the graph', 'New pathology: one finding invalidated'],
     n: '02',
     name: 'Athena',
     kicker: 'Clinical evidence graph',
@@ -113,6 +128,11 @@ export const flagships: Flagship[] = [
   },
   {
     slug: 'weavr',
+    film: 'rain',
+    area: 'Forecast blending · Smart India Hackathon',
+    hook: 'Every rainfall model is right somewhere.',
+    body: 'WEAVR learns how far to trust GraphCast, HRES and the ECMWF ensemble in each region of India at each lead time, blends them, and turns the blend into the exceedance probabilities IMD actually warns on.',
+    caps: ['Three models, one India grid', 'Learning who to trust, region by region', 'Blend above the IMD warning threshold'],
     n: '03',
     name: 'WEAVR',
     kicker: 'Forecast blending · Smart India Hackathon',
@@ -145,6 +165,11 @@ export const flagships: Flagship[] = [
   },
   {
     slug: 'syscv',
+    film: 'sys',
+    area: 'Linux internals',
+    hook: 'Watch a program ask the kernel for things.',
+    body: 'Write C in the browser. SysCV runs it under ptrace inside a Linux container and replays every system call it made, with a live graph of the files, memory and output it touched.',
+    caps: ['Program compiled and started under ptrace', 'Each syscall stopped, read and decoded', 'Exit. Every call replayable, step by step'],
     n: '04',
     name: 'SysCV',
     kicker: 'Linux internals',
@@ -194,7 +219,7 @@ export const areaLabel: Record<Area, string> = {
 
 export const site = {
   name: 'Krish Gupta',
-  role: 'Security × ML engineer',
+  role: 'Security for machine learning',
   email: 'krishgupta3879@gmail.com',
   github: 'https://github.com/KrishG7',
   linkedin: 'https://www.linkedin.com/in/krish-gupta007/',

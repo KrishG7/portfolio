@@ -1,15 +1,269 @@
 ---
 import Base from '../layouts/Base.astro';
-import Hero from '../components/Hero.astro';
-import Intro from '../components/Intro.astro';
-import Work from '../components/Work.astro';
-import Archive from '../components/Archive.astro';
-import About from '../components/About.astro';
+import { flagships, minors, site } from '../data/projects';
+
+const manifesto = 'Every model you download is somebody else’s code. I read it before you run it.';
+const cut = new Set(['somebody', 'else’s', 'code.']);
+const facts = [
+  ['House Captain, valedictorian', 'The Badhani School, Pathankot'],
+  ['Awarded the Red Coat', 'For academic and co-curricular work'],
+  ['Captain, football and volleyball', 'School teams'],
+  ['B.Tech, 2024 – 2028', 'Faculty of Technology, University of Delhi'],
+];
 ---
-<Base>
-  <Hero />
-  <Intro />
-  <Work />
-  <Archive />
-  <About />
+<Base film>
+  <!-- HERO: the face -->
+  <section class="hero" data-film="face" aria-label="Introduction">
+    <h1 class="hero-name poster" aria-label="Krish Gupta"><span data-split>Krish</span><span class="o" data-split>Gupta</span></h1>
+    <div class="face-box" data-film-box></div>
+    <div class="wrap hero-foot up">
+      <p class="lede" data-reveal><b>I break machine learning systems on purpose,</b> then build the tools that stop anyone else from doing it.</p>
+      <div class="hero-meta tag" data-reveal>
+        <p><span class="dot"></span>Now building <b>{site.now}</b></p>
+        <p>B.Tech, University of Delhi · open to 2027 internships</p>
+      </div>
+    </div>
+    <div class="scroll-cue tag up" aria-hidden="true">Scroll <i></i></div>
+  </section>
+
+  <!-- MANIFESTO: particles loosen into dust -->
+  <section class="manifesto" data-film="dust" aria-label="What I do">
+    <div class="wrap up">
+      <p class="tag">00 · The work</p>
+      <p class="poster big" data-scrub>
+        {manifesto.split(' ').map((w) => <span class={cut.has(w.toLowerCase()) ? 'w c' : 'w'}>{w} </span>)}
+      </p>
+      <div class="cols">
+        <p class="lede" data-reveal>Security and machine learning usually sit in two different departments. I work in the gap between them, because that is where the attacks are, and where very few people are looking.</p>
+        <p class="lede dim" data-reveal>Four systems below, each from a different corner of the field. Each one ships with what didn’t work written down next to what did.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="work-head" aria-label="Selected work">
+    <div class="wrap up head-row">
+      <h2 class="poster" data-split>Selected<br />work</h2>
+      <p class="tag">2025 – 2026 · {flagships.length} systems · scroll</p>
+    </div>
+  </section>
+
+  {flagships.map((f, i) => (
+    <article class="proj" data-film={f.film} data-proj={i} aria-labelledby={`p-${f.slug}`}>
+      <div class="stage" data-film-anchor>
+        <span class="num" aria-hidden="true">0{i + 1}</span>
+        <div class="wrap grid up">
+          <div class="txt">
+            <p class="tag"><span class="c">0{i + 1}</span> · {f.area}</p>
+            <h3 id={`p-${f.slug}`} class="poster" data-split>{f.name}</h3>
+            <p class="hook" data-reveal>{f.hook}</p>
+            <p class="body" data-reveal>{f.body}</p>
+            <ul class="chips" data-reveal>{f.stack.slice(0, 5).map((s) => <li>{s}</li>)}</ul>
+            <div class="cta" data-reveal>
+              <a class="btn" href={f.repo} target="_blank" rel="noopener" data-magnetic data-cursor-text="Source">Source ↗</a>
+              {f.team && <span class="tag">Team · {f.team}</span>}
+            </div>
+          </div>
+          <div class="fig">
+            <div class="fig-box" data-film-box></div>
+            <div class="fig-foot tag">
+              <span class="cap" data-cap={JSON.stringify(f.caps)}>{f.caps[0]}</span>
+              <span class="prog"><i data-prog></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  ))}
+
+  <!-- MARQUEE -->
+  <section class="marquee up" aria-hidden="true">
+    <div class="track" data-marquee>
+      {Array.from({ length: 2 }).map(() => (
+        <span class="poster">Security <i>✕</i> Machine learning <i>✕</i> Systems <i>✕</i> Research <i>✕</i> </span>
+      ))}
+    </div>
+  </section>
+
+  <!-- ALSO BUILT -->
+  <section class="also" data-film="dust" aria-label="More projects">
+    <div class="wrap up">
+      <div class="head-row"><h2 class="poster" data-split>Also built</h2><p class="tag">{minors.length} more · source on GitHub</p></div>
+      <ul class="rows">
+        {minors.map((m, i) => (
+          <li>
+            <a href={m.repo} target="_blank" rel="noopener" data-cursor-text="Source">
+              <span class="tag n">0{i + 5}</span>
+              <span class="poster nm">{m.name}</span>
+              <span class="ln">{m.line}</span>
+              <span class="tag st">{m.stack.join(' · ')}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ABOUT: particles become the photo -->
+  <section id="about" class="about" data-film="photo" aria-label="About">
+    <div class="wrap grid up">
+      <div class="pic" data-film-box role="img" aria-label="Krish on a hillside above a pine valley, drawn in particles"></div>
+      <div class="words">
+        <h2 class="poster" data-split>About</h2>
+        <div class="body">
+          <p data-reveal>I grew up in Rajouri, in the hills of Jammu and Kashmir, and spent class 5 to 12 at a boarding school in Pathankot. Now I’m in Delhi, studying blockchain, cybersecurity and machine learning.</p>
+          <p data-reveal>When a problem needs something I don’t know yet, I learn it from the ground up and keep going until the thing holds under pressure. I like to lead, I like to compete, and I don’t like being second.</p>
+          <p data-reveal>Off the screen: football, volleyball, the gym. Next on the list is quantum computing. I haven’t started yet, which is the point.</p>
+        </div>
+        <dl class="facts">
+          {facts.map(([a, b]) => <div data-reveal><dt>{a}</dt><dd>{b}</dd></div>)}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT: the face comes back -->
+  <section id="contact" class="contact" data-film="end" aria-label="Contact">
+    <div class="end-box" data-film-box></div>
+    <div class="wrap up">
+      <p class="tag">Internships · research · anything that has to hold</p>
+      <h2 class="poster" data-split>Let’s build<br />something<br /><em>that holds.</em></h2>
+      <button class="mail" type="button" data-copy={site.email} data-cursor-text="Copy" aria-label={`Copy ${site.email}`}>
+        <span class="addr">{site.email}</span>
+        <span class="tag" data-copy-hint>Click to copy</span>
+      </button>
+      <div class="foot">
+        <nav class="tag" aria-label="Elsewhere">
+          <a href={site.github} target="_blank" rel="noopener" data-magnetic>GitHub</a>
+          <a href={site.linkedin} target="_blank" rel="noopener" data-magnetic>LinkedIn</a>
+          <a href={site.leetcode} target="_blank" rel="noopener" data-magnetic>LeetCode</a>
+          <a href="/cv" data-magnetic>CV</a>
+        </nav>
+        <p class="tag">© 2026 Krish Gupta · press <b>⌘K</b></p>
+      </div>
+    </div>
+  </section>
 </Base>
+
+<style>
+  /* HERO */
+  .hero { position: relative; height: 100svh; min-height: 560px; overflow: clip; }
+  .hero-name {
+    position: absolute; z-index: 0; inset: 50% 0 auto; transform: translateY(-52%);
+    text-align: center; white-space: nowrap; color: var(--ghost);
+    font-size: clamp(96px, 23vw, 440px); line-height: .8;
+  }
+  .hero-name span { display: block; }
+  .hero-name .o { color: transparent; -webkit-text-stroke: 1.5px var(--line-2); }
+  .face-box { position: absolute; left: 50%; bottom: 0; width: min(78vw, 112svh); height: 96svh; transform: translateX(-50%); }
+  .hero-foot { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-bottom: max(28px, env(safe-area-inset-bottom)); }
+  .hero-foot .lede { max-width: 30ch; }
+  .hero-meta { text-align: right; }
+  .hero-meta p { margin: 0; }
+  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--cut); margin-right: 8px; vertical-align: 1px; box-shadow: 0 0 12px var(--cut); }
+  .scroll-cue { position: absolute; right: var(--gutter); top: 50%; writing-mode: vertical-rl; display: flex; align-items: center; gap: 12px; }
+  .scroll-cue i { width: 1px; height: 48px; background: linear-gradient(var(--ink), transparent); animation: drip 2.2s var(--ease-io) infinite; transform-origin: top; }
+  @keyframes drip { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+  /* MANIFESTO */
+  .manifesto { padding-block: clamp(140px, 22vh, 260px) clamp(100px, 14vw, 200px); }
+  .big { margin-top: 28px; font-size: clamp(52px, 8.6vw, 168px); max-width: 13ch; }
+  .big .w { opacity: .12; transition: opacity .2s linear; }
+  .big .w.c { color: var(--cut); }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: clamp(56px, 8vw, 110px); max-width: 1100px; margin-left: auto; }
+  .cols .dim { color: var(--ink-3); }
+
+  /* WORK */
+  .work-head { padding-block: 40px 0; }
+  .head-row { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+  .head-row h2 { font-size: clamp(64px, 11vw, 200px); }
+  .proj { position: relative; height: 280svh; }
+  .stage { position: sticky; top: 0; height: 100svh; overflow: clip; display: flex; align-items: center; }
+  .num { position: absolute; right: -.03em; bottom: -.12em; z-index: 0; font: 400 clamp(200px, 34vw, 640px)/.8 var(--display); color: transparent; -webkit-text-stroke: 1.5px var(--ghost); pointer-events: none; }
+  .grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 72px); align-items: center; }
+  .txt { display: grid; gap: 20px; align-content: center; }
+  .txt h3 { font-size: clamp(64px, 8.4vw, 168px); }
+  .hook { margin: 0; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.25; max-width: 22ch; }
+  .body { margin: 0; color: var(--ink-3); max-width: 46ch; font-size: 16px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .chips li { font: 500 11px/1 var(--mono); padding: 7px 9px; border: 1px solid var(--line-2); border-radius: 99px; color: var(--ink-2); }
+  .cta { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 6px; }
+  .fig { display: grid; gap: 14px; }
+  .fig-box { aspect-ratio: 16 / 11; width: 100%; max-height: 70svh; }
+  .fig-foot { display: grid; grid-template-columns: 1fr minmax(80px, 200px); gap: 16px; align-items: center; border-top: 1px solid var(--line); padding-top: 12px; }
+  .cap { color: var(--ink); }
+  .prog { height: 2px; background: var(--line); position: relative; }
+  .prog i { position: absolute; inset: 0; background: var(--cut); transform-origin: left; transform: scaleX(0); }
+
+  /* MARQUEE */
+  .marquee { padding-block: clamp(60px, 10vw, 140px); overflow: clip; border-block: 1px solid var(--line); background: var(--bg); }
+  .track { display: flex; width: max-content; will-change: transform; }
+  .track span { font-size: clamp(80px, 13vw, 240px); white-space: nowrap; padding-right: .3em; }
+  .track i { font-style: normal; color: var(--cut); font-size: .5em; vertical-align: .4em; }
+
+  /* ALSO */
+  .also { padding-block: clamp(110px, 14vw, 200px); }
+  .also .head-row h2 { font-size: clamp(56px, 8vw, 150px); }
+  .rows { list-style: none; margin: 0; padding: 0; }
+  .rows li { border-bottom: 1px solid var(--line); }
+  .rows a { position: relative; display: grid; grid-template-columns: 60px minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr); gap: 20px; align-items: center; padding-block: 26px; isolation: isolate; }
+  .rows a::before { content: ''; position: absolute; inset: 0 calc(-1 * var(--gutter)); z-index: -1; background: var(--cut); clip-path: inset(100% 0 0 0); transition: clip-path .55s var(--ease-io); }
+  .rows a:hover::before { clip-path: inset(0); }
+  .rows a:hover .n, .rows a:hover .st, .rows a:hover .ln { color: #fff; }
+  .nm { font-size: clamp(40px, 4.6vw, 84px); line-height: .9; }
+  .ln { color: var(--ink-2); font-size: 16px; line-height: 1.45; transition: color .3s; }
+  .st { text-align: right; transition: color .3s; }
+  .n { transition: color .3s; }
+
+  /* ABOUT */
+  .about { padding-block: clamp(110px, 14vw, 200px); border-top: 1px solid var(--line); }
+  .about .grid { align-items: start; }
+  .pic { aspect-ratio: 3 / 4; width: 100%; max-width: 560px; max-height: 84svh; }
+  .words h2 { font-size: clamp(80px, 12vw, 220px); }
+  .words .body { display: grid; gap: 18px; margin-top: 32px; max-width: 56ch; font-size: clamp(17px, 1.3vw, 20px); color: var(--ink-2); }
+  .words .body p { margin: 0; }
+  .words .body p:first-child { color: var(--ink); }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; margin: 48px 0 0; border-top: 1px solid var(--line); }
+  .facts div { padding: 16px 16px 16px 0; border-bottom: 1px solid var(--line); }
+  .facts dt { font-weight: 500; }
+  .facts dd { margin: 4px 0 0; color: var(--ink-3); font-size: 14px; }
+
+  /* CONTACT */
+  .contact { position: relative; min-height: 100svh; padding-block: clamp(120px, 16vw, 220px) 32px; border-top: 1px solid var(--line); display: flex; flex-direction: column; justify-content: space-between; }
+  .end-box { position: absolute; right: 0; top: 0; width: min(60vw, 900px); height: 100svh; }
+  .contact h2 { margin-top: 24px; font-size: clamp(64px, 10.4vw, 200px); max-width: 10ch; }
+  .mail { display: block; text-align: left; margin-top: clamp(40px, 6vw, 80px); max-width: 100%; }
+  .addr { display: block; font: 400 clamp(28px, 5.4vw, 104px)/1 var(--display); text-transform: uppercase; overflow-wrap: anywhere; transition: color .4s var(--ease); }
+  .mail:hover .addr { color: var(--cut); }
+  .mail .tag { display: inline-block; margin-top: 12px; }
+  .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: clamp(60px, 8vw, 120px); padding-top: 18px; border-top: 1px solid var(--line); }
+  .foot nav { display: flex; gap: 24px; flex-wrap: wrap; color: var(--ink); }
+  .foot nav a:hover { color: var(--cut); }
+  .foot p { margin: 0; }
+
+  @media (max-width: 820px) {
+    .hero-name { font-size: clamp(84px, 28vw, 200px); transform: translateY(-62%); }
+    .face-box { width: 108vw; height: 58svh; bottom: auto; top: 9svh; }
+    .hero-foot { flex-direction: column; align-items: start; padding-bottom: max(86px, calc(env(safe-area-inset-bottom) + 76px)); }
+    .hero-meta { text-align: left; }
+    .scroll-cue { display: none; }
+    .cols { grid-template-columns: 1fr; }
+    .proj { height: 230svh; }
+    .stage { align-items: stretch; }
+    .grid { grid-template-columns: 1fr; align-content: start; gap: 18px; padding-top: 68px; }
+    .fig { order: -1; }
+    .fig-box { aspect-ratio: 16 / 10; max-height: 34svh; }
+    .txt { gap: 12px; }
+    .txt h3 { font-size: clamp(54px, 16vw, 96px); }
+    .hook { font-size: 19px; }
+    .body { font-size: 15px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .num { font-size: 52vw; }
+    .rows a { grid-template-columns: 36px 1fr; gap: 6px 12px; }
+    .ln, .st { grid-column: 2; text-align: left; }
+    .pic { max-width: 100%; max-height: 62svh; }
+    .facts { grid-template-columns: 1fr; }
+    .contact { padding-top: 50svh; }
+    .end-box { width: 100vw; height: 50svh; top: 2svh; }
+    .foot { padding-bottom: 72px; }
+  }
+</style>

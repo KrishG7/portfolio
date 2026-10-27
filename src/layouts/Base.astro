@@ -1,24 +1,22 @@
 ---
 import '../styles/global.css';
-import Nav from '../components/Nav.astro';
 import Command from '../components/Command.astro';
-import Footer from '../components/Footer.astro';
 import { site } from '../data/projects';
 
-interface Props {
-  title?: string;
-  description?: string;
-  og?: string;
-  footer?: boolean;
-}
+interface Props { title?: string; description?: string; og?: string; film?: boolean }
 const {
   title = `${site.name} · ${site.role}`,
-  description = 'Krish Gupta builds systems where security and machine learning meet. B.Tech at the University of Delhi, looking for internships.',
+  description = 'Krish Gupta works on security for machine learning: the tools that check a model before anyone trusts it. B.Tech, University of Delhi.',
   og = '/og/home.png',
-  footer = true,
+  film = false,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogUrl = new URL(og, Astro.site);
+const links = [
+  { href: '/#work', label: 'Work' },
+  { href: '/#about', label: 'About' },
+  { href: '/#contact', label: 'Contact' },
+];
 ---
 <!doctype html>
 <html lang="en">
@@ -28,7 +26,7 @@ const ogUrl = new URL(og, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#0a0c12" />
+    <meta name="theme-color" content="#0b0c0e" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -40,30 +38,113 @@ const ogUrl = new URL(og, Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogUrl} />
     <script is:inline>
-      try {
-        var t = localStorage.getItem('theme');
-        if (t === 'ivory') document.documentElement.dataset.theme = 'ivory';
-      } catch (e) {}
       var c = navigator.connection;
       if (matchMedia('(prefers-reduced-motion: reduce)').matches || (c && c.saveData)) document.documentElement.classList.add('lite');
+      try { if (sessionStorage.getItem('kg-seen')) document.documentElement.classList.add('seen'); } catch (e) {}
     </script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <Nav />
+
+    {film && (
+      <div class="loader" data-loader aria-hidden="true">
+        <div class="ld-top tag"><span>Krish Gupta</span><span>Portfolio, 2026</span></div>
+        <div class="ld-num" data-loader-num>000</div>
+      </div>
+    )}
+
+    <header class="hud" data-hud>
+      <a class="mark" href="/" aria-label="Krish Gupta, home">KG</a>
+      <p class="clock tag" aria-label="Local time in New Delhi"><span class="live"></span>Delhi <b data-clock>--:--:--</b> IST</p>
+      <nav class="links tag" aria-label="Primary">
+        {links.map((l) => <a href={l.href} data-magnetic>{l.label}</a>)}
+        <button type="button" class="snd" data-sound aria-pressed="false" aria-label="Sound"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span data-sound-label>Sound off</span></button>
+        <button type="button" class="kbd" data-cmdk-open aria-label="Open command palette">⌘K</button>
+      </nav>
+    </header>
+
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-btn>Menu</button>
+    <div class="menu" id="menu" hidden data-menu>
+      <nav aria-label="Menu">
+        {links.map((l) => <a href={l.href} class="poster">{l.label}</a>)}
+        <a href="/cv" class="poster">CV</a>
+      </nav>
+      <div class="menu-foot tag">
+        <button type="button" data-sound-m>Sound</button>
+        <span>{site.email}</span>
+      </div>
+    </div>
+
+    {film && <canvas class="film" data-film-canvas aria-hidden="true"></canvas>}
+
     <main id="main">
       <slot />
     </main>
-    {footer && <Footer />}
+
     <Command />
-    <div class="grid-overlay" aria-hidden="true"><div>{Array.from({ length: 12 }).map(() => <i />)}</div></div>
+    <div class="cursor" data-cursor aria-hidden="true"><i></i><span data-cursor-label></span></div>
+    <div class="grid-overlay" aria-hidden="true"><div class="wrap">{Array.from({ length: 12 }).map(() => <i />)}</div></div>
     <script>
-      import '../scripts/core';
+      import '../scripts/site';
     </script>
   </body>
 </html>
 
 <style>
-  .skip { position: fixed; left: 12px; top: -60px; z-index: 100; background: var(--gold); color: var(--bg); padding: 10px 14px; border-radius: 8px; font: 600 14px/1 var(--body); }
+  .skip { position: fixed; left: 12px; top: -60px; z-index: 100; background: var(--cut); color: #fff; padding: 10px 14px; font: 500 13px/1 var(--mono); }
   .skip:focus { top: 12px; }
+
+  .loader { position: fixed; inset: 0; z-index: 80; background: var(--bg); display: flex; flex-direction: column; justify-content: space-between; padding: max(20px, env(safe-area-inset-top)) var(--gutter) max(20px, env(safe-area-inset-bottom)); }
+  :global(html.seen) .loader, :global(html.lite) .loader { display: none; }
+  .ld-top { display: flex; justify-content: space-between; }
+  .ld-num { font: 400 clamp(96px, 22vw, 360px)/.8 var(--display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+  .hud {
+    position: fixed; z-index: 60; inset: 0 0 auto 0;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px;
+    padding: max(18px, env(safe-area-inset-top)) var(--gutter) 14px;
+    mix-blend-mode: difference; color: #fff; pointer-events: none;
+  }
+  .hud > * { pointer-events: auto; }
+  .mark { font: 400 22px/1 var(--display); letter-spacing: .02em; justify-self: start; }
+  .clock { margin: 0; color: #fff; display: inline-flex; align-items: center; gap: 8px; }
+  .clock b { color: #fff; font-variant-numeric: tabular-nums; }
+  .live { width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: beat 2s infinite; }
+  @keyframes beat { 50% { opacity: .25; } }
+  .links { display: flex; align-items: center; gap: 26px; justify-self: end; color: #fff; }
+  .links a { position: relative; padding-block: 6px; }
+  .links a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .5s var(--ease); }
+  .links a:hover::after { transform: scaleX(1); transform-origin: left; }
+  .snd { display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: .14em; }
+  .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 10px; }
+  .eq i { width: 2px; height: 3px; background: currentColor; }
+  .snd[aria-pressed='true'] .eq i { animation: eq 1s var(--ease-io) infinite alternate; }
+  .snd[aria-pressed='true'] .eq i:nth-child(2) { animation-delay: -.3s; }
+  .snd[aria-pressed='true'] .eq i:nth-child(3) { animation-delay: -.6s; }
+  .snd[aria-pressed='true'] .eq i:nth-child(4) { animation-delay: -.9s; }
+  @keyframes eq { to { height: 10px; } }
+  .kbd { border: 1px solid currentColor; border-radius: 4px; padding: 5px 6px; letter-spacing: .04em; }
+
+  .menu-btn, .menu { display: none; }
+  @media (max-width: 820px) {
+    .hud { grid-template-columns: auto 1fr; }
+    .clock { justify-self: end; }
+    .links { display: none; }
+    .menu-btn {
+      display: block; position: fixed; z-index: 70; left: 50%; transform: translateX(-50%);
+      bottom: max(16px, env(safe-area-inset-bottom));
+      height: 48px; padding: 0 26px; border-radius: 99px; background: var(--ink); color: var(--bg);
+      font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
+    }
+    .menu {
+      display: flex; position: fixed; inset: 0; z-index: 65; flex-direction: column; justify-content: flex-end; gap: 28px;
+      padding: 90px var(--gutter) max(96px, calc(env(safe-area-inset-bottom) + 84px));
+      background: var(--cut); color: #fff; clip-path: inset(100% 0 0 0); transition: clip-path .7s var(--ease-io);
+    }
+    .menu[hidden] { display: flex; visibility: hidden; }
+    .menu.open { clip-path: inset(0); visibility: visible; }
+    .menu nav { display: grid; }
+    .menu nav a { font-size: clamp(64px, 22vw, 120px); line-height: .9; }
+    .menu-foot { display: flex; justify-content: space-between; color: #fff; }
+  }
 </style>
