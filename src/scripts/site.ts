@@ -13,6 +13,45 @@ const small = matchMedia('(max-width: 820px)').matches;
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector<T>(s);
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => [...r.querySelectorAll<T>(s)];
 
+/* ---------------- decode: text resolves out of random glyphs ---------------- */
+const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+=/<>';
+const scrambling = new WeakMap<Element, number>();
+function scramble(el: HTMLElement, to: string, dur = 600) {
+  if (lite) { el.textContent = to; return; }
+  const id = (scrambling.get(el) ?? 0) + 1; scrambling.set(el, id);
+  const t0 = performance.now();
+  const step = (now: number) => {
+    if (scrambling.get(el) !== id) return;
+    const p = Math.min(1, (now - t0) / dur);
+    let out = '';
+    for (let i = 0; i < to.length; i++) out += to[i] === ' ' || p > i / to.length * .8 + .2 ? to[i] : GLYPHS[(Math.random() * GLYPHS.length) | 0];
+    el.textContent = out;
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+// decode every text node inside an element, keeping its markup
+function scrambleNode(el: HTMLElement) {
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  const nodes: Text[] = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode as Text);
+  nodes.forEach((n) => {
+    const to = n.data, t0 = performance.now();
+    const step = (now: number) => {
+      const p = Math.min(1, (now - t0) / 800);
+      n.data = [...to].map((c, i) => (c === ' ' || p > i / to.length * .8 + .2 ? c : GLYPHS[(Math.random() * GLYPHS.length) | 0])).join('');
+      if (p < 1) requestAnimationFrame(step);
+    };
+    if (!lite) requestAnimationFrame(step);
+  });
+}
+
+/* ---------------- rolling link labels ---------------- */
+$$('[data-roll]').forEach((el) => {
+  const t = el.textContent?.trim() ?? '';
+  el.innerHTML = `<span class="roll" data-t="${t.replace(/"/g, '&quot;')}"><span>${t}</span></span>`;
+});
+
 /* ---------------- one clock: Lenis, ScrollTrigger and the film all run on GSAP's ticker ---------------- */
 let lenis: Lenis | null = null;
 if (!lite) {
@@ -34,11 +73,11 @@ try { sessionStorage.setItem('kg-seen', '1'); } catch {}
 const loaderDone = new Promise<void>((resolve) => {
   if (!loader || seen || lite) { loader?.remove(); resolve(); return; }
   lenis?.stop();
-  const num = $('[data-loader-num]', loader)!;
+  const num = $('[data-loader-num]', loader)!, bar = $('[data-loader-bar]', loader);
   const o = { v: 0 };
-  gsap.to(o, { v: 100, duration: 1.05, ease: 'power2.inOut', onUpdate: () => (num.textContent = String(Math.round(o.v)).padStart(3, '0')) });
+  gsap.to(o, { v: 100, duration: 1.05, ease: 'power2.inOut', onUpdate: () => { num.textContent = String(Math.round(o.v)).padStart(3, '0'); if (bar) bar.style.transform = `scaleX(${o.v / 100})`; } });
   gsap.to(loader, { clipPath: 'inset(0 0 100% 0)', duration: .8, ease: 'expo.inOut', delay: 1.1, onComplete: () => { loader.remove(); lenis?.start(); } });
-  setTimeout(resolve, 1100);
+  setTimeout(resolve, 900);
 });
 
 /* ---------------- film ---------------- */
@@ -54,6 +93,7 @@ if (canvas) {
     })
     .catch((e) => console.error('film', e));
   addEventListener('pointermove', (e) => film?.setPointer(e.clientX, e.clientY, true), { passive: true });
+  addEventListener('pointerdown', (e) => { if (!(e.target as HTMLElement).closest('a, button, input, dialog')) film?.shock(e.clientX, e.clientY); }, { passive: true });
   document.addEventListener('pointerleave', () => film?.setPointer(0, 0, false));
   addEventListener('touchend', () => setTimeout(() => film?.setPointer(0, 0, false), 400), { passive: true });
 }
@@ -62,6 +102,21 @@ if (canvas) {
 document.fonts.ready.then(() => {
   if (lite) return;
   loaderDone.then(() => {
+    // the name builds letter by letter, then splits apart as the hero scrolls away
+    const heroLines = $$('[data-hero-line]');
+    heroLines.forEach((el, li) => {
+      const s = SplitText.create(el, { type: 'words,chars', mask: 'chars' });
+      gsap.from(s.chars, { yPercent: 110, duration: 1.3, ease: 'expo.out', stagger: .045, delay: .1 + li * .12 });
+      gsap.to(el, { xPercent: li ? 16 : -16, opacity: .25, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    });
+    $$('[data-split-chars]').forEach((el) => {
+      const s = SplitText.create(el, { type: 'words,chars', mask: 'chars' });
+      gsap.from(s.chars, { yPercent: 110, rotate: 6, duration: 1.1, ease: 'expo.out', stagger: .035, scrollTrigger: { trigger: el, start: 'top 85%' } });
+    });
+    $$('[data-scramble]').forEach((el) => ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: () => scrambleNode(el) }));
+    $$('[data-row]').forEach((row, i) => {
+      gsap.from(row, { x: -60, opacity: 0, duration: 1.1, ease: 'expo.out', delay: (i % 5) * .06, scrollTrigger: { trigger: row, start: 'top 94%' } });
+    });
     $$('[data-split]').forEach((el) => {
       const s = SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'line' });
       gsap.from(s.lines, { yPercent: 105, duration: 1.15, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: el, start: 'top 88%' } });
@@ -83,8 +138,9 @@ if (lite) $$('[data-scrub] .w').forEach((w) => (w.style.opacity = '1'));
 
 /* ---------------- projects: caption and progress follow the pinned scroll ---------------- */
 $$('[data-proj]').forEach((sec) => {
-  const cap = $('[data-cap]', sec)!, bar = $('[data-prog]', sec)!;
+  const cap = $('[data-cap]', sec)!, bar = $('[data-prog]', sec)!, vf = $('[data-vf]', sec), num = $('[data-num]', sec);
   const caps: string[] = JSON.parse(cap.dataset.cap || '[]');
+  const alertAt = Number(sec.dataset.alert);
   let last = -1;
   ScrollTrigger.create({
     trigger: sec, start: 'top top', end: 'bottom bottom',
@@ -93,11 +149,30 @@ $$('[data-proj]').forEach((sec) => {
       const k = st.progress < .3 ? 0 : st.progress < .62 ? 1 : 2;
       if (k !== last) {
         last = k;
-        gsap.fromTo(cap, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: .4, ease: 'power2.out', onStart: () => (cap.textContent = caps[k]) });
+        scramble(cap, caps[k], 700);
+        const alert = alertAt >= 0 && k >= alertAt;
+        sec.classList.toggle('alert', alert);
+        vf?.classList.toggle('alert', alert);
+        if (alert && k === alertAt && vf) { vf.classList.remove('sweep'); void vf.offsetWidth; vf.classList.add('sweep'); }
       }
     },
   });
+  if (num && !lite) gsap.fromTo(num, { yPercent: 30 }, { yPercent: -30, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } });
 });
+
+/* ---------------- viewfinder corners lock on when a figure comes into view ---------------- */
+$$('[data-vf]').forEach((vf) => ScrollTrigger.create({ trigger: vf, start: 'top 80%', end: 'bottom 10%', onToggle: (st) => vf.classList.toggle('on', st.isActive) }));
+
+/* ---------------- header: which section you're in, decoded as it changes ---------------- */
+const where = $('[data-where]', $('[data-hud]') ?? document);
+if (where) $$('main [data-where]').forEach((sec) => ScrollTrigger.create({
+  trigger: sec, start: 'top 50%', end: 'bottom 50%',
+  onToggle: (st) => { if (st.isActive) scramble(where, sec.dataset.where!, 500); },
+}));
+
+/* ---------------- scroll progress ---------------- */
+const progress = $('[data-progress]');
+if (progress) ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (st) => (progress.style.transform = `scaleX(${st.progress})`) });
 
 /* ---------------- marquee: drifts on its own, pushed and skewed by scroll speed ---------------- */
 const track = $('[data-marquee]');

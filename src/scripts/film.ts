@@ -34,6 +34,7 @@ uniform vec2 uOffFrom, uOffTo;
 uniform float uTime, uIntro, uVel, uAspect, uDpr, uSize;
 uniform vec2 uMouse; uniform float uMouseOn;
 uniform vec2 uTilt;
+uniform vec3 uShock; // x, y, seconds since the click (large when idle)
 in vec3 aRnd;
 out vec4 vCol;
 
@@ -51,7 +52,7 @@ vec2 move(vec4 d, float stage, vec2 off){
 
 // colour, alpha and size for a particle in a scene
 vec4 look(vec4 d, float stage, out float size){
-  vec3 ink = vec3(.93,.92,.90), dim = vec3(.34,.35,.40), cut = vec3(.24,.33,1.), alert = vec3(1.,.36,.30);
+  vec3 ink = vec3(.93,.92,.90), dim = vec3(.34,.35,.40), cut = vec3(.24,.33,1.), alert = vec3(.86,.08,.24);
   int g = int(d.w + .5);
   float b = d.z;
   vec3 c = mix(dim, ink, b); float a = .35 + b * .65; size = .7 + b * 1.3;
@@ -66,8 +67,12 @@ vec4 look(vec4 d, float stage, out float size){
   if (g == ${G.ALERT}) { c = alert; a = .8; size = 1.2; }
   if (g == ${G.ALERT_LATE}) { c = alert; a = smoothstep(.5, .6, stage); size = 1.6; }
   if (g == ${G.RAIN}) { c = mix(dim, cut, .35); a = .35; size = .9; }
-  if (g == ${G.DUST}) { c = ink; a = b * .55; size = .6 + b; }
-  if (g == ${G.RELIEF}) { a = .3 + b * .75; size = .55 + b * 1.6; }
+  if (g == ${G.DUST}) { c = aRnd.z > .93 ? alert : ink; a = b * .55 + (aRnd.z > .93 ? .25 : 0.); size = .6 + b; }
+  if (g == ${G.RELIEF}) {
+    // shadows carry a low crimson, highlights stay paper white
+    c = mix(mix(dim, alert, .5) * .8, ink, smoothstep(.12, .78, b));
+    a = .3 + b * .75; size = .55 + b * 1.6;
+  }
   if (g == ${G.ROW}) {
     float row = b, cur = clamp(stage * 1.15, 0., 1.);
     a = smoothstep(row, row + .02, cur) * .9;
@@ -104,12 +109,26 @@ void main(){
   // scroll speed smears particles vertically
   p.y += uVel * (aRnd.y - .5) * .05;
 
+  // a click sends a ring through the field
+  vec2 ds = (p - uShock.xy) * vec2(uAspect, 1.);
+  float dist = length(ds), ring = uShock.z * 1.5;
+  float wave = exp(-pow((dist - ring) * 22., 2.)) * max(0., 1. - uShock.z / 1.2);
+  p += normalize(ds + 1e-5) / vec2(uAspect, 1.) * wave * .035;
+
+  // on the portrait, a scan beam passes over the face every few seconds
+  float relief = mix(float(int(A.w + .5) == ${G.RELIEF}), float(int(B.w + .5) == ${G.RELIEF}), k);
+  float beamY = 1.25 - fract(uTime / 7.5) * 3.4;
+  float beam = smoothstep(.05, 0., abs(p.y - beamY)) * relief;
+  p.x += beam * (aRnd.x - .5) * .012;
+
   gl_Position = vec4(p, 0., 1.);
   vec4 c = mix(ca, cb, k);
   c.rgb = mix(c.rgb, vec3(.24,.33,1.), f * .9);
+  c.rgb = mix(c.rgb, vec3(.86,.08,.24), clamp(beam * .8 + wave * .6, 0., 1.));
+  c.a = max(c.a, (beam * .9 + wave * .5) * step(.01, c.a + relief));
   c.a *= ki * (1. + abs(uVel) * .3);
   vCol = c;
-  gl_PointSize = mix(sa, sb, k) * uSize * uDpr * (1. + f * 1.2) * (1. + fly * .6);
+  gl_PointSize = mix(sa, sb, k) * uSize * uDpr * (1. + f * 1.2 + beam * .8 + wave * .6) * (1. + fly * .6);
 }`;
 
 const FS = `#version 300 es
@@ -242,7 +261,7 @@ function sample(img: ImageData, n: number, q: number, vw: number, vh: number, we
 
 /* ------------------------------------------------------------------ the film */
 
-export interface Film { setPointer(x: number, y: number, on: boolean): void; setVelocity(v: number): void; render(time: number): void; resize(): void }
+export interface Film { shock(x: number, y: number): void; setPointer(x: number, y: number, on: boolean): void; setVelocity(v: number): void; render(time: number): void; resize(): void }
 
 export async function createFilm(canvas: HTMLCanvasElement, opts: { face: string; photo: string; small: boolean; reduce: boolean }): Promise<Film | null> {
   const gl = canvas.getContext('webgl2', { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: 'high-performance' });
@@ -271,7 +290,7 @@ export async function createFilm(canvas: HTMLCanvasElement, opts: { face: string
   if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog) || 'link');
   gl.useProgram(prog);
   const U: Record<string, WebGLUniformLocation | null> = {};
-  'uT uRows uFrom uTo uMix uStageFrom uStageTo uOffFrom uOffTo uTime uIntro uVel uAspect uDpr uSize uMouse uMouseOn uTilt'.split(' ').forEach((n) => (U[n] = gl.getUniformLocation(prog, n)));
+  'uT uRows uFrom uTo uMix uStageFrom uStageTo uOffFrom uOffTo uTime uIntro uVel uAspect uDpr uSize uMouse uMouseOn uTilt uShock'.split(' ').forEach((n) => (U[n] = gl.getUniformLocation(prog, n)));
 
   const rnd = new Float32Array(N * 3); for (let i = 0; i < rnd.length; i++) rnd[i] = Math.random();
   const vao = gl.createVertexArray(); gl.bindVertexArray(vao);
@@ -351,8 +370,10 @@ export async function createFilm(canvas: HTMLCanvasElement, opts: { face: string
   const ptr = { x: 0, y: 0, tx: 0, ty: 0, on: 0, ton: 0 };
   const tilt = { x: 0, y: 0 };
   let vel = 0, t0 = 0;
+  const shk = { x: 0, y: 0, at: -99 };
 
   return {
+    shock(x, y) { shk.x = (x / vw) * 2 - 1; shk.y = 1 - (y / vh) * 2; shk.at = performance.now(); },
     setPointer(x, y, on) { ptr.tx = (x / vw) * 2 - 1; ptr.ty = 1 - (y / vh) * 2; ptr.ton = on ? 1 : 0; },
     setVelocity(v) { vel = Math.max(-1, Math.min(1, v / 40)); },
     resize() { build(); },
@@ -371,6 +392,7 @@ export async function createFilm(canvas: HTMLCanvasElement, opts: { face: string
       gl!.uniform1f(U.uVel, opts.reduce ? 0 : vel);
       gl!.uniform2f(U.uMouse, ptr.x, ptr.y); gl!.uniform1f(U.uMouseOn, ptr.on);
       gl!.uniform2f(U.uTilt, tilt.x, tilt.y);
+      gl!.uniform3f(U.uShock, shk.x, shk.y, opts.reduce ? 99 : (now - shk.at) / 1000);
       gl!.clearColor(0, 0, 0, 0); gl!.clear(gl!.COLOR_BUFFER_BIT);
       gl!.drawArrays(gl!.POINTS, 0, N);
       vel *= .9;

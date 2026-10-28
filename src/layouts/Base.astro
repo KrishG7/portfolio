@@ -50,14 +50,15 @@ const links = [
       <div class="loader" data-loader aria-hidden="true">
         <div class="ld-top tag"><span>Krish Gupta</span><span>Portfolio, 2026</span></div>
         <div class="ld-num" data-loader-num>000</div>
+        <i class="ld-bar" data-loader-bar></i>
       </div>
     )}
 
     <header class="hud" data-hud>
-      <a class="mark" href="/" aria-label="Krish Gupta, home">KG</a>
+      <div class="left"><a class="mark" href="/" aria-label="Krish Gupta, home">KG</a><span class="where tag" data-where aria-live="polite">Index</span></div>
       <p class="clock tag" aria-label="Local time in New Delhi"><span class="live"></span>Delhi <b data-clock>--:--:--</b> IST</p>
       <nav class="links tag" aria-label="Primary">
-        {links.map((l) => <a href={l.href} data-magnetic>{l.label}</a>)}
+        {links.map((l) => <a href={l.href} data-magnetic data-roll>{l.label}</a>)}
         <button type="button" class="snd" data-sound aria-pressed="false" aria-label="Sound"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span data-sound-label>Sound off</span></button>
         <button type="button" class="kbd" data-cmdk-open aria-label="Open command palette">⌘K</button>
       </nav>
@@ -76,6 +77,8 @@ const links = [
     </div>
 
     {film && <canvas class="film" data-film-canvas aria-hidden="true"></canvas>}
+    <div class="grain" aria-hidden="true"></div>
+    <div class="progress-line" data-progress aria-hidden="true"></div>
 
     <main id="main">
       <slot />
@@ -98,6 +101,7 @@ const links = [
   :global(html.seen) .loader, :global(html.lite) .loader { display: none; }
   .ld-top { display: flex; justify-content: space-between; }
   .ld-num { font: 400 clamp(96px, 22vw, 360px)/.8 var(--display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .ld-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--crimson); transform-origin: left; transform: scaleX(0); }
 
   .hud {
     position: fixed; z-index: 60; inset: 0 0 auto 0;
@@ -106,7 +110,10 @@ const links = [
     mix-blend-mode: difference; color: #fff; pointer-events: none;
   }
   .hud > * { pointer-events: auto; }
-  .mark { font: 400 22px/1 var(--display); letter-spacing: .02em; justify-self: start; }
+  .left { display: flex; align-items: center; gap: 18px; justify-self: start; }
+  .mark { font: 400 22px/1 var(--display); letter-spacing: .02em; }
+  .where { color: #fff; min-width: 16ch; }
+  .where::before { content: '/ '; opacity: .5; }
   .clock { margin: 0; color: #fff; display: inline-flex; align-items: center; gap: 8px; }
   .clock b { color: #fff; font-variant-numeric: tabular-nums; }
   .live { width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: beat 2s infinite; }
@@ -129,6 +136,7 @@ const links = [
   @media (max-width: 820px) {
     .hud { grid-template-columns: auto 1fr; }
     .clock { justify-self: end; }
+    .where { display: none; }
     .links { display: none; }
     .menu-btn {
       display: block; position: fixed; z-index: 70; left: 50%; transform: translateX(-50%);

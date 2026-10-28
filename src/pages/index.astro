@@ -3,7 +3,10 @@ import Base from '../layouts/Base.astro';
 import { flagships, minors, site } from '../data/projects';
 
 const manifesto = 'Every model you download is somebody else’s code. I read it before you run it.';
-const cut = new Set(['somebody', 'else’s', 'code.']);
+const threat = new Set(['somebody', 'else’s', 'code.']);
+const guard = new Set(['read']);
+// which caption step is the moment the threat shows up (crimson)
+const alertAt: Record<string, number> = { 'aegis-tensor': 1, athena: 2, weavr: 2 };
 const facts = [
   ['House Captain, valedictorian', 'The Badhani School, Pathankot'],
   ['Awarded the Red Coat', 'For academic and co-curricular work'],
@@ -13,11 +16,11 @@ const facts = [
 ---
 <Base film>
   <!-- HERO: the face -->
-  <section class="hero" data-film="face" aria-label="Introduction">
-    <h1 class="hero-name poster" aria-label="Krish Gupta"><span data-split>Krish</span><span class="o" data-split>Gupta</span></h1>
+  <section class="hero" data-film="face" data-where="Index" aria-label="Introduction">
+    <h1 class="hero-name poster" aria-label="Krish Gupta"><span data-hero-line>Krish</span><span class="o" data-hero-line>Gupta</span></h1>
     <div class="face-box" data-film-box></div>
     <div class="wrap hero-foot up">
-      <p class="lede" data-reveal><b>I break machine learning systems on purpose,</b> then build the tools that stop anyone else from doing it.</p>
+      <p class="lede" data-reveal><b>I <span class="r">break</span> machine learning systems on purpose,</b> then build the tools that stop anyone else from doing it.</p>
       <div class="hero-meta tag" data-reveal>
         <p><span class="dot"></span>Now building <b>{site.now}</b></p>
         <p>B.Tech, University of Delhi · open to 2027 internships</p>
@@ -27,11 +30,11 @@ const facts = [
   </section>
 
   <!-- MANIFESTO: particles loosen into dust -->
-  <section class="manifesto" data-film="dust" aria-label="What I do">
+  <section class="manifesto" data-film="dust" data-where="The work" aria-label="What I do">
     <div class="wrap up">
       <p class="tag">00 · The work</p>
       <p class="poster big" data-scrub>
-        {manifesto.split(' ').map((w) => <span class={cut.has(w.toLowerCase()) ? 'w c' : 'w'}>{w} </span>)}
+        {manifesto.split(' ').map((w) => <span class={threat.has(w.toLowerCase()) ? 'w r' : guard.has(w.toLowerCase()) ? 'w c' : 'w'}>{w} </span>)}
       </p>
       <div class="cols">
         <p class="lede" data-reveal>Security and machine learning usually sit in two different departments. I work in the gap between them, because that is where the attacks are, and where very few people are looking.</p>
@@ -41,7 +44,7 @@ const facts = [
   </section>
 
   <!-- WORK -->
-  <section id="work" class="work-head" aria-label="Selected work">
+  <section id="work" class="work-head" data-where="Selected work" aria-label="Selected work">
     <div class="wrap up head-row">
       <h2 class="poster" data-split>Selected<br />work</h2>
       <p class="tag">2025 – 2026 · {flagships.length} systems · scroll</p>
@@ -49,23 +52,23 @@ const facts = [
   </section>
 
   {flagships.map((f, i) => (
-    <article class="proj" data-film={f.film} data-proj={i} aria-labelledby={`p-${f.slug}`}>
+    <article class="proj" data-film={f.film} data-proj={i} data-where={`0${i + 1} ${f.name}`} data-alert={alertAt[f.slug] ?? -1} aria-labelledby={`p-${f.slug}`}>
       <div class="stage" data-film-anchor>
-        <span class="num" aria-hidden="true">0{i + 1}</span>
+        <span class="num" aria-hidden="true" data-num>0{i + 1}</span>
         <div class="wrap grid up">
           <div class="txt">
-            <p class="tag"><span class="c">0{i + 1}</span> · {f.area}</p>
-            <h3 id={`p-${f.slug}`} class="poster" data-split>{f.name}</h3>
+            <p class="tag" data-scramble><span class="c">0{i + 1}</span> · {f.area}</p>
+            <h3 id={`p-${f.slug}`} class="poster" data-split-chars set:html={f.name.replace('-', '-<br />')} />
             <p class="hook" data-reveal>{f.hook}</p>
             <p class="body" data-reveal>{f.body}</p>
             <ul class="chips" data-reveal>{f.stack.slice(0, 5).map((s) => <li>{s}</li>)}</ul>
             <div class="cta" data-reveal>
-              <a class="btn" href={f.repo} target="_blank" rel="noopener" data-magnetic data-cursor-text="Source">Source ↗</a>
+              <a class="btn" href={f.repo} target="_blank" rel="noopener" data-magnetic data-roll data-cursor-text="Source">Source ↗</a>
               {f.team && <span class="tag">Team · {f.team}</span>}
             </div>
           </div>
           <div class="fig">
-            <div class="fig-box" data-film-box></div>
+            <div class="fig-box vf" data-film-box data-vf><i class="cn"></i><i class="cn"></i><i class="cn"></i><i class="cn"></i></div>
             <div class="fig-foot tag">
               <span class="cap" data-cap={JSON.stringify(f.caps)}>{f.caps[0]}</span>
               <span class="prog"><i data-prog></i></span>
@@ -86,12 +89,12 @@ const facts = [
   </section>
 
   <!-- ALSO BUILT -->
-  <section class="also" data-film="dust" aria-label="More projects">
+  <section class="also" data-film="dust" data-where="Also built" aria-label="More projects">
     <div class="wrap up">
       <div class="head-row"><h2 class="poster" data-split>Also built</h2><p class="tag">{minors.length} more · source on GitHub</p></div>
       <ul class="rows">
         {minors.map((m, i) => (
-          <li>
+          <li data-row>
             <a href={m.repo} target="_blank" rel="noopener" data-cursor-text="Source">
               <span class="tag n">0{i + 5}</span>
               <span class="poster nm">{m.name}</span>
@@ -105,9 +108,9 @@ const facts = [
   </section>
 
   <!-- ABOUT: particles become the photo -->
-  <section id="about" class="about" data-film="photo" aria-label="About">
+  <section id="about" class="about" data-film="photo" data-where="About" aria-label="About">
     <div class="wrap grid up">
-      <div class="pic" data-film-box role="img" aria-label="Krish on a hillside above a pine valley, drawn in particles"></div>
+      <div class="pic vf" data-film-box data-vf role="img" aria-label="Krish on a hillside above a pine valley, drawn in particles"><i class="cn"></i><i class="cn"></i><i class="cn"></i><i class="cn"></i></div>
       <div class="words">
         <h2 class="poster" data-split>About</h2>
         <div class="body">
@@ -123,7 +126,7 @@ const facts = [
   </section>
 
   <!-- CONTACT: the face comes back -->
-  <section id="contact" class="contact" data-film="end" aria-label="Contact">
+  <section id="contact" class="contact" data-film="end" data-where="Contact" aria-label="Contact">
     <div class="end-box" data-film-box></div>
     <div class="wrap up">
       <p class="tag">Internships · research · anything that has to hold</p>
@@ -134,10 +137,10 @@ const facts = [
       </button>
       <div class="foot">
         <nav class="tag" aria-label="Elsewhere">
-          <a href={site.github} target="_blank" rel="noopener" data-magnetic>GitHub</a>
-          <a href={site.linkedin} target="_blank" rel="noopener" data-magnetic>LinkedIn</a>
-          <a href={site.leetcode} target="_blank" rel="noopener" data-magnetic>LeetCode</a>
-          <a href="/cv" data-magnetic>CV</a>
+          <a href={site.github} target="_blank" rel="noopener" data-magnetic data-roll>GitHub</a>
+          <a href={site.linkedin} target="_blank" rel="noopener" data-magnetic data-roll>LinkedIn</a>
+          <a href={site.leetcode} target="_blank" rel="noopener" data-magnetic data-roll>LeetCode</a>
+          <a href="/cv" data-magnetic data-roll>CV</a>
         </nav>
         <p class="tag">© 2026 Krish Gupta · press <b>⌘K</b></p>
       </div>
@@ -148,6 +151,9 @@ const facts = [
 <style>
   /* HERO */
   .hero { position: relative; height: 100svh; min-height: 560px; overflow: clip; }
+  .hero::before { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(42% 55% at 12% 100%, rgba(212, 22, 60, .16), transparent 70%), radial-gradient(30% 40% at 92% 8%, rgba(59, 82, 255, .08), transparent 70%); animation: breathe 7s ease-in-out infinite alternate; }
+  @keyframes breathe { from { opacity: .55; } to { opacity: 1; } }
+  .contact::before { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(50% 50% at 80% 70%, rgba(212, 22, 60, .12), transparent 70%); }
   .hero-name {
     position: absolute; z-index: 0; inset: 50% 0 auto; transform: translateY(-52%);
     text-align: center; white-space: nowrap; color: var(--ghost);
@@ -190,16 +196,19 @@ const facts = [
   .cta { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 6px; }
   .fig { display: grid; gap: 14px; }
   .fig-box { aspect-ratio: 16 / 11; width: 100%; max-height: 70svh; }
+  .proj.alert .prog i { background: var(--crimson); }
+  .proj.alert .cap { color: var(--crimson); }
   .fig-foot { display: grid; grid-template-columns: 1fr minmax(80px, 200px); gap: 16px; align-items: center; border-top: 1px solid var(--line); padding-top: 12px; }
   .cap { color: var(--ink); }
   .prog { height: 2px; background: var(--line); position: relative; }
-  .prog i { position: absolute; inset: 0; background: var(--cut); transform-origin: left; transform: scaleX(0); }
+  .prog i { position: absolute; inset: 0; background: var(--cut); transform-origin: left; transform: scaleX(0); transition: background .4s; }
+  .cap { transition: color .4s; }
 
   /* MARQUEE */
   .marquee { padding-block: clamp(60px, 10vw, 140px); overflow: clip; border-block: 1px solid var(--line); background: var(--bg); }
   .track { display: flex; width: max-content; will-change: transform; }
   .track span { font-size: clamp(80px, 13vw, 240px); white-space: nowrap; padding-right: .3em; }
-  .track i { font-style: normal; color: var(--cut); font-size: .5em; vertical-align: .4em; }
+  .track i { font-style: normal; color: var(--crimson); font-size: .5em; vertical-align: .4em; }
 
   /* ALSO */
   .also { padding-block: clamp(110px, 14vw, 200px); }
@@ -210,6 +219,7 @@ const facts = [
   .rows a::before { content: ''; position: absolute; inset: 0 calc(-1 * var(--gutter)); z-index: -1; background: var(--cut); clip-path: inset(100% 0 0 0); transition: clip-path .55s var(--ease-io); }
   .rows a:hover::before { clip-path: inset(0); }
   .rows a:hover .n, .rows a:hover .st, .rows a:hover .ln { color: #fff; }
+  .rows .n { color: var(--crimson); }
   .nm { font-size: clamp(40px, 4.6vw, 84px); line-height: .9; }
   .ln { color: var(--ink-2); font-size: 16px; line-height: 1.45; transition: color .3s; }
   .st { text-align: right; transition: color .3s; }
