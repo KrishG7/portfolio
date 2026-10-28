@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { flagships, minors, site } from '../data/projects';
+import { allCases, minors, site } from '../data/projects';
 const skills = [
   ['Languages', 'Python, C, Go, TypeScript, JavaScript, SQL, MATLAB, VHDL'],
   ['Security', 'Model-file and pickle analysis, Linux ptrace, sandboxing, applied cryptography'],
@@ -31,10 +31,10 @@ const skills = [
 
     <section>
       <h2>Selected work</h2>
-      {flagships.map((f) => (
+      {allCases.map((f) => (
         <div class="row"><div><h3><a href={`/work/${f.slug}`}>{f.name}</a> <small>{f.kicker}</small></h3><p>{f.line}</p><p class="dim">{f.stack.join(' · ')}</p></div><span>{f.year}</span></div>
       ))}
-      {minors.map((m) => (
+      {minors.filter((m) => !m.slug).map((m) => (
         <div class="row"><div><h3><a href={m.repo} target="_blank" rel="noopener">{m.name}</a></h3><p>{m.line}</p></div><span>{m.year}</span></div>
       ))}
     </section>
@@ -48,13 +48,13 @@ const skills = [
 
 <style>
   .cv { padding-block: clamp(120px, 14vw, 170px) 40px; max-width: 980px; }
-  h1 { margin: 16px 0 20px; font: 340 clamp(56px, 9vw, 120px)/.9 var(--display); font-variation-settings: 'opsz' 144; letter-spacing: -.04em; }
+  h1 { margin: 16px 0 20px; font: 400 clamp(64px, 11vw, 150px)/.88 var(--display); text-transform: uppercase; letter-spacing: -.005em; }
   .links { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 24px; font: 500 13px/1.6 var(--mono); }
-  .links a, .links button { color: var(--gold); text-decoration: underline; text-underline-offset: 4px; }
+  .links a, .links button { color: var(--cut); text-decoration: underline; text-underline-offset: 4px; }
   section { margin-top: 72px; }
-  h2 { margin: 0 0 8px; font: 500 12px/1.6 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+  h2 { margin: 0 0 8px; font: 500 12px/1.6 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--cut); }
   .row { display: flex; justify-content: space-between; gap: 24px; padding: 20px 0; border-top: 1px solid var(--line); }
-  .row h3 { margin: 0 0 6px; font: 400 22px/1.2 var(--display); font-variation-settings: 'opsz' 48; }
+  .row h3 { margin: 0 0 6px; font: 400 24px/1.15 var(--display); text-transform: uppercase; letter-spacing: .01em; }
   .row h3 small { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-left: 8px; }
   .row p { margin: 0; color: var(--ink-2); }
   .row .dim { color: var(--ink-3); font-size: 14px; margin-top: 6px; }
@@ -62,10 +62,13 @@ const skills = [
   @media (max-width: 640px) { .row { flex-direction: column; gap: 6px; } .row > span { order: -1; } }
   @media print {
     :global(.hud), :global(.menu-btn), :global(.foot), :global(.grid-overlay), .links button { display: none !important; }
-    :global(body) { background: #fff; color: #000; font-size: 12px; }
-    .cv { padding: 0; }
+    :global(.skip), :global(.cursor), :global(canvas) { display: none !important; }
+    .links a[href^='http']::after { content: ' · ' attr(href); font-weight: 400; }
+    :global(:root) { --bg: #fff; --bg-2: #fff; --ink: #111; --ink-2: #333; --ink-3: #555; --line: #ccc; --cut: #1b2fc7; --gold: #1b2fc7; }
+    :global(html), :global(body) { background: #fff !important; color: #111; font-size: 12px; }
+    .cv { padding: 14mm; max-width: none; }
     h1 { font-size: 44px; }
-    section { margin-top: 24px; break-inside: avoid-page; }
+    section { margin-top: 22px; }
     .row { padding: 8px 0; break-inside: avoid; }
   }
 </style>

@@ -1,15 +1,19 @@
 ---
+import fs from 'node:fs';
 import Base from '../../layouts/Base.astro';
-import { flagships, type Flagship } from '../../data/projects';
+import { allCases, type Flagship } from '../../data/projects';
 
 export function getStaticPaths() {
-  return flagships.map((f, i) => ({ params: { slug: f.slug }, props: { f, next: flagships[(i + 1) % flagships.length] } }));
+  return allCases.map((f, i) => ({ params: { slug: f.slug }, props: { f, next: allCases[(i + 1) % allCases.length] } }));
 }
 const { f, next } = Astro.props as { f: Flagship; next: Flagship };
 const outLabel = { held: 'Held', failed: 'Didn’t hold', open: 'Still open' };
+const hasVideo = !!f.video && fs.existsSync(`public/video/${f.video}.mp4`);
+const hasPoster = !!f.video && fs.existsSync(`public/video/${f.video}.jpg`);
+const ogImg = fs.existsSync(`public/og/${f.slug}.png`) ? `/og/${f.slug}.png` : '/og/home.png';
 ---
-<Base title={`${f.name} · Krish Gupta`} description={f.line} og={`/og/${f.slug}.png`}>
-  <article class="cs">
+<Base title={`${f.name} · Krish Gupta`} description={f.line} og={ogImg}>
+  <article class={`cs${f.demo ? '' : ' nodemo'}`}>
     <header class="wrap head">
       <a class="back" href="/#work"><i aria-hidden="true">←</i> All work</a>
       <p class="eyebrow"><b>{f.n}</b> · {f.kicker}</p>
@@ -23,16 +27,41 @@ const outLabel = { held: 'Held', failed: 'Didn’t hold', open: 'Still open' };
       </dl>
     </header>
 
-    <div class="wrap">
-      <div class="figure" style={`view-transition-name: fig-${f.slug}`}>
-        <canvas data-demo={f.demo} data-auto role="img" aria-label={`Animated figure for ${f.name}`}></canvas>
+    {f.demo && (
+      <div class="wrap">
+        <div class="figure" style={`view-transition-name: fig-${f.slug}`}>
+          <canvas data-demo={f.demo} data-auto role="img" aria-label={`Animated figure for ${f.name}`}></canvas>
+        </div>
       </div>
-    </div>
+    )}
+
+    {hasVideo && (
+      <section class="wrap reelwrap">
+        <h2 class="label">Watch it</h2>
+        <div class="reel">
+          <video controls playsinline preload="none" poster={hasPoster ? `/video/${f.video}.jpg` : undefined} aria-label={`Narrated walkthrough of ${f.name}`}>
+            <source src={`/video/${f.video}.mp4`} type="video/mp4" />
+          </video>
+          <p class="cap">A narrated walkthrough from each user’s point of view. Captions are burned in, so it works on mute.</p>
+        </div>
+      </section>
+    )}
 
     <section class="wrap two">
       <h2 class="label">The problem</h2>
       <p class="big">{f.problem}</p>
     </section>
+
+    {f.facts && (
+      <section class="wrap two">
+        <h2 class="label">Numbers, with dates</h2>
+        <ul class="facts">
+          {f.facts.map((x) => (
+            <li><b>{x.v}</b><span>{x.label}</span><em>{x.src}</em></li>
+          ))}
+        </ul>
+      </section>
+    )}
 
     <section class="wrap story" data-story>
       <h2 class="label">How it works</h2>
@@ -46,9 +75,11 @@ const outLabel = { held: 'Held', failed: 'Didn’t hold', open: 'Still open' };
             </li>
           ))}
         </ol>
-        <div class="stick">
-          <div class="pane"><canvas data-demo={f.demo} data-scroll role="img" aria-label={`Step-by-step figure for ${f.name}`}></canvas></div>
-        </div>
+        {f.demo && (
+          <div class="stick">
+            <div class="pane"><canvas data-demo={f.demo} data-scroll role="img" aria-label={`Step-by-step figure for ${f.name}`}></canvas></div>
+          </div>
+        )}
       </div>
     </section>
 
@@ -80,7 +111,7 @@ const outLabel = { held: 'Held', failed: 'Didn’t hold', open: 'Still open' };
     {f.team && (
       <section class="wrap two">
         <h2 class="label">Team</h2>
-        <p class="note">Built with the {f.team} team. The repository credits everyone who worked on it.</p>
+        <p class="note">{f.team.includes('-') ? `Built with the ${f.team} team.` : `Built as a ${f.team} project.`} The repository credits everyone who worked on it.</p>
       </section>
     )}
 
@@ -96,33 +127,47 @@ const outLabel = { held: 'Held', failed: 'Didn’t hold', open: 'Still open' };
 <style>
   .cs { padding-top: clamp(110px, 14vw, 170px); }
   .back { display: inline-flex; gap: 10px; font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 48px; }
-  .back:hover { color: var(--gold); }
-  h1 { margin: 18px 0 clamp(28px, 4vw, 56px); font: 330 clamp(64px, 13vw, 220px)/.86 var(--display); font-variation-settings: 'opsz' 144; letter-spacing: -.045em; width: fit-content; }
+  .back:hover { color: var(--ink); }
+  h1 { margin: 18px 0 clamp(24px, 3vw, 40px); font: 400 clamp(72px, 15vw, 240px)/.86 var(--display); text-transform: uppercase; letter-spacing: -.01em; width: fit-content; }
+  .lede { margin: 0; max-width: 34ch; font: 400 clamp(20px, 2vw, 28px)/1.3 var(--body); color: var(--ink-2); text-wrap: balance; }
   .meta { display: grid; grid-template-columns: repeat(4, 1fr); margin: 56px 0 0; border-top: 1px solid var(--line); }
   .meta div { padding: 18px 18px 0 0; }
   .meta div + div { padding-left: 18px; border-left: 1px solid var(--line); }
   dt { font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
   dd { margin: 10px 0 0; font-size: 15px; color: var(--ink); }
-  dd a { color: var(--gold); }
+  dd a { color: var(--cut); }
   .figure { position: relative; margin-top: clamp(48px, 7vw, 96px); aspect-ratio: 16 / 8; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg-2); overflow: hidden; }
   .figure canvas, .pane canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 
+  .reelwrap { padding-block: clamp(56px, 8vw, 110px) 0; display: grid; grid-template-columns: 260px 1fr; gap: 24px 48px; }
+  .reel video { width: 100%; aspect-ratio: 16 / 10; background: #05070b; border: 1px solid var(--line); border-radius: var(--r); object-fit: contain; }
+  .cap { margin: 12px 0 0; font: 500 12px/1.6 var(--mono); letter-spacing: .04em; color: var(--ink-3); max-width: 70ch; }
+
   .two { display: grid; grid-template-columns: 260px 1fr; gap: 24px 48px; padding-block: clamp(64px, 9vw, 128px) 0; }
-  .label { margin: 0; font: 500 12px/1.6 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
-  .big { margin: 0; font: 360 clamp(26px, 2.8vw, 42px)/1.25 var(--display); font-variation-settings: 'opsz' 72; letter-spacing: -.015em; max-width: 30ch; text-wrap: pretty; }
+  .label { margin: 0; font: 500 12px/1.6 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--cut); }
+  .big { margin: 0; font: 400 clamp(28px, 3.2vw, 50px)/1.1 var(--display); text-transform: uppercase; letter-spacing: 0; max-width: 28ch; text-wrap: pretty; }
   .built { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; counter-reset: b; max-width: 70ch; }
   .built li { position: relative; padding: 20px 0 20px 48px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 18px; line-height: 1.55; counter-increment: b; }
-  .built li::before { content: counter(b, decimal-leading-zero); position: absolute; left: 0; top: 23px; font: 500 12px/1 var(--mono); color: var(--gold); }
+  .built li::before { content: counter(b, decimal-leading-zero); position: absolute; left: 0; top: 23px; font: 500 12px/1 var(--mono); color: var(--cut); }
   .limits li::before { content: '!'; }
   .note { margin: 0 0 24px; color: var(--ink-3); max-width: 60ch; }
 
+  .facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; max-width: 78ch; }
+  .facts li { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 4px 24px; padding: 22px 0; border-top: 1px solid var(--line); }
+  .facts b { grid-row: span 2; font: 400 clamp(30px, 3.4vw, 52px)/1 var(--display); text-transform: uppercase; color: var(--ink); }
+  .facts span { color: var(--ink-2); line-height: 1.5; }
+  .facts em { font: 500 11px/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-style: normal; }
+
   .story { padding-block: clamp(64px, 9vw, 128px) 0; }
   .story-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 80px); margin-top: 40px; }
+  .nodemo .story-grid { grid-template-columns: minmax(0, 1fr); }
   .steps { list-style: none; margin: 0; padding: 0; }
   .steps li { min-height: 62vh; display: flex; flex-direction: column; justify-content: center; opacity: .3; transition: opacity .5s var(--ease); }
   .steps li.on { opacity: 1; }
-  .steps .k { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
-  .steps h3 { margin: 14px 0 12px; font: 380 clamp(30px, 3vw, 46px)/1.05 var(--display); font-variation-settings: 'opsz' 96; letter-spacing: -.02em; }
+  .nodemo .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0 32px; }
+  .nodemo .steps li { min-height: 0; opacity: 1; padding: 24px 0 8px; border-top: 1px solid var(--line); justify-content: flex-start; }
+  .steps .k { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--cut); }
+  .steps h3 { margin: 14px 0 12px; font: 400 clamp(30px, 3vw, 46px)/1.02 var(--display); text-transform: uppercase; }
   .steps p { margin: 0; color: var(--ink-2); font-size: 18px; line-height: 1.55; max-width: 44ch; }
   .stick { position: relative; }
   .pane { position: sticky; top: 18vh; aspect-ratio: 4 / 3; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg-2); overflow: hidden; }
@@ -134,28 +179,28 @@ const outLabel = { held: 'Held', failed: 'Didn’t hold', open: 'Still open' };
   .out { align-self: start; font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 7px 9px; border-radius: 6px; width: fit-content; }
   .out.held { color: #5fd38d; background: rgba(95, 211, 141, .12); }
   .out.failed { color: #e57a88; background: rgba(229, 122, 136, .12); }
-  .out.open { color: var(--gold); background: color-mix(in srgb, var(--gold) 14%, transparent); }
-  :global(html[data-theme='ivory']) .out.held { color: #11663f; }
-  :global(html[data-theme='ivory']) .out.failed { color: #9b1f32; }
+  .out.open { color: var(--gold-2); background: rgba(59, 82, 255, .14); }
 
   .next { display: block; margin-top: clamp(96px, 14vw, 180px); padding-block: clamp(56px, 8vw, 110px); border-top: 1px solid var(--line); transition: background .5s var(--ease); }
   .next:hover { background: var(--bg-2); }
   .next .wrap { display: grid; gap: 16px; }
-  .nn { font: 340 clamp(48px, 9vw, 150px)/.9 var(--display); font-variation-settings: 'opsz' 144; letter-spacing: -.04em; }
-  .nn i { font-style: normal; color: var(--gold); display: inline-block; transition: transform .5s var(--ease); }
+  .nn { font: 400 clamp(56px, 11vw, 170px)/.9 var(--display); text-transform: uppercase; }
+  .nn i { font-style: normal; color: var(--cut); display: inline-block; transition: transform .5s var(--ease); }
   .next:hover .nn i { transform: translateX(16px); }
 
   @media (max-width: 860px) {
     .meta { grid-template-columns: 1fr 1fr; }
     .meta > div:nth-child(odd) { padding-left: 0; border-left: 0; }
     .meta > div:nth-child(n + 3) { margin-top: 18px; border-top: 1px solid var(--line); }
-    .two { grid-template-columns: 1fr; }
+    .two, .reelwrap { grid-template-columns: 1fr; }
     .figure { aspect-ratio: 4 / 3; }
     .story-grid { grid-template-columns: 1fr; }
     .stick { order: -1; position: sticky; top: 64px; z-index: 2; }
     .pane { position: relative; top: 0; aspect-ratio: 16 / 10; box-shadow: 0 16px 30px var(--bg); }
     .steps li { min-height: 56vh; }
     .ledger li { grid-template-columns: 1fr; gap: 10px; }
+    .facts li { grid-template-columns: 1fr; }
+    .facts b { grid-row: auto; }
   }
 </style>
 

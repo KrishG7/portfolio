@@ -79,11 +79,11 @@ const journey = [
     <div class="stage" id="s3">
       <h2 id="h-arch" class="sr">Archive</h2>
       <div class="slide list wrap" data-slide>
-        <p class="tag a">Also built · {minors.length} more · source on GitHub</p>
+        <p class="tag a">Also built · {minors.length} more</p>
         <ul class="rows">
           {minors.map((m, i) => (
             <li class="a">
-              <a href={m.repo} target="_blank" rel="noopener" data-cursor-text="Source">
+              <a href={m.slug ? `/work/${m.slug}` : m.repo} target={m.slug ? undefined : "_blank"} rel={m.slug ? undefined : "noopener"} data-cursor-text={m.slug ? "Case study" : "Source"}>
                 <span class="tag n">0{i + 5}</span>
                 <span class="poster nm">{m.name}</span>
                 <span class="ln">{m.line}</span>
