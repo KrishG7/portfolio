@@ -78,7 +78,6 @@ const links = [
 
     {film && <canvas class="film" data-film-canvas aria-hidden="true"></canvas>}
     <div class="grain" aria-hidden="true"></div>
-    <div class="progress-line" data-progress aria-hidden="true"></div>
 
     <main id="main">
       <slot />
@@ -101,7 +100,7 @@ const links = [
   :global(html.seen) .loader, :global(html.lite) .loader { display: none; }
   .ld-top { display: flex; justify-content: space-between; }
   .ld-num { font: 400 clamp(96px, 22vw, 360px)/.8 var(--display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; color: var(--ink); }
-  .ld-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--crimson); transform-origin: left; transform: scaleX(0); }
+  .ld-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--ink); transform-origin: left; transform: scaleX(0); }
 
   .hud {
     position: fixed; z-index: 60; inset: 0 0 auto 0;

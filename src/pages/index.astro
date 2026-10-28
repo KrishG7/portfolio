@@ -2,278 +2,253 @@
 import Base from '../layouts/Base.astro';
 import { flagships, minors, site } from '../data/projects';
 
-const manifesto = 'Every model you download is somebody else’s code. I read it before you run it.';
-const threat = new Set(['somebody', 'else’s', 'code.']);
-const guard = new Set(['read']);
-// which caption step is the moment the threat shows up (crimson)
-const alertAt: Record<string, number> = { 'aegis-tensor': 1, athena: 2, weavr: 2 };
-const facts = [
-  ['House Captain, valedictorian', 'The Badhani School, Pathankot'],
-  ['Awarded the Red Coat', 'For academic and co-curricular work'],
-  ['Captain, football and volleyball', 'School teams'],
-  ['B.Tech, 2024 – 2028', 'Faculty of Technology, University of Delhi'],
+// which caption step is the moment the threat shows up
+const journey = [
+  { place: 'Rajouri', where: 'Jammu and Kashmir', coord: '33.38° N  74.31° E', when: 'Where I’m from', text: 'A small town in the hills. Where it started.' },
+  { place: 'Badhani', where: 'Pathankot, Punjab', coord: '32.27° N  75.65° E', when: 'Class 5 – 12', text: 'Seven years of boarding school. House Captain and valedictorian, awarded the Red Coat, captain of the football and volleyball teams.' },
+  { place: 'New Delhi', where: 'University of Delhi', coord: '28.61° N  77.21° E', when: '2024 – 2028', text: 'B.Tech in blockchain, cybersecurity and machine learning at the Faculty of Technology. Where everything above was built.' },
+  { place: 'Next', where: 'Quantum computing', coord: '|ψ⟩ = α|0⟩ + β|1⟩', when: 'Not started yet', text: 'Which is exactly why it’s next. I learn things from the ground up, and this is the one I haven’t started.' },
 ];
 ---
 <Base film>
-  <!-- HERO: the face -->
-  <section class="hero" data-film="face" data-where="Index" aria-label="Introduction">
-    <h1 class="hero-name poster" aria-label="Krish Gupta"><span data-hero-line>Krish</span><span class="o" data-hero-line>Gupta</span></h1>
-    <div class="face-box" data-film-box></div>
-    <div class="wrap hero-foot up">
-      <p class="lede" data-reveal><b>I <span class="r">break</span> machine learning systems on purpose,</b> then build the tools that stop anyone else from doing it.</p>
-      <div class="hero-meta tag" data-reveal>
-        <p><span class="dot"></span>Now building <b>{site.now}</b></p>
-        <p>B.Tech, University of Delhi · open to 2027 internships</p>
+  <svg class="rope" data-rope aria-hidden="true"><path class="glow" /><path class="line" /><path class="fiber" /><circle class="halo" r="11" /><circle class="tip" r="3.5" /></svg>
+
+  <!-- 1 · ABOUT ME → dust → portrait and name → about -->
+  <section class="ch" data-where="About me" aria-labelledby="h-about">
+    <div class="stage" id="s1">
+      <h2 id="h-about" class="sr">About me</h2>
+      <div class="intro-foot wrap tag" data-intro-hint><span>Krish Gupta · Portfolio 2026</span><span>Scroll</span></div>
+      <div class="face-box" id="s1face"></div>
+      <h1 class="name poster" data-name aria-label="Krish Gupta"><span data-name-chars>Krish Gupta</span></h1>
+      <div class="about wrap" data-about>
+        <div class="col-a">
+          <p class="poster about-name" data-name-target aria-hidden="true">Krish Gupta</p>
+          <p class="statement" data-about-line>I break machine learning systems on purpose, then build the tools that stop anyone else from doing it.</p>
+        </div>
+        <div class="col-b">
+          <p data-about-line>I’m a B.Tech student at the University of Delhi, studying blockchain, cybersecurity and machine learning. I work where security and machine learning overlap, because that is where real attacks happen and where very few people are looking.</p>
+          <p data-about-line>When a problem needs something I don’t know yet, I learn it from the ground up and keep going until it holds under pressure. I like to lead, I like to compete, and I don’t like being second.</p>
+          <p class="tag" data-about-line><span class="dot"></span>Now building <b>{site.now}</b> · open to 2027 internships</p>
+        </div>
       </div>
     </div>
-    <div class="scroll-cue tag up" aria-hidden="true">Scroll <i></i></div>
-  </section>
-
-  <!-- MANIFESTO: particles loosen into dust -->
-  <section class="manifesto" data-film="dust" data-where="The work" aria-label="What I do">
-    <div class="wrap up">
-      <p class="tag">00 · The work</p>
-      <p class="poster big" data-scrub>
-        {manifesto.split(' ').map((w) => <span class={threat.has(w.toLowerCase()) ? 'w r' : guard.has(w.toLowerCase()) ? 'w c' : 'w'}>{w} </span>)}
-      </p>
-      <div class="cols">
-        <p class="lede" data-reveal>Security and machine learning usually sit in two different departments. I work in the gap between them, because that is where the attacks are, and where very few people are looking.</p>
-        <p class="lede dim" data-reveal>Four systems below, each from a different corner of the field. Each one ships with what didn’t work written down next to what did.</p>
-      </div>
+    <div class="marks">
+      <div data-film="text" data-text="About me" data-anchor="#s1" data-rope="0:.06 .3:.1 .62:.5 .9:.88"></div>
+      <div data-film="dust" data-rope=".4:.72 .85:.3"></div>
+      <div data-film="face" data-anchor="#s1" data-box="#s1face" data-rope=".35:.1 .8:.08"></div>
+      <div data-film="haze" style="--h:220svh" data-rope=".12:.34 .45:.05 .85:.5"></div>
     </div>
   </section>
 
-  <!-- WORK -->
-  <section id="work" class="work-head" data-where="Selected work" aria-label="Selected work">
-    <div class="wrap up head-row">
-      <h2 class="poster" data-split>Selected<br />work</h2>
-      <p class="tag">2025 – 2026 · {flagships.length} systems · scroll</p>
-    </div>
-  </section>
-
-  {flagships.map((f, i) => (
-    <article class="proj" data-film={f.film} data-proj={i} data-where={`0${i + 1} ${f.name}`} data-alert={alertAt[f.slug] ?? -1} aria-labelledby={`p-${f.slug}`}>
-      <div class="stage" data-film-anchor>
-        <span class="num" aria-hidden="true" data-num>0{i + 1}</span>
-        <div class="wrap grid up">
+  <!-- 2 · PROJECTS → one full screen per project -->
+  <section id="work" class="ch" data-where="Projects" aria-labelledby="h-work">
+    <div class="stage" id="s2">
+      <h2 id="h-work" class="sr">Projects</h2>
+      <p class="ch-cap wrap tag" data-ch-cap>Four systems · 2025 – 2026 · each from a different corner of the field</p>
+      <div class="fig-box" id="pfig"></div>
+      {flagships.map((f, i) => (
+        <article class="slide wrap" data-slide aria-labelledby={`p-${f.slug}`}>
           <div class="txt">
-            <p class="tag" data-scramble><span class="c">0{i + 1}</span> · {f.area}</p>
-            <h3 id={`p-${f.slug}`} class="poster" data-split-chars set:html={f.name.replace('-', '-<br />')} />
-            <p class="hook" data-reveal>{f.hook}</p>
-            <p class="body" data-reveal>{f.body}</p>
-            <ul class="chips" data-reveal>{f.stack.slice(0, 5).map((s) => <li>{s}</li>)}</ul>
-            <div class="cta" data-reveal>
+            <p class="tag a"><span class="ix">0{i + 1}</span> / 0{flagships.length} · {f.area}</p>
+            <h3 id={`p-${f.slug}`} class="poster pname" data-lines set:html={f.name.replace('-', '-<br />')} />
+            <p class="hook a">{f.hook}</p>
+            <p class="body a">{f.body}</p>
+            <ul class="chips a">{f.stack.slice(0, 5).map((s) => <li>{s}</li>)}</ul>
+            <div class="row a">
               <a class="btn" href={f.repo} target="_blank" rel="noopener" data-magnetic data-roll data-cursor-text="Source">Source ↗</a>
               {f.team && <span class="tag">Team · {f.team}</span>}
             </div>
           </div>
-          <div class="fig">
-            <div class="fig-box vf" data-film-box data-vf><i class="cn"></i><i class="cn"></i><i class="cn"></i><i class="cn"></i></div>
-            <div class="fig-foot tag">
-              <span class="cap" data-cap={JSON.stringify(f.caps)}>{f.caps[0]}</span>
-              <span class="prog"><i data-prog></i></span>
-            </div>
+          <div class="fig-foot tag a">
+            <span class="cap" data-cap={JSON.stringify(f.caps)}>{f.caps[0]}</span>
+            <span class="prog"><i data-prog></i></span>
           </div>
-        </div>
-      </div>
-    </article>
-  ))}
-
-  <!-- MARQUEE -->
-  <section class="marquee up" aria-hidden="true">
-    <div class="track" data-marquee>
-      {Array.from({ length: 2 }).map(() => (
-        <span class="poster">Security <i>✕</i> Machine learning <i>✕</i> Systems <i>✕</i> Research <i>✕</i> </span>
+        </article>
+      ))}
+    </div>
+    <div class="marks">
+      <div data-film="text" data-text="Projects" data-anchor="#s2" data-rope=".3:.92 .62:.5 .9:.1"></div>
+      {flagships.map((f, i) => (
+        <div data-film={f.film} data-anchor="#s2" data-box="#pfig" data-slide-mark style="--h:170svh" data-rope={i % 2 ? '.2:.47 .55:.43 .9:.46' : '.2:.43 .55:.47 .9:.44'} data-rope-m=".2:.95 .55:.9 .9:.95"></div>
       ))}
     </div>
   </section>
 
-  <!-- ALSO BUILT -->
-  <section class="also" data-film="dust" data-where="Also built" aria-label="More projects">
-    <div class="wrap up">
-      <div class="head-row"><h2 class="poster" data-split>Also built</h2><p class="tag">{minors.length} more · source on GitHub</p></div>
-      <ul class="rows">
-        {minors.map((m, i) => (
-          <li data-row>
-            <a href={m.repo} target="_blank" rel="noopener" data-cursor-text="Source">
-              <span class="tag n">0{i + 5}</span>
-              <span class="poster nm">{m.name}</span>
-              <span class="ln">{m.line}</span>
-              <span class="tag st">{m.stack.join(' · ')}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
+  <!-- 3 · ARCHIVE -->
+  <section class="ch" data-where="Archive" aria-labelledby="h-arch">
+    <div class="stage" id="s3">
+      <h2 id="h-arch" class="sr">Archive</h2>
+      <div class="slide list wrap" data-slide>
+        <p class="tag a">Also built · {minors.length} more · source on GitHub</p>
+        <ul class="rows">
+          {minors.map((m, i) => (
+            <li class="a">
+              <a href={m.repo} target="_blank" rel="noopener" data-cursor-text="Source">
+                <span class="tag n">0{i + 5}</span>
+                <span class="poster nm">{m.name}</span>
+                <span class="ln">{m.line}</span>
+                <span class="tag st">{m.stack.join(' · ')}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <div class="marks">
+      <div data-film="text" data-text="Archive" data-anchor="#s3" data-rope=".3:.08 .62:.5 .9:.92"></div>
+      <div data-film="haze" data-slide-mark style="--h:170svh" data-rope=".15:.97 .5:.02 .85:.97"></div>
     </div>
   </section>
 
-  <!-- ABOUT: particles become the photo -->
-  <section id="about" class="about" data-film="photo" data-where="About" aria-label="About">
-    <div class="wrap grid up">
-      <div class="pic vf" data-film-box data-vf role="img" aria-label="Krish on a hillside above a pine valley, drawn in particles"><i class="cn"></i><i class="cn"></i><i class="cn"></i><i class="cn"></i></div>
-      <div class="words">
-        <h2 class="poster" data-split>About</h2>
-        <div class="body">
-          <p data-reveal>I grew up in Rajouri, in the hills of Jammu and Kashmir, and spent class 5 to 12 at a boarding school in Pathankot. Now I’m in Delhi, studying blockchain, cybersecurity and machine learning.</p>
-          <p data-reveal>When a problem needs something I don’t know yet, I learn it from the ground up and keep going until the thing holds under pressure. I like to lead, I like to compete, and I don’t like being second.</p>
-          <p data-reveal>Off the screen: football, volleyball, the gym. Next on the list is quantum computing. I haven’t started yet, which is the point.</p>
+  <!-- 4 · JOURNEY -->
+  <section class="ch" data-where="Journey" aria-labelledby="h-jour">
+    <div class="stage" id="s4">
+      <h2 id="h-jour" class="sr">Journey</h2>
+      <div class="fig-box" id="jfig"></div>
+      {journey.map((j, i) => (
+        <article class="slide wrap" data-slide>
+          <div class="txt">
+            <p class="tag a"><span class="ix">0{i + 1}</span> / 0{journey.length} · {j.when}</p>
+            <h3 class="poster pname" data-lines>{j.place}</h3>
+            <p class="hook a">{j.where}</p>
+            <p class="body a">{j.text}</p>
+            <p class="coord tag a">{j.coord}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+    <div class="marks">
+      <div data-film="text" data-text="Journey" data-anchor="#s4" data-rope=".3:.9 .62:.5 .9:.15"></div>
+      {journey.map((_, i) => (
+        <div data-film={i < 3 ? 'route' : 'bloch'} data-active={i} data-anchor="#s4" data-box="#jfig" data-slide-mark style="--h:130svh" data-rope=".3:.46 .75:.5" data-rope-m=".3:.95 .75:.92"></div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 5 · CONTACT -->
+  <section id="contact" class="ch last" data-where="Contact" aria-labelledby="h-contact">
+    <div class="stage" id="s5">
+      <h2 id="h-contact" class="sr">Contact</h2>
+      <div class="slide contact wrap" data-slide>
+        <p class="tag a">Internships · research · anything that has to hold</p>
+        <p class="poster big" data-lines>Let’s build<br />something<br />that holds.</p>
+        <button class="mail a" type="button" data-copy={site.email} data-cursor-text="Copy" aria-label={`Copy ${site.email}`}>
+          <span class="addr" id="mailaddr">{site.email}</span>
+          <span class="tag" data-copy-hint>Click to copy</span>
+        </button>
+        <div class="foot a">
+          <nav class="tag" aria-label="Elsewhere">
+            <a href={site.github} target="_blank" rel="noopener" data-magnetic data-roll>GitHub</a>
+            <a href={site.linkedin} target="_blank" rel="noopener" data-magnetic data-roll>LinkedIn</a>
+            <a href={site.leetcode} target="_blank" rel="noopener" data-magnetic data-roll>LeetCode</a>
+            <a href="/cv" data-magnetic data-roll>CV</a>
+          </nav>
+          <p class="tag">© 2026 Krish Gupta · press <b>⌘K</b></p>
         </div>
-        <dl class="facts">
-          {facts.map(([a, b]) => <div data-reveal><dt>{a}</dt><dd>{b}</dd></div>)}
-        </dl>
       </div>
     </div>
-  </section>
-
-  <!-- CONTACT: the face comes back -->
-  <section id="contact" class="contact" data-film="end" data-where="Contact" aria-label="Contact">
-    <div class="end-box" data-film-box></div>
-    <div class="wrap up">
-      <p class="tag">Internships · research · anything that has to hold</p>
-      <h2 class="poster" data-split>Let’s build<br />something<br /><em>that holds.</em></h2>
-      <button class="mail" type="button" data-copy={site.email} data-cursor-text="Copy" aria-label={`Copy ${site.email}`}>
-        <span class="addr">{site.email}</span>
-        <span class="tag" data-copy-hint>Click to copy</span>
-      </button>
-      <div class="foot">
-        <nav class="tag" aria-label="Elsewhere">
-          <a href={site.github} target="_blank" rel="noopener" data-magnetic data-roll>GitHub</a>
-          <a href={site.linkedin} target="_blank" rel="noopener" data-magnetic data-roll>LinkedIn</a>
-          <a href={site.leetcode} target="_blank" rel="noopener" data-magnetic data-roll>LeetCode</a>
-          <a href="/cv" data-magnetic data-roll>CV</a>
-        </nav>
-        <p class="tag">© 2026 Krish Gupta · press <b>⌘K</b></p>
-      </div>
+    <div class="marks">
+      <div data-film="text" data-text="Contact" data-anchor="#s5" data-rope=".3:.9 .62:.5 .92:.06"></div>
+      <div data-film="haze" data-slide-mark data-rope=".25:.025" data-rope-m=".25:.03" data-rope-end="#mailaddr"></div>
     </div>
   </section>
 </Base>
 
 <style>
-  /* HERO */
-  .hero { position: relative; height: 100svh; min-height: 560px; overflow: clip; }
-  .hero::before { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(42% 55% at 12% 100%, rgba(212, 22, 60, .16), transparent 70%), radial-gradient(30% 40% at 92% 8%, rgba(59, 82, 255, .08), transparent 70%); animation: breathe 7s ease-in-out infinite alternate; }
-  @keyframes breathe { from { opacity: .55; } to { opacity: 1; } }
-  .contact::before { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(50% 50% at 80% 70%, rgba(212, 22, 60, .12), transparent 70%); }
-  .hero-name {
-    position: absolute; z-index: 0; inset: 50% 0 auto; transform: translateY(-52%);
-    text-align: center; white-space: nowrap; color: var(--ghost);
-    font-size: clamp(96px, 23vw, 440px); line-height: .8;
+  /* chapters: a sticky full-screen stage, with the scroll length set by the markers under it */
+  .ch { position: relative; }
+  .stage { position: sticky; top: 0; height: 100svh; overflow: clip; z-index: 3; }
+  .marks { margin-top: -100svh; pointer-events: none; }
+  .marks > div { height: var(--h, 100svh); }
+  .ch.last .marks > div:last-child { height: 100svh; }
+
+  .rope { position: fixed; inset: 0; width: 100vw; height: 100lvh; z-index: 2; pointer-events: none; overflow: visible; }
+  .rope path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .rope .glow { stroke: var(--crimson); stroke-width: 10; opacity: .22; filter: blur(5px); }
+  .rope .line { stroke: var(--crimson); stroke-width: 2.6; }
+  .rope .fiber { stroke: #ff6a82; stroke-width: 1; stroke-dasharray: 1.5 7; opacity: .75; }
+  .rope .tip { fill: #ffd6dd; }
+  .rope .halo { fill: none; stroke: var(--crimson); stroke-width: 1; opacity: .6; transform-box: fill-box; transform-origin: center; animation: halo 2s var(--ease) infinite; }
+  @keyframes halo { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(1.8); opacity: 0; } }
+
+  /* 1 */
+  .intro-foot { position: absolute; left: 0; right: 0; bottom: max(26px, env(safe-area-inset-bottom)); display: flex; justify-content: space-between; }
+  .face-box { position: absolute; left: 50%; top: 3svh; width: min(84vw, 96svh); height: 88svh; transform: translateX(-50%); }
+  .name {
+    position: absolute; left: 0; right: 0; bottom: 5svh; margin: 0 auto; width: fit-content; text-align: center; white-space: nowrap;
+    font-size: clamp(64px, 14.5vw, 280px); line-height: .82; color: var(--ink); transform-origin: 0 0;
   }
-  .hero-name span { display: block; }
-  .hero-name .o { color: transparent; -webkit-text-stroke: 1.5px var(--line-2); }
-  .face-box { position: absolute; left: 50%; bottom: 0; width: min(78vw, 112svh); height: 96svh; transform: translateX(-50%); }
-  .hero-foot { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-bottom: max(28px, env(safe-area-inset-bottom)); }
-  .hero-foot .lede { max-width: 30ch; }
-  .hero-meta { text-align: right; }
-  .hero-meta p { margin: 0; }
-  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--cut); margin-right: 8px; vertical-align: 1px; box-shadow: 0 0 12px var(--cut); }
-  .scroll-cue { position: absolute; right: var(--gutter); top: 50%; writing-mode: vertical-rl; display: flex; align-items: center; gap: 12px; }
-  .scroll-cue i { width: 1px; height: 48px; background: linear-gradient(var(--ink), transparent); animation: drip 2.2s var(--ease-io) infinite; transform-origin: top; }
-  @keyframes drip { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+  .about { position: absolute; inset: 0; display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(24px, 5vw, 96px); align-content: center; padding-block: 90px 60px; }
+  .about-name { visibility: hidden; font-size: clamp(56px, 7.4vw, 140px); line-height: .84; margin: 0 0 32px; white-space: nowrap; }
+  .statement { margin: 0; font-size: clamp(24px, 2.6vw, 44px); line-height: 1.15; letter-spacing: -.01em; max-width: 24ch; }
+  .col-b { display: grid; gap: 18px; align-content: end; color: var(--ink-2); font-size: clamp(16px, 1.25vw, 19px); }
+  .col-b p { margin: 0; max-width: 52ch; }
+  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--cut); margin-right: 8px; vertical-align: 1px; }
 
-  /* MANIFESTO */
-  .manifesto { padding-block: clamp(140px, 22vh, 260px) clamp(100px, 14vw, 200px); }
-  .big { margin-top: 28px; font-size: clamp(52px, 8.6vw, 168px); max-width: 13ch; }
-  .big .w { opacity: .12; transition: opacity .2s linear; }
-  .big .w.c { color: var(--cut); }
-  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: clamp(56px, 8vw, 110px); max-width: 1100px; margin-left: auto; }
-  .cols .dim { color: var(--ink-3); }
-
-  /* WORK */
-  .work-head { padding-block: 40px 0; }
-  .head-row { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
-  .head-row h2 { font-size: clamp(64px, 11vw, 200px); }
-  .proj { position: relative; height: 280svh; }
-  .stage { position: sticky; top: 0; height: 100svh; overflow: clip; display: flex; align-items: center; }
-  .num { position: absolute; right: -.03em; bottom: -.12em; z-index: 0; font: 400 clamp(200px, 34vw, 640px)/.8 var(--display); color: transparent; -webkit-text-stroke: 1.5px var(--ghost); pointer-events: none; }
-  .grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 72px); align-items: center; }
-  .txt { display: grid; gap: 20px; align-content: center; }
-  .txt h3 { font-size: clamp(64px, 8.4vw, 168px); }
-  .hook { margin: 0; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.25; max-width: 22ch; }
+  /* 2 and 4: slides */
+  .ch-cap { position: absolute; left: 0; right: 0; bottom: max(28px, env(safe-area-inset-bottom)); text-align: center; }
+  .slide { position: absolute; inset: 0; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: 1fr auto; column-gap: clamp(24px, 4vw, 72px); align-items: center; padding-block: 84px 32px; visibility: hidden; }
+  .txt { display: grid; gap: 18px; align-content: center; }
+  .ix { color: var(--ink); }
+  .pname { font-size: clamp(64px, 8.4vw, 170px); }
+  .hook { margin: 0; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.25; max-width: 24ch; }
   .body { margin: 0; color: var(--ink-3); max-width: 46ch; font-size: 16px; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
   .chips li { font: 500 11px/1 var(--mono); padding: 7px 9px; border: 1px solid var(--line-2); border-radius: 99px; color: var(--ink-2); }
-  .cta { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 6px; }
-  .fig { display: grid; gap: 14px; }
-  .fig-box { aspect-ratio: 16 / 11; width: 100%; max-height: 70svh; }
-  .proj.alert .prog i { background: var(--crimson); }
-  .proj.alert .cap { color: var(--crimson); }
-  .fig-foot { display: grid; grid-template-columns: 1fr minmax(80px, 200px); gap: 16px; align-items: center; border-top: 1px solid var(--line); padding-top: 12px; }
+  .row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .fig-box { position: absolute; right: var(--gutter); top: 14svh; width: min(54vw, 980px); height: 64svh; }
+  .fig-foot { grid-column: 2; grid-row: 2; display: grid; grid-template-columns: 1fr minmax(80px, 200px); gap: 16px; align-items: center; border-top: 1px solid var(--line); padding-top: 12px; }
   .cap { color: var(--ink); }
   .prog { height: 2px; background: var(--line); position: relative; }
-  .prog i { position: absolute; inset: 0; background: var(--cut); transform-origin: left; transform: scaleX(0); transition: background .4s; }
-  .cap { transition: color .4s; }
+  .prog i { position: absolute; inset: 0; background: var(--cut); transform-origin: left; transform: scaleX(0); }
+  .coord { color: var(--ink); letter-spacing: .1em; }
 
-  /* MARQUEE */
-  .marquee { padding-block: clamp(60px, 10vw, 140px); overflow: clip; border-block: 1px solid var(--line); background: var(--bg); }
-  .track { display: flex; width: max-content; will-change: transform; }
-  .track span { font-size: clamp(80px, 13vw, 240px); white-space: nowrap; padding-right: .3em; }
-  .track i { font-style: normal; color: var(--crimson); font-size: .5em; vertical-align: .4em; }
-
-  /* ALSO */
-  .also { padding-block: clamp(110px, 14vw, 200px); }
-  .also .head-row h2 { font-size: clamp(56px, 8vw, 150px); }
-  .rows { list-style: none; margin: 0; padding: 0; }
+  /* 3: archive list */
+  .list { display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: 24px; }
+  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
   .rows li { border-bottom: 1px solid var(--line); }
-  .rows a { position: relative; display: grid; grid-template-columns: 60px minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr); gap: 20px; align-items: center; padding-block: 26px; isolation: isolate; }
-  .rows a::before { content: ''; position: absolute; inset: 0 calc(-1 * var(--gutter)); z-index: -1; background: var(--cut); clip-path: inset(100% 0 0 0); transition: clip-path .55s var(--ease-io); }
+  .rows a { position: relative; display: grid; grid-template-columns: 60px minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr); gap: 20px; align-items: center; padding-block: clamp(14px, 2.4svh, 26px); isolation: isolate; }
+  .rows a::before { content: ''; position: absolute; inset: 0 calc(-1 * var(--gutter)); z-index: -1; background: var(--ink); clip-path: inset(100% 0 0 0); transition: clip-path .55s var(--ease-io); }
   .rows a:hover::before { clip-path: inset(0); }
-  .rows a:hover .n, .rows a:hover .st, .rows a:hover .ln { color: #fff; }
-  .rows .n { color: var(--crimson); }
-  .nm { font-size: clamp(40px, 4.6vw, 84px); line-height: .9; }
-  .ln { color: var(--ink-2); font-size: 16px; line-height: 1.45; transition: color .3s; }
+  .rows a:hover * { color: var(--bg); }
+  .nm { font-size: clamp(36px, 4.4vw, 80px); line-height: .9; transition: color .3s; }
+  .ln { color: var(--ink-2); font-size: 15px; line-height: 1.45; transition: color .3s; }
   .st { text-align: right; transition: color .3s; }
-  .n { transition: color .3s; }
 
-  /* ABOUT */
-  .about { padding-block: clamp(110px, 14vw, 200px); border-top: 1px solid var(--line); }
-  .about .grid { align-items: start; }
-  .pic { aspect-ratio: 3 / 4; width: 100%; max-width: 560px; max-height: 84svh; }
-  .words h2 { font-size: clamp(80px, 12vw, 220px); }
-  .words .body { display: grid; gap: 18px; margin-top: 32px; max-width: 56ch; font-size: clamp(17px, 1.3vw, 20px); color: var(--ink-2); }
-  .words .body p { margin: 0; }
-  .words .body p:first-child { color: var(--ink); }
-  .facts { display: grid; grid-template-columns: 1fr 1fr; margin: 48px 0 0; border-top: 1px solid var(--line); }
-  .facts div { padding: 16px 16px 16px 0; border-bottom: 1px solid var(--line); }
-  .facts dt { font-weight: 500; }
-  .facts dd { margin: 4px 0 0; color: var(--ink-3); font-size: 14px; }
-
-  /* CONTACT */
-  .contact { position: relative; min-height: 100svh; padding-block: clamp(120px, 16vw, 220px) 32px; border-top: 1px solid var(--line); display: flex; flex-direction: column; justify-content: space-between; }
-  .end-box { position: absolute; right: 0; top: 0; width: min(60vw, 900px); height: 100svh; }
-  .contact h2 { margin-top: 24px; font-size: clamp(64px, 10.4vw, 200px); max-width: 10ch; }
-  .mail { display: block; text-align: left; margin-top: clamp(40px, 6vw, 80px); max-width: 100%; }
-  .addr { display: block; font: 400 clamp(28px, 5.4vw, 104px)/1 var(--display); text-transform: uppercase; overflow-wrap: anywhere; transition: color .4s var(--ease); }
+  /* 5: contact */
+  .contact { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 22px; }
+  .contact .foot { align-self: stretch; }
+  .big { font-size: clamp(60px, 9.6vw, 190px); margin: 0; }
+  .mail { display: block; text-align: left; max-width: 100%; margin-top: 12px; }
+  .addr { display: inline-block; font: 400 clamp(28px, 5vw, 96px)/1 var(--display); text-transform: uppercase; overflow-wrap: anywhere; transition: color .4s var(--ease); }
   .mail:hover .addr { color: var(--cut); }
-  .mail .tag { display: inline-block; margin-top: 12px; }
-  .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: clamp(60px, 8vw, 120px); padding-top: 18px; border-top: 1px solid var(--line); }
+  .mail .tag { display: block; margin-top: 18px; }
+  .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: clamp(24px, 5svh, 64px); padding-top: 18px; border-top: 1px solid var(--line); }
   .foot nav { display: flex; gap: 24px; flex-wrap: wrap; color: var(--ink); }
-  .foot nav a:hover { color: var(--cut); }
   .foot p { margin: 0; }
 
   @media (max-width: 820px) {
-    .hero-name { font-size: clamp(84px, 28vw, 200px); transform: translateY(-62%); }
-    .face-box { width: 108vw; height: 58svh; bottom: auto; top: 9svh; }
-    .hero-foot { flex-direction: column; align-items: start; padding-bottom: max(86px, calc(env(safe-area-inset-bottom) + 76px)); }
-    .hero-meta { text-align: left; }
-    .scroll-cue { display: none; }
-    .cols { grid-template-columns: 1fr; }
-    .proj { height: 230svh; }
-    .stage { align-items: stretch; }
-    .grid { grid-template-columns: 1fr; align-content: start; gap: 18px; padding-top: 68px; }
-    .fig { order: -1; }
-    .fig-box { aspect-ratio: 16 / 10; max-height: 34svh; }
+    .face-box { width: 112vw; top: 8svh; height: 62svh; }
+    .name { bottom: 16svh; font-size: clamp(56px, 17vw, 120px); }
+    .about { grid-template-columns: 1fr; align-content: start; gap: 18px; padding-block: 80px 90px; }
+    .about-name { font-size: clamp(44px, 13vw, 80px); margin-bottom: 18px; }
+    .statement { font-size: 22px; }
+    .col-b { font-size: 15px; gap: 12px; align-content: start; }
+    .col-b p:nth-child(2) { display: none; }
+    .slide { display: flex; flex-direction: column; justify-content: flex-end; padding-block: 0 92px; }
+    .fig-box { left: var(--gutter); right: var(--gutter); width: auto; top: 13svh; height: 29svh; }
     .txt { gap: 12px; }
-    .txt h3 { font-size: clamp(54px, 16vw, 96px); }
-    .hook { font-size: 19px; }
-    .body { font-size: 15px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-    .num { font-size: 52vw; }
-    .rows a { grid-template-columns: 36px 1fr; gap: 6px 12px; }
+    .pname { font-size: clamp(52px, 15vw, 96px); }
+    .hook { font-size: 18px; }
+    .body { font-size: 14.5px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .fig-foot { position: absolute; left: var(--gutter); right: var(--gutter); top: calc(13svh - 34px); border-top: 0; padding-top: 0; }
+    .chips { display: none; }
+    .rows a { grid-template-columns: 30px 1fr; gap: 4px 12px; }
     .ln, .st { grid-column: 2; text-align: left; }
-    .pic { max-width: 100%; max-height: 62svh; }
-    .facts { grid-template-columns: 1fr; }
-    .contact { padding-top: 50svh; }
-    .end-box { width: 100vw; height: 50svh; top: 2svh; }
-    .foot { padding-bottom: 72px; }
+    .ln { font-size: 13.5px; }
+    .st { display: none; }
+    .list { justify-content: center; padding-block: 70px 90px; }
+    .contact { padding-block: 70px 96px; justify-content: center; }
+    .rope .line { stroke-width: 2; }
   }
 </style>

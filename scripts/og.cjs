@@ -7,7 +7,7 @@ const fs = require('fs');
 const nm = path.join(__dirname, '..', 'node_modules', '@fontsource-variable');
 const font = (pkg, file) => 'data:font/woff2;base64,' + fs.readFileSync(path.join(nm, pkg, 'files', file)).toString('base64');
 const anton = 'data:font/woff2;base64,' + fs.readFileSync(path.join(__dirname, '..', 'node_modules', '@fontsource', 'anton', 'files', 'anton-latin-400-normal.woff2')).toString('base64');
-const portrait = 'data:image/webp;base64,' + fs.readFileSync(path.join(__dirname, '..', 'public', 'img', 'portrait.webp')).toString('base64');
+const portrait = 'data:image/webp;base64,' + fs.readFileSync(path.join(__dirname, '..', 'public', 'img', 'portrait-colour.webp')).toString('base64');
 
 const cards = [
   { file: 'home', k: 'Security for machine learning', t: 'Krish<br><em>Gupta</em>', s: 'B.Tech, University of Delhi · open to 2027 internships', face: true },
@@ -28,7 +28,7 @@ h1{position:absolute;left:56px;bottom:150px;margin:0;font:400 196px/.82 F;text-t
 h1 em{font-style:normal;color:#3b52ff}
 p{position:absolute;left:60px;bottom:66px;margin:0;font:400 26px/1.3 H;color:#b6b7bc;max-width:1000px;z-index:2}
 .seal{position:absolute;right:60px;top:50px;font:400 34px F;color:#ecebe6;z-index:2}
-.face{position:absolute;right:-20px;bottom:-20px;height:640px;filter:grayscale(1) contrast(1.1) brightness(.75);opacity:.9;-webkit-mask:linear-gradient(90deg,transparent,#000 45%)}
+.face{position:absolute;right:-20px;bottom:-20px;height:640px;filter:contrast(1.05) brightness(.9);opacity:1;-webkit-mask:linear-gradient(90deg,transparent,#000 45%)}
 </style></head><body>${c.face ? `<img class="face" src="${portrait}">` : ''}<div class="b"></div><div class="k">${c.k}</div><div class="seal">KG</div><h1>${c.t}</h1><p>${c.s}</p></body></html>`;
 
 (async () => {
