@@ -115,13 +115,6 @@ html.lite .grain { display: none; }
 .cursor.down i { transform: scale(2.4); }
 
 /* grid overlay (G) and x-ray (X) */
-.grid-overlay { position: fixed; inset: 0; z-index: 90; pointer-events: none; display: none; }
-.grid-overlay > div { height: 100%; display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
-.grid-overlay i { background: rgba(59, 82, 255, .07); border-inline: 1px solid rgba(59, 82, 255, .3); }
-html.show-grid .grid-overlay { display: block; }
-@media (max-width: 720px) { .grid-overlay > div { grid-template-columns: repeat(4, 1fr); gap: 12px; } .grid-overlay i:nth-child(n + 5) { display: none; } }
-html.xray body *:not(.film) { outline: 1px solid rgba(59, 82, 255, .45) !important; }
-html.xray .film { opacity: .25; }
 
 @view-transition { navigation: auto; }
 

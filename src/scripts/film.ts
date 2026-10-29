@@ -1,6 +1,6 @@
 // The particle film. One fixed WebGL2 canvas sits behind the whole site and the same particles
 // keep re-forming as you scroll: chapter words, the dust they fall into, the portrait, each
-// project's figure, the route home, a Bloch sphere.
+// project's figure, the route home.
 //
 // Each scene is drawn once into an offscreen 2D canvas the size of the viewport (red = brightness,
 // green = behaviour group), then N particles are sampled from the drawn pixels. Every scene's
@@ -9,7 +9,7 @@
 // Scenes are declared in the page as [data-film] markers. A marker can point at the sticky stage it
 // belongs to (data-anchor) and at the box its drawing should fill (data-box).
 
-export type Kind = 'text' | 'dust' | 'haze' | 'face' | 'bits' | 'graph' | 'rain' | 'sys' | 'route' | 'bloch';
+export type Kind = 'text' | 'dust' | 'haze' | 'face' | 'bits' | 'graph' | 'rain' | 'sys' | 'route';
 
 interface Scene {
   kind: Kind;
@@ -265,19 +265,6 @@ function drawRoute(g: CanvasRenderingContext2D, r: Px, active: number) {
   });
 }
 
-function drawBloch(g: CanvasRenderingContext2D, r: Px) {
-  const cx = r.x + r.w / 2, cy = r.y + r.h / 2, R = Math.min(r.w, r.h) * .4;
-  g.strokeStyle = col(.75, G.STATIC); g.lineWidth = 1.8; g.beginPath(); g.arc(cx, cy, R, 0, 7); g.stroke();
-  g.strokeStyle = col(.4, G.STATIC); g.lineWidth = 1.2; g.setLineDash([5, 6]); g.beginPath(); g.ellipse(cx, cy, R, R * .3, 0, 0, 7); g.stroke(); g.setLineDash([]);
-  g.beginPath(); g.moveTo(cx, cy - R * 1.12); g.lineTo(cx, cy + R * 1.12); g.stroke();
-  // the state vector, drawn in as you arrive
-  const tx = cx + R * .62, ty = cy - R * .55;
-  for (let i = 0; i < 40; i++) { const u = i / 40; g.strokeStyle = col(u * .8, G.REVEAL); g.lineWidth = 3; g.beginPath(); g.moveTo(cx + (tx - cx) * u, cy + (ty - cy) * u); g.lineTo(cx + (tx - cx) * (u + .025), cy + (ty - cy) * (u + .025)); g.stroke(); }
-  g.fillStyle = col(1, G.BRIGHT); g.beginPath(); g.arc(tx, ty, 8, 0, 7); g.fill();
-  g.font = `400 ${R * .2}px "Geist Mono Variable", monospace`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = col(.8, G.STATIC);
-  g.fillText('|0⟩', cx, cy - R * 1.25); g.fillText('|1⟩', cx, cy + R * 1.32);
-}
-
 /* ------------------------------------------------------------------ sampling */
 
 function sample(img: ImageData, n: number, q: number, vw: number, vh: number, weight: (r: number, g: number) => number, out: Float32Array, off: number) {
@@ -390,7 +377,6 @@ export async function createFilm(canvas: HTMLCanvasElement, opts: { face: string
       else if (s.kind === 'rain') drawRain(g, box);
       else if (s.kind === 'sys') drawSys(g, box);
       else if (s.kind === 'route') drawRoute(g, box, Number(s.el.dataset.active || 0));
-      else if (s.kind === 'bloch') drawBloch(g, box);
       const weight = s.kind === 'face' ? (r: number) => .12 + r * r : (_r: number, gr: number) => (gr === G.RAIN * 20 ? .5 : 1);
       sample(g.getImageData(0, 0, cw, ch), N, q, vw, vh, weight, data, off);
     });

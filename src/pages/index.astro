@@ -10,7 +10,7 @@ const journey = [
 ];
 ---
 <Base film>
-  <svg class="rope" data-rope aria-hidden="true"><path class="glow" /><circle class="halo" r="16" /><circle class="tip" r="3.5" /></svg>
+  <svg class="rope" data-rope aria-hidden="true"><path class="glow" /><circle class="tip" r="3.5" /></svg>
 
   <!-- 1 · ABOUT ME → dust → portrait and name → about -->
   <section id="about" class="ch" data-where="About me" aria-labelledby="h-about">
@@ -175,8 +175,6 @@ const journey = [
   .rope { filter: drop-shadow(0 0 9px rgba(255, 45, 77, .6)); }
   .rope .glow { stroke: #ff2d4d; stroke-width: 26; opacity: .42; filter: blur(10px); }
   .rope .tip { fill: #fff3f5; r: 7; }
-  .rope .halo { fill: none; stroke: var(--crimson); stroke-width: 1; opacity: .6; transform-box: fill-box; transform-origin: center; animation: halo 2s var(--ease) infinite; }
-  @keyframes halo { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(1.8); opacity: 0; } }
 
   /* 1 */
   .intro-foot { position: absolute; left: 0; right: 0; bottom: max(26px, env(safe-area-inset-bottom)); display: flex; justify-content: space-between; }

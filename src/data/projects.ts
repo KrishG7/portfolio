@@ -1,8 +1,6 @@
 // Every figure on the site is held back until it has been re-run (see the v10 board).
 // Copy here describes what each system does and how, never a number we haven't verified.
 
-export type Area = 'security' | 'ml' | 'systems' | 'health' | 'data';
-
 export interface Step {
   k: string; // short label shown on the figure
   t: string;
@@ -18,7 +16,6 @@ export interface Flagship {
   year: string;
   role: string;
   stack: string[];
-  areas: Area[];
   repo: string;
   demo?: 'bits' | 'graph' | 'rain' | 'syscalls';
   film?: 'bits' | 'graph' | 'rain' | 'sys';
@@ -32,15 +29,12 @@ export interface Flagship {
   problem: string;
   built: string[];
   steps: Step[];
-  ledger: { h: string; out: 'held' | 'failed' | 'open'; note: string }[];
-  limits: string[];
   team?: string;
 }
 
 export interface Minor {
   name: string;
   line: string;
-  areas: Area[];
   stack: string[];
   repo: string;
   year: string;
@@ -62,7 +56,6 @@ export const flagships: Flagship[] = [
     year: '2026 — now',
     role: 'Sole author',
     stack: ['Python', 'safetensors', 'GGUF', 'ONNX', 'pickle VM', 'SARIF'],
-    areas: ['security', 'ml'],
     repo: 'https://github.com/KrishG7/Aegis-Tensor',
     demo: 'bits',
     problem:
@@ -78,15 +71,6 @@ export const flagships: Flagship[] = [
       { k: 'resolve', t: 'Resolve what the pickle would call', p: 'The pickle stream is walked like a VM: memo PUT/GET, STACK_GLOBAL and calls on call results, so os.system assembled from fragments is still os.system.' },
       { k: 'measure', t: 'Measure the weights', p: 'Float tensors are checked for overwrites, injected NaN/Inf and structure in the least significant mantissa bits.' },
       { k: 'disarm', t: 'Disarm regardless', p: 'Detection is not the safety net. Disarm zeroes the rounded-away bits for every tensor and refuses any width that would reach the exponent.' },
-    ],
-    ledger: [
-      { h: 'Low-bit payloads can be detected statistically', out: 'failed', note: 'Random bits in the low mantissa are indistinguishable from noise. That is why disarm exists and runs on clean files too.' },
-      { h: 'Structured payloads in the low bits are detectable', out: 'held', note: 'Text and code have structure that random rounding noise does not.' },
-      { h: 'Payloads split across very small tensors are caught', out: 'open', note: 'A documented blind spot, tested and listed as a known limit.' },
-    ],
-    limits: [
-      'Static rules are public, so an attacker who reads them can stay under every threshold. The answer is disarm, not more thresholds.',
-      'Payloads split across tiny tensors are a known blind spot.',
     ],
   },
   {
@@ -109,7 +93,6 @@ export const flagships: Flagship[] = [
       { v: '13 in 4', label: 'tumour-board subsystems across four pull requests, all still open', src: 'PRs #128 to #132, checked 28 Oct 2026' },
     ],
     stack: ['Python', 'FalkorDB', 'Cypher', 'CIViC', 'PubMed', 'AutoDock Vina'],
-    areas: ['ml', 'health'],
     repo: 'https://github.com/healers-second-look/Athena',
     demo: 'graph',
     team: 'healers-second-look',
@@ -129,15 +112,6 @@ export const flagships: Flagship[] = [
       { k: 'graph', t: 'Pull a cited subgraph', p: 'Cypher returns the evidence around the variant. Every edge carries the citation it came from.' },
       { k: 'diff', t: 'Diff what changed', p: 'A new result is compared with the last state of the case; findings it contradicts are marked invalidated, not silently kept.' },
       { k: 'board', t: 'Hand it to the board', p: 'The tumour board sees what is known, what changed and what is still unproven, in that order.' },
-    ],
-    ledger: [
-      { h: 'Docking can rank binding affinity for resistant mutations', out: 'failed', note: 'On the nine gold-standard cases, none was scored by docking (0 of 9); every result fell back to proximity.' },
-      { h: 'Proximity to the binding pocket alone separates resistant from sensitive', out: 'failed', note: 'It matched 7 of the 8 unambiguous cases (EGFR C797S was the miss), which the pre-committed bar counts as a fail. Written up in the repo before anyone demoed it.' },
-      { h: 'Evidence retrieval keeps answers grounded', out: 'open', note: 'The model is told to cite only retrieved sources. That is an instruction, not an enforced guardrail, and the README says so.' },
-    ],
-    limits: [
-      'LLM answers are instructed, not constrained, to use only retrieved evidence.',
-      'The patient timeline uses one published reference dataset for every case until a real source is wired in.',
     ],
   },
   {
@@ -160,7 +134,6 @@ export const flagships: Flagship[] = [
       { v: '11', label: 'of my pull requests merged; four more are open', src: 'GitHub, 29 Oct 2026' },
     ],
     stack: ['Python', 'xarray', 'Zarr', 'EMOS', 'BMA', 'GraphCast', 'IFS-ENS'],
-    areas: ['ml', 'data'],
     repo: 'https://github.com/ATMOSYNC/WEAVR',
     demo: 'rain',
     team: 'ATMOSYNC',
@@ -181,13 +154,6 @@ export const flagships: Flagship[] = [
       { k: 'calibrate', t: 'Turn a number into a probability', p: 'Each calibration method is benchmarked against the last; it only ships if it wins.' },
       { k: 'verify', t: 'Verify without leaking', p: 'The year being tested is never seen in training. Every claim in the README links to the run that produced it.' },
     ],
-    ledger: [
-      { h: 'Heavy-rain tails need their own model', out: 'held', note: 'A generalised Pareto tail splice removed every false-zero cell (193 to 0). But SEDI got worse at all five leads, because the tail also adds false alarms.' },
-      { h: 'Quantile mapping improves extreme-rain skill', out: 'open', note: 'SEDI at 115.6 mm improved at 5 of 5 leads. The price: threshold-weighted CRPS at 64.5 mm got worse at every lead, and RMSE rose by roughly 4 to 6 mm.' },
-      { h: 'A stacked combiner beats both of its parents', out: 'failed', note: 'It failed at 2 of 5 leads; plain fixed-weight quantile averaging beat both parents at all five (open pull request).' },
-      { h: 'Outer-joining sources is harmless', out: 'failed', note: 'It silently stretched the member axis to 55 and padded one model with 50 empty members, a 6.1 times larger array. Found and fixed. The same investigation found why the blend run kept being OOM-killed.' },
-    ],
-    limits: ['A research prototype, not an IMD or NCMRWF product. Any warning it shows is a demonstration.', 'Results mix one-season and two-season runs; each table says which. The committed H7 verdict file is stale (the measured verdict is in the README).'],
   },
   {
     slug: 'syscv',
@@ -212,7 +178,6 @@ export const flagships: Flagship[] = [
       { v: 'One week', label: 'start to finish, 9 commits, all mine', src: 'git history, 9 to 15 Apr 2026' },
     ],
     stack: ['Go', 'ptrace', 'Docker', 'WebSockets', 'React Flow', 'Monaco'],
-    areas: ['systems', 'security'],
     repo: 'https://github.com/KrishG7/SysCV',
     demo: 'syscalls',
     problem:
@@ -228,12 +193,6 @@ export const flagships: Flagship[] = [
       { k: 'hydrate', t: 'Hydrate the arguments', p: 'Raw registers become paths, buffers and flags, with a plain-English line for each call.' },
       { k: 'replay', t: 'Step through the kernel', p: 'Collect, then replay: step back and forth while the kernel graph grows and shrinks with the program.' },
     ],
-    ledger: [
-      { h: 'A static binary would give a cleaner trace', out: 'failed', note: 'Static glibc adds threading and futex setup that can deadlock the tracer, so programs are linked dynamically on purpose. The cost: the first calls you see are the loader starting up, before main().' },
-      { h: 'The tracer can run natively on a Mac', out: 'failed', note: 'It reads Linux registers and Linux syscall numbers, so it needs Linux. Docker makes it behave the same everywhere.' },
-      { h: 'A Dockerfile that built last April builds today', out: 'failed', note: 'The base image had reached end of life and its package mirrors returned 404, so a fresh build failed. Moved to a current base and checked from scratch.' },
-    ],
-    limits: ['Collect-then-replay means long-running programs are traced to completion before you can step through them.', 'It runs any C you give it, so it is a local tool: I would not host it publicly.', 'Only the common syscalls are decoded (a curated table, not every call).'],
   },
 ];
 
@@ -253,7 +212,6 @@ export const studies: Flagship[] = [
     year: '2026',
     role: 'Sole author',
     stack: ['Python', 'ast', 'click', 'Three.js', 'SSE'],
-    areas: ['systems'],
     repo: 'https://github.com/KrishG7/Brahm-Kosh',
     shots: [
       { img: '/shots/brahm-kosh/panel.jpg', alt: 'Brahm-Kosh viewer with the Architectural Intelligence panel listing the largest files', title: 'Where the trouble is', text: 'As soon as a project opens, the panel lists the files that have grown too big and everything else worth a look: files nothing imports, files that mix many concerns, and files ready to split. Here it is analysing its own source.' },
@@ -277,11 +235,6 @@ export const studies: Flagship[] = [
       { k: 'judge', t: 'Flag the hotspots', p: 'Complexity, dead files, mixed concerns and split candidates are computed from the graph, not guessed.' },
       { k: 'explore', t: 'Fly around it', p: 'Search a file, see its blast radius, read its symbols and code, all in one panel.' },
     ],
-    ledger: [
-      { h: 'The ignore file keeps unwanted folders out', out: 'failed', note: 'It filtered nothing: the 13 adapters walked the tree themselves. Found while verifying, fixed centrally, with three tests written to fail first.' },
-      { h: 'A tree-sitter parser for every language', out: 'open', note: 'Chosen against, to avoid a binary dependency. Twelve languages use regular expressions, which is a documented trade-off.' },
-    ],
-    limits: ['Only Python gets a true syntax tree; other languages are read more loosely.', 'Not tried on very large repositories.', 'Ignore patterns are cached per root, so editing the file during watch mode needs a restart.'],
   },
   {
     slug: 'wait-zero',
@@ -297,7 +250,6 @@ export const studies: Flagship[] = [
     year: '2026',
     role: 'Lead developer and architect, team of six',
     stack: ['Node', 'Express', 'MySQL', 'React', 'Flutter', 'SQLite'],
-    areas: ['health', 'systems'],
     repo: 'https://github.com/KrishG7/smart-clinic-booking',
     team: 'six-person course',
     shots: [
@@ -323,11 +275,6 @@ export const studies: Flagship[] = [
       { k: 'admin', t: 'The admin keeps it safe', p: 'New doctors wait for approval; every account and action is recorded.' },
       { k: 'sync', t: 'The phone works offline', p: 'Bookings are stored in SQLite and pushed to the server when the connection returns.' },
     ],
-    ledger: [
-      { h: 'A migration that runs in CI runs in production', out: 'failed', note: 'It used MariaDB-only syntax, so on MySQL 8 two columns never existed and skipping a token returned HTTP 500. The 115 tests mock the database and CI ended the step with `|| true`. Only a real run showed it. Fixed with an idempotent migration.' },
-      { h: 'Dates survive the trip to the browser', out: 'failed', note: 'Date columns reached clients as the previous day (an IST shift). Fixed so they arrive as plain strings.' },
-    ],
-    limits: ['The demo uses seed data; the people on screen are made up.', 'The mobile app was exercised as a web build, and GPS check-in has not been tried on a real phone.', 'The marketing landing page carries placeholder statistics that were never measured; this page does not use them.'],
   },
   {
     slug: 'trinetra',
@@ -343,7 +290,6 @@ export const studies: Flagship[] = [
     year: '2026',
     role: 'Sole author',
     stack: ['FastAPI', 'Next.js', 'PyTorch', 'Earth Engine', 'Gemini'],
-    areas: ['ml', 'data'],
     repo: 'https://github.com/KrishG7/TriNetra-Farmers-Stack',
     shots: [
       { img: '/shots/trinetra/market.jpg', alt: 'Market Vision showing a forecast price, a seven-day curve and a recommendation', title: 'When to sell', text: 'Pick a crop, a state, a market and a date, and Market Vision draws a seven-day price outlook with a hold or sell hint. Demo model.' },
@@ -367,12 +313,6 @@ export const studies: Flagship[] = [
       { k: 'grow', t: 'What to grow', p: 'Soil numbers in, advice out, with a rule that refuses impossible soil before any AI is asked.' },
       { k: 'borrow', t: 'Will a bank lend', p: 'A pin on a field becomes a satellite check of whether it is farmland and how healthy the crop is.' },
     ],
-    ledger: [
-      { h: 'The price model forecasts prices', out: 'failed', note: 'Its training history is a seasonal curve I generated, not market data, and the 87% confidence figure was a hard-coded constant. I dropped the claim and corrected the README. It shows the pipeline, not forecasting skill.' },
-      { h: 'Satellite scoring works as a credit score', out: 'open', note: 'The cropland filter and NDVI path work with real credentials, but the number is a crop-health score that ignores the season, so fallow land can look risky.' },
-      { h: 'Registration by OTP works', out: 'failed', note: 'The new-user OTP route called a function that did not exist and always returned HTTP 500. Fixed, with tests, and the register route now refuses unverified phones.' },
-    ],
-    limits: ['The home-screen statistics are placeholders.', 'Soil answers take 35 to 50 seconds and vary between runs; the agronomy has not been reviewed by an agronomist.', 'The OTP is only printed to the server log; there is no SMS provider.'],
   },
   {
     slug: 'video-tracer',
@@ -387,7 +327,6 @@ export const studies: Flagship[] = [
     year: '2026',
     role: 'Author',
     stack: ['YOLOv8', 'ByteTrack', 'BoT-SORT', 'OpenCV', 'Python'],
-    areas: ['ml'],
     repo: 'https://github.com/KrishG7/Video-Tracer',
     shots: [
       { img: '/shots/video-tracer/tracking.jpg', alt: 'A street scene with tracked people and a bus, each boxed with an ID, and red regions of interest', title: 'Detect, track, trigger', text: 'Every person and vehicle gets a class, a confidence and a persistent ID. The red boxes are regions of interest: when a tracked object enters one, an event is logged with a timestamp, here \u201c#4 ENTERED entrance_zone\u201d. Frame from a demo clip made from a public sample photo.', tall: true },
@@ -409,11 +348,6 @@ export const studies: Flagship[] = [
       { k: 'zones', t: 'Draw the lines that matter', p: 'Zones and tripwires fire when a track enters or crosses them.' },
       { k: 'events', t: 'Export what happened', p: 'Each trigger becomes a timestamped event in a JSON file.' },
     ],
-    ledger: [
-      { h: 'The evaluation script proves the pipeline is accurate', out: 'failed', note: 'It printed \u201cALL CHECKS PASSED (100%)\u201d without measuring any accuracy. It now says it only runs structural checks, and real numbers come from a COCO subset and MOT16.' },
-      { h: 'A door detector fine-tuned on door images', out: 'open', note: 'The detector is pretrained on COCO, which has no door class. Fine-tuning on door footage is the next step and needs real recordings.' },
-    ],
-    limits: ['The detector is the pretrained COCO model, so it has no door class yet.', 'The event logic has not been scored on real doorway footage.', 'In crowds it misses many people (recall 37% on MOT16).'],
   },
   {
     slug: 'stock-anomaly',
@@ -428,7 +362,6 @@ export const studies: Flagship[] = [
     year: '2026',
     role: 'Author',
     stack: ['Python', 'pandas', 'scikit-learn', 'DBSCAN', 'k-means', 'pytest'],
-    areas: ['ml', 'data'],
     repo: 'https://github.com/KrishG7/stock-anomaly-detection',
     shots: [
       { img: '/shots/stock-anomaly/flags.jpg', alt: 'Close prices of six tickers in Q1 2020 with consensus anomaly flags marked in red', title: 'The March 2020 crash, flagged', text: 'Close price for each ticker in the held-out test quarter, with the consensus detector\u2019s flags in red. The flags cluster in the late-February to March sell-off, which is where the twelve known stress sessions sit.' },
@@ -449,22 +382,17 @@ export const studies: Flagship[] = [
       { k: 'detect', t: 'Flag the unusual', p: 'Rule, k-means and DBSCAN each vote, and the consensus decides.' },
       { k: 'score', t: 'Score against stress days', p: 'With no labels, twelve known stress sessions stand in, and the flag rate is shown beside recall.' },
     ],
-    ledger: [
-      { h: 'The clustering layers are strong detectors on their own', out: 'failed', note: 'k-means caught 6 of 12 and DBSCAN 5 of 12. Their value is as voters in the consensus, and the project says so.' },
-      { h: 'The original notebook\u2019s thresholds were sound', out: 'failed', note: 'Three defects were fixed: the market threshold was not fitted on the training period only, scaled copies leaked into features, and the DBSCAN radius gave a layer that never fired. Each is now pinned by a test.' },
-    ],
-    limits: ['There are no ground-truth labels, so recall is measured against twelve hand-listed stress sessions.', 'Results cover one test quarter (Q1 2020) and six tickers.'],
   },
 ];
 
 export const allCases: Flagship[] = [...flagships, ...studies];
 
 export const minors: Minor[] = [
-  { slug: 'brahm-kosh', name: 'Brahm-Kosh', line: 'A static-analysis engine and 3D viewer that shows what breaks if you change a file. No LLM calls.', areas: ['systems'], stack: ['Python', 'AST', 'Three.js'], repo: 'https://github.com/KrishG7/Brahm-Kosh', year: '2026' },
-  { slug: 'wait-zero', name: 'Wait Zero', line: 'Offline-first OPD queues for clinics on unreliable networks, with emergency interrupts and geofenced check-in.', areas: ['health', 'systems'], stack: ['Flutter', 'Node', 'SQLite', 'MySQL'], repo: 'https://github.com/KrishG7/smart-clinic-booking', year: '2026' },
-  { slug: 'trinetra', name: 'TriNetra', line: 'Satellite crop-health checks, a demo price model and soil advice in local languages, in one farmer dashboard.', areas: ['ml', 'data'], stack: ['PyTorch', 'Earth Engine', 'FastAPI'], repo: 'https://github.com/KrishG7/TriNetra-Farmers-Stack', year: '2026' },
-  { slug: 'video-tracer', name: 'Video-Tracer', line: 'From raw video to a trained YOLO tracker with trajectories and ROI tripwires.', areas: ['ml'], stack: ['YOLOv8', 'ByteTrack', 'BoT-SORT'], repo: 'https://github.com/KrishG7/Video-Tracer', year: '2026' },
-  { slug: 'stock-anomaly', name: 'Stock Anomaly', line: 'Unsupervised anomaly detection on equities where most of the code exists to prove nothing sees the future.', areas: ['ml', 'data'], stack: ['pandas', 'scikit-learn', 'DBSCAN'], repo: 'https://github.com/KrishG7/stock-anomaly-detection', year: '2026' },
+  { slug: 'brahm-kosh', name: 'Brahm-Kosh', line: 'A static-analysis engine and 3D viewer that shows what breaks if you change a file. No LLM calls.', stack: ['Python', 'AST', 'Three.js'], repo: 'https://github.com/KrishG7/Brahm-Kosh', year: '2026' },
+  { slug: 'wait-zero', name: 'Wait Zero', line: 'Offline-first OPD queues for clinics on unreliable networks, with emergency interrupts and geofenced check-in.', stack: ['Flutter', 'Node', 'SQLite', 'MySQL'], repo: 'https://github.com/KrishG7/smart-clinic-booking', year: '2026' },
+  { slug: 'trinetra', name: 'TriNetra', line: 'Satellite crop-health checks, a demo price model and soil advice in local languages, in one farmer dashboard.', stack: ['PyTorch', 'Earth Engine', 'FastAPI'], repo: 'https://github.com/KrishG7/TriNetra-Farmers-Stack', year: '2026' },
+  { slug: 'video-tracer', name: 'Video-Tracer', line: 'From raw video to a trained YOLO tracker with trajectories and ROI tripwires.', stack: ['YOLOv8', 'ByteTrack', 'BoT-SORT'], repo: 'https://github.com/KrishG7/Video-Tracer', year: '2026' },
+  { slug: 'stock-anomaly', name: 'Stock Anomaly', line: 'Unsupervised anomaly detection on equities where most of the code exists to prove nothing sees the future.', stack: ['pandas', 'scikit-learn', 'DBSCAN'], repo: 'https://github.com/KrishG7/stock-anomaly-detection', year: '2026' },
 ];
 
 // Smaller repositories on GitHub that don't get a case-study page.
@@ -485,14 +413,6 @@ export const skills: { k: string; v: string }[] = [
   { k: 'Systems and backend', v: 'Linux, Docker, Node.js, Express, FastAPI, WebSockets, REST APIs' },
   { k: 'Data and DevOps', v: 'FalkorDB (knowledge graph), PostgreSQL, MySQL, SQLite, Git, GitHub Actions, AWS, Vercel' },
 ];
-
-export const areaLabel: Record<Area, string> = {
-  security: 'Security',
-  ml: 'Machine learning',
-  systems: 'Systems',
-  health: 'Health',
-  data: 'Data',
-};
 
 export const site = {
   name: 'Krish Gupta',

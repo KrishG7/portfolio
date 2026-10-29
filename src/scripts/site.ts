@@ -319,11 +319,11 @@ let sel = 0;
 const eggs: Record<string, string> = {
   sudo: 'krish is not in the sudoers file. This incident will be reported.\n(Hire him and he will be.)',
   'sudo hire krish': 'Permission granted. Email copied to your clipboard.',
-  whoami: 'krish · security for machine learning · b.tech, university of delhi · rajouri → pathankot → delhi',
+  whoami: 'krish · builds software that has to work · b.tech, university of delhi · rajouri → badhani → delhi',
   ls: 'aegis-tensor/  athena/  weavr/  syscv/  brahm-kosh/  wait-zero/  trinetra/  video-tracer/  stock-anomaly/',
   'cat secrets': 'cat: secrets: Permission denied. Nice try.',
   'rm -rf /': 'Refused. This site runs on principle.',
-  hello: 'Hi. The email is at the end of the rope, and it copies on click.',
+  hello: 'Hi. The comet ends under the email, and the email copies on click.',
 };
 const visible = () => $$<HTMLLIElement>('li:not([hidden])', list ?? document.createElement('ul'));
 function paint() { visible().forEach((li, i) => li.setAttribute('aria-selected', String(i === sel))); visible()[sel]?.scrollIntoView({ block: 'nearest' }); }
@@ -340,6 +340,8 @@ function toggleGroup(id: string, force?: boolean) {
   const head = $<HTMLLIElement>(`li.head[data-toggle="${id}"]`, list!); if (!head) return;
   head.setAttribute('aria-expanded', String(force ?? head.getAttribute('aria-expanded') !== 'true')); filter();
   const i = visible().indexOf(head); if (i >= 0) { sel = i; paint(); }
+  // bring the opened group up under the search box so its rows are all in view
+  if (head.getAttribute('aria-expanded') === 'true') list!.scrollTo({ top: head.offsetTop - list!.offsetTop - 8, behavior: 'smooth' });
 }
 function openCmd() { if (!dlg || dlg.open) return; dlg.showModal(); lenis?.stop(); input!.value = ''; out!.textContent = ''; filter(); input!.focus(); }
 function closeCmd() { if (dlg?.open) dlg.close(); }
@@ -412,4 +414,4 @@ $$<HTMLAnchorElement>('[data-idx-a]').forEach((a) => {
 });
 
 console.log('%cKG', 'font: 48px Impact; color: #c8102e');
-console.log('You opened the console. Press ⌘K and type whoami, or follow the rope to the email.');
+console.log('You opened the console. Press ⌘K and type whoami, or follow the comet to the email.');

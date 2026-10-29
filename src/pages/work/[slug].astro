@@ -7,7 +7,6 @@ export function getStaticPaths() {
   return allCases.map((f, i) => ({ params: { slug: f.slug }, props: { f, next: allCases[(i + 1) % allCases.length] } }));
 }
 const { f, next } = Astro.props as { f: Flagship; next: Flagship };
-const outLabel = { held: 'Held', failed: 'Didn’t hold', open: 'Still open' };
 const hasVideo = !!f.video && fs.existsSync(`public/video/${f.video}.mp4`);
 const hasPoster = !!f.video && fs.existsSync(`public/video/${f.video}.jpg`);
 const ogImg = fs.existsSync(`public/og/${f.slug}.png`) ? `/og/${f.slug}.png` : '/og/home.png';
@@ -144,7 +143,6 @@ const ogImg = fs.existsSync(`public/og/${f.slug}.png`) ? `/og/${f.slug}.png` : '
   .built { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; counter-reset: b; max-width: 70ch; }
   .built li { position: relative; padding: 20px 0 20px 48px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 18px; line-height: 1.55; counter-increment: b; }
   .built li::before { content: counter(b, decimal-leading-zero); position: absolute; left: 0; top: 23px; font: 500 12px/1 var(--mono); color: var(--cut); }
-  .limits li::before { content: '!'; }
   .note { margin: 0 0 24px; color: var(--ink-3); max-width: 60ch; }
 
   .shots { display: grid; gap: clamp(36px, 5vw, 72px); }
@@ -175,14 +173,6 @@ const ogImg = fs.existsSync(`public/og/${f.slug}.png`) ? `/og/${f.slug}.png` : '
   .stick { position: relative; }
   .pane { position: sticky; top: 18vh; aspect-ratio: 4 / 3; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg-2); overflow: hidden; }
 
-  .ledger { list-style: none; margin: 0; padding: 0; max-width: 78ch; }
-  .ledger li { display: grid; grid-template-columns: 130px 1fr; gap: 20px; padding: 22px 0; border-top: 1px solid var(--line); }
-  .ledger h3 { margin: 0 0 6px; font: 500 18px/1.4 var(--body); color: var(--ink); }
-  .ledger p { margin: 0; color: var(--ink-2); line-height: 1.55; }
-  .out { align-self: start; font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 7px 9px; border-radius: 6px; width: fit-content; }
-  .out.held { color: #5fd38d; background: rgba(95, 211, 141, .12); }
-  .out.failed { color: #e57a88; background: rgba(229, 122, 136, .12); }
-  .out.open { color: var(--gold-2); background: rgba(59, 82, 255, .14); }
 
   .next { display: block; margin-top: clamp(96px, 14vw, 180px); padding-block: clamp(56px, 8vw, 110px); border-top: 1px solid var(--line); transition: background .5s var(--ease); }
   .next:hover { background: var(--bg-2); }
@@ -201,8 +191,7 @@ const ogImg = fs.existsSync(`public/og/${f.slug}.png`) ? `/og/${f.slug}.png` : '
     .stick { order: -1; position: sticky; top: 64px; z-index: 2; }
     .pane { position: relative; top: 0; aspect-ratio: 16 / 10; box-shadow: 0 16px 30px var(--bg); }
     .steps li { min-height: 56vh; }
-    .ledger li { grid-template-columns: 1fr; gap: 10px; }
-    .facts li { grid-template-columns: 1fr; }
+      .facts li { grid-template-columns: 1fr; }
     .facts b { grid-row: auto; }
   }
 </style>
