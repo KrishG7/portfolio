@@ -4,10 +4,9 @@ import { flagships, minors, site } from '../data/projects';
 
 // which caption step is the moment the threat shows up
 const journey = [
-  { place: 'Rajouri', where: 'Jammu and Kashmir', coord: '33.38° N  74.31° E', when: 'Where I’m from', text: 'A small town in the hills. Where it started.' },
-  { place: 'Badhani', where: 'Pathankot, Punjab', coord: '32.27° N  75.65° E', when: 'Class 5 – 12', text: 'Seven years of boarding school. House Captain and valedictorian, awarded the Red Coat, captain of the football and volleyball teams.' },
-  { place: 'New Delhi', where: 'University of Delhi', coord: '28.61° N  77.21° E', when: '2024 – 2028', text: 'B.Tech in blockchain, cybersecurity and machine learning at the Faculty of Technology. Where everything above was built.' },
-  { place: 'Next', where: 'Quantum computing', coord: '|ψ⟩ = α|0⟩ + β|1⟩', when: 'Not started yet', text: 'Which is exactly why it’s next. I learn things from the ground up, and this is the one I haven’t started.' },
+  { place: 'Rajouri', where: 'Jammu and Kashmir', coord: '33.38° N  74.31° E', when: 'Where I’m from', text: 'A small town in the hills, and where I grew up.' },
+  { place: 'Badhani', where: 'Pathankot, Punjab', coord: '32.27° N  75.65° E', when: 'Class 5 – 12', text: 'Seven years at a boarding school, where I was House Captain, valedictorian and captain of the football and volleyball teams, and received the Red Coat. It taught me to lead, and to keep going when it’s hard.' },
+  { place: 'New Delhi', where: 'University of Delhi', coord: '28.61° N  77.21° E', when: '2024 – 2028', text: 'B.Tech in blockchain, cybersecurity and machine learning at the Faculty of Technology. This is where the projects on this page were built.' },
 ];
 ---
 <Base film>
@@ -23,11 +22,11 @@ const journey = [
       <div class="about wrap" data-about>
         <div class="col-a">
           <p class="poster about-name" data-name-target aria-hidden="true">Krish Gupta</p>
-          <p class="statement" data-about-line>I break machine learning systems on purpose, then build the tools that stop anyone else from doing it.</p>
+          <p class="statement" data-about-line>I build tools that check a machine learning model before anyone trusts it.</p>
         </div>
         <div class="col-b">
-          <p data-about-line>I’m a B.Tech student at the University of Delhi, studying blockchain, cybersecurity and machine learning. I work where security and machine learning overlap, because that is where real attacks happen and where very few people are looking.</p>
-          <p data-about-line>When a problem needs something I don’t know yet, I learn it from the ground up and keep going until it holds under pressure. I like to lead, I like to compete, and I don’t like being second.</p>
+          <p data-about-line>I’m Krish, a B.Tech student at the University of Delhi studying blockchain, cybersecurity and machine learning. I’m most interested in where security and machine learning meet: models are now files people download and run, and very few tools check them first.</p>
+          <p data-about-line>When a problem needs something I don’t know yet, I learn it properly, from the ground up, and keep building until it works. I enjoy leading a team and learning from the people around me. Away from the screen you’ll find me at the gym, or on a football or volleyball field.</p>
           <p class="tag" data-about-line><span class="dot"></span>Now building <b>{site.now}</b> · open to 2027 internships</p>
         </div>
       </div>
@@ -44,7 +43,7 @@ const journey = [
   <section id="work" class="ch" data-where="Projects" aria-labelledby="h-work">
     <div class="stage" id="s2">
       <h2 id="h-work" class="sr">Projects</h2>
-      <p class="ch-cap wrap tag" data-ch-cap>Four systems · 2025 – 2026 · each from a different corner of the field</p>
+      <p class="ch-cap wrap tag" data-ch-cap>Four systems · 2026 · from four different corners of the field</p>
       <div class="fig-box" id="pfig"></div>
       {flagships.map((f, i) => (
         <article class="slide wrap" data-slide aria-labelledby={`p-${f.slug}`}>
@@ -120,7 +119,7 @@ const journey = [
     <div class="marks">
       <div data-film="text" data-text="Journey" data-anchor="#s4" data-rope=".3:.9 .62:.5 .9:.15"></div>
       {journey.map((_, i) => (
-        <div data-film={i < 3 ? 'route' : 'bloch'} data-active={i} data-anchor="#s4" data-box="#jfig" data-slide-mark style="--h:130svh" data-rope=".3:.46 .75:.5" data-rope-m=".3:.95 .75:.92"></div>
+        <div data-film="route" data-active={i} data-anchor="#s4" data-box="#jfig" data-slide-mark style="--h:130svh" data-rope=".3:.46 .75:.5" data-rope-m=".3:.95 .75:.92"></div>
       ))}
     </div>
   </section>

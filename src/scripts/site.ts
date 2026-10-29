@@ -209,36 +209,72 @@ if (cur && fine && !lite) {
   });
 }
 
-/* ---------------- Delhi clock ---------------- */
+/* ---------------- India clock, 12-hour ---------------- */
 const clock = $('[data-clock]');
 if (clock) {
-  const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-  const tick = () => (clock.textContent = fmt.format(new Date()));
+  const fmt = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
+  const tick = () => (clock.textContent = fmt.format(new Date()).toUpperCase());
   tick(); setInterval(tick, 1000);
 }
 
-/* ---------------- sound: opt-in, generated, very quiet ---------------- */
-let audio: { ctx: AudioContext; master: GainNode } | null = null;
+/* ---------------- sound: opt-in, generated in the browser, very quiet ----------------
+   A slow, warm pad that moves through four chords, a soft room reverb, and the odd high bell.
+   Hovering a link plays one quiet note from a pentatonic scale. Nothing is downloaded. */
+let audio: { ctx: AudioContext; master: GainNode; dry: GainNode } | null = null;
 let soundOn = false;
+const CHORDS = [
+  [130.81, 196.0, 246.94, 329.63, 392.0],   // C add9 / G
+  [110.0, 164.81, 220.0, 261.63, 329.63],   // A minor 9
+  [87.31, 130.81, 174.61, 220.0, 329.63],   // F major 7
+  [98.0, 146.83, 196.0, 246.94, 293.66],    // G 6/9
+];
+const PENT = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5, 1174.66];
 function startAudio() {
   const ctx = new AudioContext();
   const master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
-  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 520; lp.Q.value = .4; lp.connect(master);
-  [55, 82.4, 110.2, 164.8].forEach((f, i) => {
-    const o = ctx.createOscillator(); o.type = i % 2 ? 'triangle' : 'sine'; o.frequency.value = f; o.detune.value = (i - 1.5) * 6;
-    const g = ctx.createGain(); g.gain.value = .05 / (i + 1);
-    const lfo = ctx.createOscillator(); lfo.frequency.value = .05 + i * .03; const lg = ctx.createGain(); lg.gain.value = .02 / (i + 1);
-    lfo.connect(lg).connect(g.gain); o.connect(g).connect(lp); o.start(); lfo.start();
-  });
-  audio = { ctx, master };
+  const dry = ctx.createGain(); dry.gain.value = .9; dry.connect(master);
+  // room: a short decaying-noise impulse through a convolver
+  const len = ctx.sampleRate * 3.2, ir = ctx.createBuffer(2, len, ctx.sampleRate);
+  for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6); }
+  const verb = ctx.createConvolver(); verb.buffer = ir; const wet = ctx.createGain(); wet.gain.value = .55; verb.connect(wet).connect(master);
+  const bus = ctx.createGain(); bus.gain.value = 1; bus.connect(dry); bus.connect(verb);
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1100; lp.Q.value = .3; lp.connect(bus);
+  // slow breathing in the brightness
+  const sw = ctx.createOscillator(); sw.frequency.value = .04; const swg = ctx.createGain(); swg.gain.value = 260; sw.connect(swg).connect(lp.frequency); sw.start();
+  let voices: { stop: () => void }[] = [], step = 0;
+  const playChord = () => {
+    const t = ctx.currentTime, chord = CHORDS[step++ % CHORDS.length];
+    const old = voices; voices = [];
+    old.forEach((v) => v.stop());
+    chord.forEach((f, i) => {
+      [-5, 5].forEach((det) => {
+        const o = ctx.createOscillator(); o.type = i < 2 ? 'sine' : 'triangle'; o.frequency.value = f; o.detune.value = det;
+        const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.022 / (1 + i * .25), t + 4.5);
+        o.connect(g).connect(lp); o.start(t);
+        voices.push({ stop: () => { const n = ctx.currentTime; g.gain.cancelScheduledValues(n); g.gain.setValueAtTime(g.gain.value, n); g.gain.linearRampToValueAtTime(0, n + 5); o.stop(n + 5.2); } });
+      });
+    });
+  };
+  const bell = () => {
+    if (!soundOn) return;
+    const f = PENT[(Math.random() * PENT.length) | 0] * (Math.random() < .3 ? .5 : 1), t = ctx.currentTime;
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.018, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + 3.2);
+    o.connect(g); g.connect(verb); g.connect(dry); o.start(t); o.stop(t + 3.3);
+  };
+  playChord(); setInterval(() => { if (soundOn) playChord(); }, 14000);
+  (function loop() { setTimeout(() => { bell(); loop(); }, 6000 + Math.random() * 7000); })();
+  audio = { ctx, master, dry };
 }
+let lastTick = 0;
 function tickSound() {
   if (!audio || !soundOn) return;
-  const { ctx, master } = audio;
+  const { ctx } = audio, t = ctx.currentTime;
+  if (t - lastTick < .12) return; lastTick = t;
   const o = ctx.createOscillator(), g = ctx.createGain();
-  o.type = 'sine'; o.frequency.value = 1800 + Math.random() * 400;
-  g.gain.setValueAtTime(.0001, ctx.currentTime); g.gain.exponentialRampToValueAtTime(.05, ctx.currentTime + .005); g.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .06);
-  o.connect(g).connect(master); o.start(); o.stop(ctx.currentTime + .07);
+  o.type = 'sine'; o.frequency.value = PENT[(Math.random() * 5) | 0] * 2;
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.016, t + .006); g.gain.exponentialRampToValueAtTime(.0001, t + .5);
+  o.connect(g).connect(audio.dry); o.start(t); o.stop(t + .55);
 }
 function toggleSound() {
   soundOn = !soundOn;

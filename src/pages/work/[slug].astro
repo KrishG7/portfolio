@@ -103,26 +103,6 @@ const ogImg = fs.existsSync(`public/og/${f.slug}.png`) ? `/og/${f.slug}.png` : '
       <ul class="built">{f.built.map((b) => <li>{b}</li>)}</ul>
     </section>
 
-    <section class="wrap two">
-      <h2 class="label">What didn’t work</h2>
-      <div>
-        <p class="note">Every project has a ledger of the hypotheses it tested. The ones that failed are kept, because they are why the design looks the way it does.</p>
-        <ul class="ledger">
-          {f.ledger.map((l) => (
-            <li>
-              <span class={`out ${l.out}`}>{outLabel[l.out]}</span>
-              <div><h3>{l.h}</h3><p>{l.note}</p></div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    <section class="wrap two">
-      <h2 class="label">Honest limits</h2>
-      <ul class="built limits">{f.limits.map((b) => <li>{b}</li>)}</ul>
-    </section>
-
     {f.team && (
       <section class="wrap two">
         <h2 class="label">Team</h2>

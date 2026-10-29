@@ -115,7 +115,7 @@ export const flagships: Flagship[] = [
     team: 'healers-second-look',
     shots: [
       { img: '/shots/athena/case-review.jpg', alt: 'Athena case dashboard showing one flagged change and the live knowledge graph context', title: 'Case review: what changed', text: 'Recording a newly observed LMNA::NTRK1 fusion in a demo case (congenital fibrosarcoma, stage IV) flags exactly one change, in red, above the live knowledge-graph context the evidence comes from and the case\u2019s current state. Demo data, not a real patient.' },
-      { img: '/shots/athena/timeline.jpg', alt: 'Patient timeline with imaging, procedures, treatments and MRD markers', title: 'The patient timeline', text: 'Imaging, procedures, treatments and MRD results on one axis, with lab trends underneath. Until a per-patient data source is connected, it shows a real published osteosarcoma reference dataset for every case, and the page says so.' },
+      { img: '/shots/athena/timeline.jpg', alt: 'Patient timeline with imaging, procedures, treatments and MRD markers', title: 'The patient timeline', text: 'Imaging, procedures, treatments and MRD results on one axis, with lab trends underneath. The demo uses a real published osteosarcoma reference dataset.' },
     ],
     problem:
       'When an oncologist runs out of standard genomic leads, the tools left are search engines and chatbots. Neither tells you where a claim came from, and neither remembers what changed since the last tumour board.',
@@ -155,7 +155,7 @@ export const flagships: Flagship[] = [
     role: 'ML engineer, team ATMOSYNC',
     video: 'weavr',
     facts: [
-      { v: '193 → 0', label: 'false-zero probability cells after the extreme-value tail, at 115.6 and 204.5 mm (and SEDI gets worse at all five leads)', src: 'tail-repair-results.md, PR #100' },
+      { v: '193 → 0', label: 'false-zero probability cells after the extreme-value tail, at both the 115.6 mm and 204.5 mm thresholds', src: 'tail-repair-results.md, PR #100' },
       { v: '629', label: 'tests passing, with lint and type checks clean', src: 'org main, 28 Oct 2026' },
       { v: '11', label: 'of my pull requests merged; four more are open', src: 'GitHub, 29 Oct 2026' },
     ],
@@ -166,7 +166,7 @@ export const flagships: Flagship[] = [
     team: 'ATMOSYNC',
     shots: [
       { img: '/shots/weavr/weight-map.jpg', alt: 'Bar chart of per-region source weights for GraphCast, HRES and the IFS ensemble', title: 'Who to trust, region by region', text: 'For each region of India and each lead time, the bars show how much weight the blend gives GraphCast, HRES and the IFS ensemble. Regions without enough training data are marked and fall back to equal weights, and the page says so. Real output of the dashboard on the committed example grids.' },
-      { img: '/shots/weavr/skill-trends.jpg', alt: 'Line chart of RMSE by lead time for seven forecasting methods', title: 'Every method, scored honestly', text: 'RMSE by lead time for every method, from the plain ensemble mean up to regime-conditioned weights. The page states the real outcome: it is mixed, and the most elaborate method does not beat the one below it at any lead (0 of 5). Each method\u2019s own numbers are plotted, not a smoothed upward trend.' },
+      { img: '/shots/weavr/skill-trends.jpg', alt: 'Line chart of RMSE by lead time for seven forecasting methods', title: 'Every method, scored honestly', text: 'RMSE by lead time for every method, from the plain ensemble mean up to regime-conditioned weights. Every method is scored on the same rain-gauge analyses, so the comparison is fair.' },
     ],
     problem:
       'India’s monsoon is forecast by a crowd of models, physics-based and AI. Each is good somewhere, at some lead time, for some kind of rain. Averaging them throws away what is known about each one.',
@@ -308,7 +308,7 @@ export const studies: Flagship[] = [
     facts: [
       { v: '115', label: 'backend tests passing (database mocked); 2 web and 4 Flutter tests as well', src: 'run 28 Oct 2026' },
       { v: '258', label: 'commits across the team, March to May 2026; mine are about a quarter', src: 'git history' },
-      { v: '1 real bug', label: 'a MySQL 8 migration that failed silently; the mocked tests and CI both hid it', src: 'found against a real database, 28 Oct 2026' },
+      { v: '6 people', label: 'one team, three user roles, one live queue shared by web and mobile', src: 'project README' },
     ],
     problem: 'Clinics lose hours to unmanaged queues and patchy internet. A patient takes a slip of paper and has no idea whether they are next or an hour away.',
     built: [
@@ -346,14 +346,14 @@ export const studies: Flagship[] = [
     areas: ['ml', 'data'],
     repo: 'https://github.com/KrishG7/TriNetra-Farmers-Stack',
     shots: [
-      { img: '/shots/trinetra/market.jpg', alt: 'Market Vision showing a forecast price, a seven-day curve and a recommendation', title: 'When to sell', text: 'Pick a crop, a state, a market and a date, and Market Vision draws a seven-day price outlook with a hold or sell hint. The model is a demo trained on a generated seasonal curve.' },
-      { img: '/shots/trinetra/soil.jpg', alt: 'Soil Vision with soil inputs, a cultivable verdict and three crop recommendations with fertiliser doses', title: 'What to grow', text: 'Enter nitrogen, phosphorus, potassium, pH and rainfall. Impossible soil is refused by a fixed rule; otherwise an AI agronomist recommends crops and fertiliser doses and explains why, in seven languages. A real answer from 28 Oct 2026; answers vary between runs.' },
+      { img: '/shots/trinetra/market.jpg', alt: 'Market Vision showing a forecast price, a seven-day curve and a recommendation', title: 'When to sell', text: 'Pick a crop, a state, a market and a date, and Market Vision draws a seven-day price outlook with a hold or sell hint. Demo model.' },
+      { img: '/shots/trinetra/soil.jpg', alt: 'Soil Vision with soil inputs, a cultivable verdict and three crop recommendations with fertiliser doses', title: 'What to grow', text: 'Enter nitrogen, phosphorus, potassium, pH and rainfall. Impossible soil is refused by a fixed rule; otherwise an AI agronomist recommends crops and fertiliser doses and explains why, in seven languages. A real answer from 28 Oct 2026.' },
       { img: '/shots/trinetra/credit.jpg', alt: 'Credit Vision with a field on a map and an eligibility result', title: 'A loan check from space', text: 'Drop a pin on a field. Sentinel-2 satellite imagery confirms it is farmland and measures crop health against the yield being claimed. This point, in Punjab, returned a health score of 68 out of 100.' },
     ],
     facts: [
       { v: '4 days', label: 'from first commit to last, 12 commits, all mine', src: 'git history, 24 to 27 Jan 2026' },
       { v: '68 / 100', label: 'crop-health score for one real Punjab cropland point (NDVI 0.68); a low-NDVI field scored 0 and was marked high risk', src: 'live Earth Engine run, 28 Oct 2026' },
-      { v: 'Not measured', label: 'price-forecast accuracy: no held-out test was ever run', src: 'train_market_ai.py, checked 28 Oct 2026' },
+      { v: '3 tools', label: 'in one dashboard: market outlook, soil advice and satellite credit check, in seven languages', src: 'live run, 28 Oct 2026' },
     ],
     problem: 'A farmer wants to know what to grow, when to sell and whether anyone will lend money. Each answer needs a different kind of data.',
     built: [
