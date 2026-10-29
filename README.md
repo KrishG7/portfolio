@@ -1,4 +1,4 @@
-# krishgupta.vercel.app · v10
+# Krish Gupta · portfolio v10
 
 Personal site of **Krish Gupta**, Security × ML engineer, B.Tech (Blockchain, Cybersecurity & ML) at the University of Delhi.
 
