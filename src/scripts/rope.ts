@@ -30,7 +30,13 @@ export function createRope(svg: SVGSVGElement, opts: { small: boolean }): Rope {
   };
   const SW = opts.small ? 4 : 5.4, AMP = opts.small ? 2.5 : 3.6, PITCH = opts.small ? 30 : 44;
   // ?rope=chain draws the same path as chain links instead, to compare the two looks
-  const chain = new URLSearchParams(location.search).get('rope') === 'chain';
+  const mode = new URLSearchParams(location.search).get('rope') || 'comet';   // comet (default), rope or chain
+  const chain = mode === 'chain';
+  // the comet: a head that leads, a tail that fades, a faint dotted path ahead and a few sparks
+  const K = 28;
+  const trail = Array.from({ length: K }, (_, c) => { const u = c / (K - 1); return mk('trail', '#ff3552', .7 + 3.4 * Math.pow(u, 1.5), Math.pow(u, 1.7)); });
+  const ahead = mk('ahead', '#c8102e', 1.8, .55); ahead.setAttribute('stroke-dasharray', '1 9');
+  const sparks = Array.from({ length: 10 }, () => { const c = document.createElementNS(NS, 'circle'); c.setAttribute('fill', '#ff8da0'); c.setAttribute('class', 'spark'); svg.insertBefore(c, halo); return c; });
   const core = mk('core', '#2c0309', AMP * 2 + 1.6);
   const cLinkShadow = mk('c-shadow', '#2c0309', 4.8), cLink = mk('c-link', '#d92642', 2.5), cLinkHi = mk('c-hi', '#ffb0bc', .8, .65);
   const cEdge = mk('c-edge', '#7d0a1d', 4.2), cEdgeHi = mk('c-edge-hi', '#e9566c', 1.5);
@@ -99,7 +105,8 @@ export function createRope(svg: SVGSVGElement, opts: { small: boolean }): Rope {
     function sway(y: number) {
       // the end near the tip is loose and moves; the rope further back has settled
       const near = Math.exp(-Math.max(0, tipY - y) / 260);
-      return Math.sin(t * 1.4 + y * .006) * (1.5 + 8 * near) + whip * 26 * near;
+      const k = mode === 'comet' ? .3 : 1;
+      return (Math.sin(t * 1.4 + y * .006) * (1.5 + 8 * near) + whip * 26 * near) * k;
     }
     // first visible sample
     let s0 = 0, s1 = Y.length - 1;
@@ -126,7 +133,30 @@ export function createRope(svg: SVGSVGElement, opts: { small: boolean }): Rope {
       for (let j = 1; j <= n; j++) { const u = j / n; px.push(cx[i - 1] + dx * u); py.push(cy[i - 1] + dy * u); pl.push(cl[i - 1] + (cl[i] - cl[i - 1]) * u); }
     }
     const N = px.length; let tx = 0, ty = 0;
-    if (chain && N > 1) {
+    if (mode === 'comet' && N > 1) {
+      const head = N - 1; tx = px[head]; ty = py[head];
+      const TL = (opts.small ? 250 : 380) + e * 900, L1 = pl[head];
+      let i0 = head; while (i0 > 0 && pl[i0] > L1 - TL) i0--;
+      for (let c = 0; c < K; c++) {
+        const a = i0 + Math.floor((head - i0) * c / K), b = Math.min(head, i0 + Math.floor((head - i0) * (c + 1) / K) + 1);
+        let d = ''; for (let j = a; j <= b; j++) d += `${j === a ? 'M' : 'L'}${px[j].toFixed(1)} ${py[j].toFixed(1)}`;
+        trail[c].setAttribute('d', d);
+      }
+      // a soft bloom along the last stretch of the tail
+      let g = ''; for (let j = Math.max(i0, head - 70); j <= head; j += 2) g += `${g ? 'L' : 'M'}${px[j].toFixed(1)} ${py[j].toFixed(1)}`;
+      glow.setAttribute('d', g);
+      // the way ahead, as a dotted line, until the last screen
+      let ad = '';
+      if (e < .02) for (let i = last + 1; i < Math.min(Y.length, last + 70); i++) ad += `${ad ? 'L' : 'M'}${(X[i] + sway(Y[i])).toFixed(1)} ${(Y[i] - sy).toFixed(1)}`;
+      ahead.setAttribute('d', ad);
+      // sparks drifting off the tail
+      sparks.forEach((c, n) => {
+        const f = (n + 1) / (sparks.length + 1), j = Math.max(i0, Math.round(head - (head - i0) * f * .85)), off = Math.sin(t * 2.1 + n * 1.9) * 7 * f + (n % 2 ? 4 : -4) * f;
+        const a0 = Math.max(0, j - 1), a1 = Math.min(N - 1, j + 1); let nx = -(py[a1] - py[a0]), ny = px[a1] - px[a0]; const nl = Math.hypot(nx, ny) || 1;
+        c.setAttribute('cx', (px[j] + nx / nl * off).toFixed(1)); c.setAttribute('cy', (py[j] + ny / nl * off).toFixed(1));
+        c.setAttribute('r', (1.7 * (1 - f) + .4).toFixed(2)); c.setAttribute('opacity', (.85 * (1 - f) * (.6 + .4 * Math.sin(t * 3 + n))).toFixed(2));
+      });
+    } else if (chain && N > 1) {
       tx = px[N - 1]; ty = py[N - 1];
       const S = opts.small ? 13 : 17, a = S * .74, bb = opts.small ? 3.6 : 4.6;
       let face = '', edge = '', cdl = '', j = 0;

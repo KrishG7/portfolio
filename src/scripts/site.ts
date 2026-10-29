@@ -295,23 +295,6 @@ $$('[data-copy]').forEach((b) => b.addEventListener('click', async () => {
   if (hint) { hint.textContent = 'Copied. Talk soon.'; setTimeout(() => (hint.textContent = 'Click to copy'), 2400); }
 }));
 
-/* ---------------- note box: posts to PUBLIC_NOTE_ENDPOINT if set, otherwise opens the mail app ---------------- */
-const noteForm = $<HTMLFormElement>('[data-note]');
-noteForm?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const ta = $<HTMLTextAreaElement>('textarea', noteForm)!, btn = $<HTMLButtonElement>('button', noteForm)!, state = $('[data-note-state]', noteForm)!;
-  const text = ta.value.trim(); if (!text) return;
-  const endpoint = noteForm.dataset.endpoint, to = noteForm.dataset.to || '';
-  if (!endpoint) { location.href = `mailto:${to}?subject=${encodeURIComponent('A note for Krish')}&body=${encodeURIComponent(text)}`; state.textContent = 'Opening your mail app with the note ready to send.'; return; }
-  btn.disabled = true; state.textContent = 'Sending…';
-  try {
-    const r = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ message: text, page: location.href }) });
-    if (!r.ok) throw new Error(String(r.status));
-    ta.value = ''; state.textContent = 'Thank you. Krish will read it.';
-  } catch { state.textContent = 'That did not send. You can email it instead.'; }
-  btn.disabled = false;
-});
-
 /* ---------------- phone menu ---------------- */
 const menuBtn = $<HTMLButtonElement>('[data-menu-btn]'), menu = $('[data-menu]');
 function setMenu(open: boolean) {

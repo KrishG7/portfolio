@@ -144,14 +144,6 @@ const journey = [
           <span class="addr" id="mailaddr">{site.email}</span>
           <span class="tag" data-copy-hint>Click to copy</span>
         </button>
-        <form class="note a" data-note data-endpoint={import.meta.env.PUBLIC_NOTE_ENDPOINT ?? ''} data-to={site.email}>
-          <label class="tag" for="note-text">Want to add something for Krish? Just type.</label>
-          <div class="note-row">
-            <textarea id="note-text" name="note" rows="2" maxlength="1000" placeholder="A note, an idea, a question…" required></textarea>
-            <button type="submit">Send</button>
-          </div>
-          <p class="state tag" data-note-state aria-live="polite"></p>
-        </form>
         <div class="foot a">
           <nav class="tag" aria-label="Elsewhere">
             <a href={site.github} target="_blank" rel="noopener" data-magnetic data-roll>GitHub</a>
@@ -180,9 +172,9 @@ const journey = [
 
   .rope { position: fixed; inset: 0; width: 100vw; height: 100lvh; z-index: 2; pointer-events: none; overflow: visible; }
   .rope path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .rope { filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .55)); }
-  .rope .glow { stroke: var(--crimson); stroke-width: 16; opacity: .16; filter: blur(7px); }
-  .rope .tip { fill: #ffe3e7; }
+  .rope { filter: drop-shadow(0 0 7px rgba(200, 16, 46, .5)); }
+  .rope .glow { stroke: var(--crimson); stroke-width: 18; opacity: .3; filter: blur(8px); }
+  .rope .tip { fill: #fff3f5; r: 4.6; }
   .rope .halo { fill: none; stroke: var(--crimson); stroke-width: 1; opacity: .6; transform-box: fill-box; transform-origin: center; animation: halo 2s var(--ease) infinite; }
   @keyframes halo { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(1.8); opacity: 0; } }
 
@@ -240,15 +232,6 @@ const journey = [
   .mail .tag { display: block; margin-top: 18px; }
   .big { font-size: clamp(48px, min(9.6vw, 15svh), 190px); }
 
-  .note { width: min(640px, 100%); margin-top: clamp(8px, 2svh, 24px); display: grid; gap: 10px; }
-  .note label { color: var(--ink-2); }
-  .note-row { display: flex; gap: 10px; align-items: stretch; }
-  .note textarea { flex: 1; min-width: 0; resize: none; background: transparent; color: var(--ink); border: 1px solid var(--line-2); border-radius: 10px; padding: 12px 14px; font: 400 16px/1.45 var(--body); transition: border-color .3s var(--ease); }
-  .note textarea::placeholder { color: var(--ink-3); }
-  .note textarea:focus { outline: 0; border-color: var(--cut); }
-  .note button { flex: none; align-self: stretch; padding: 0 20px; border-radius: 10px; background: var(--cut); color: #fff; font: 600 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
-  .note button:disabled { opacity: .5; cursor: default; }
-  .note .state { margin: 0; min-height: 1.4em; color: var(--ink-3); }
   .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: clamp(24px, 5svh, 64px); padding-top: 18px; border-top: 1px solid var(--line); }
   .foot nav { display: flex; gap: 24px; flex-wrap: wrap; color: var(--ink); }
   .foot p { margin: 0; }
