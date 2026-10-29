@@ -144,6 +144,14 @@ const journey = [
           <span class="addr" id="mailaddr">{site.email}</span>
           <span class="tag" data-copy-hint>Click to copy</span>
         </button>
+        <form class="note a" data-note data-endpoint={import.meta.env.PUBLIC_NOTE_ENDPOINT ?? ''} data-to={site.email}>
+          <label class="tag" for="note-text">Want to add something for Krish? Just type.</label>
+          <div class="note-row">
+            <textarea id="note-text" name="note" rows="2" maxlength="1000" placeholder="A note, an idea, a question…" required></textarea>
+            <button type="submit">Send</button>
+          </div>
+          <p class="state tag" data-note-state aria-live="polite"></p>
+        </form>
         <div class="foot a">
           <nav class="tag" aria-label="Elsewhere">
             <a href={site.github} target="_blank" rel="noopener" data-magnetic data-roll>GitHub</a>
@@ -225,20 +233,22 @@ const journey = [
   /* 5: contact */
   .contact { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 22px; }
   .contact .foot { align-self: stretch; }
-  .big { font-size: clamp(60px, 9.6vw, 190px); margin: 0; }
-  .mail { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; gap: 20px; text-align: left; max-width: 100%; margin-top: 14px;
-    padding: clamp(18px, 2.6vw, 34px) clamp(20px, 3.4vw, 52px) clamp(18px, 2.4vw, 30px); border: 1px solid var(--line-2); border-radius: 20px;
-    background: radial-gradient(120% 140% at 0% 0%, rgba(59, 82, 255, .22), rgba(59, 82, 255, 0) 60%), rgba(255, 255, 255, .02);
-    box-shadow: 0 0 0 0 rgba(59, 82, 255, .0), 0 30px 80px -40px rgba(59, 82, 255, .6); transition: border-color .4s var(--ease), box-shadow .5s var(--ease), background .5s var(--ease); }
-  .mail:hover, .mail:focus-visible { border-color: var(--cut); box-shadow: 0 0 0 4px rgba(59, 82, 255, .16), 0 30px 90px -30px rgba(59, 82, 255, .85); }
-  .mail::before { content: ''; position: absolute; inset: -1px; border-radius: 20px; border: 1px solid var(--cut); opacity: 0; animation: mailPulse 2.8s var(--ease) infinite; pointer-events: none; }
-  @keyframes mailPulse { 0% { opacity: .7; transform: scale(1); } 100% { opacity: 0; transform: scale(1.06); } }
-  .addr { display: inline-block; font: 400 clamp(28px, 5.4vw, 104px)/1 var(--display); text-transform: uppercase; overflow-wrap: anywhere; color: #fff; text-shadow: 0 0 28px rgba(120, 140, 255, .45);
-    background-image: linear-gradient(90deg, var(--cut), #9aa6ff); background-repeat: no-repeat; background-size: 0% 3px; background-position: 0 100%; padding-bottom: 6px; transition: background-size .6s var(--ease), color .4s var(--ease); }
-  .mail:hover .addr { background-size: 100% 3px; }
-  .mail .tag[data-copy-hint] { display: inline-flex; align-items: center; gap: 8px; margin: 0; padding: 10px 16px; border-radius: 999px; background: var(--cut); color: #fff; font-weight: 600; letter-spacing: .12em; }
-  .mail .tag[data-copy-hint]::before { content: ''; width: 12px; height: 12px; border: 1.6px solid #fff; border-radius: 3px; box-shadow: 3px -3px 0 -1px var(--cut), 3px -3px 0 0 #fff; }
-  @media (prefers-reduced-motion: reduce) { .mail::before { animation: none; } }
+  .big { margin: 0; }
+  .mail { display: block; text-align: left; max-width: 100%; margin-top: 12px; }
+  .addr { display: inline-block; font: 400 clamp(28px, 5vw, 96px)/1 var(--display); text-transform: uppercase; overflow-wrap: anywhere; color: var(--cut); transition: color .4s var(--ease); }
+  .mail:hover .addr { color: var(--gold-2); }
+  .mail .tag { display: block; margin-top: 18px; }
+  .big { font-size: clamp(48px, min(9.6vw, 15svh), 190px); }
+
+  .note { width: min(640px, 100%); margin-top: clamp(8px, 2svh, 24px); display: grid; gap: 10px; }
+  .note label { color: var(--ink-2); }
+  .note-row { display: flex; gap: 10px; align-items: stretch; }
+  .note textarea { flex: 1; min-width: 0; resize: none; background: transparent; color: var(--ink); border: 1px solid var(--line-2); border-radius: 10px; padding: 12px 14px; font: 400 16px/1.45 var(--body); transition: border-color .3s var(--ease); }
+  .note textarea::placeholder { color: var(--ink-3); }
+  .note textarea:focus { outline: 0; border-color: var(--cut); }
+  .note button { flex: none; align-self: stretch; padding: 0 20px; border-radius: 10px; background: var(--cut); color: #fff; font: 600 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+  .note button:disabled { opacity: .5; cursor: default; }
+  .note .state { margin: 0; min-height: 1.4em; color: var(--ink-3); }
   .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: clamp(24px, 5svh, 64px); padding-top: 18px; border-top: 1px solid var(--line); }
   .foot nav { display: flex; gap: 24px; flex-wrap: wrap; color: var(--ink); }
   .foot p { margin: 0; }
