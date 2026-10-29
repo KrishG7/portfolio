@@ -69,7 +69,7 @@ const groups: { id?: string; title?: string; open?: boolean; rows: Row[]; childr
   li { display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 10px; cursor: pointer; color: var(--ink-2); }
   li em { font: 500 11px/1.6 var(--mono); font-style: normal; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; }
   li[aria-selected='true'] { background: color-mix(in srgb, var(--gold) 14%, transparent); color: var(--ink); }
-  li[hidden] { display: none; }
+  li[hidden] { display: none !important; }
   li.head { margin-top: 6px; color: var(--ink); font-weight: 600; }
   li.head em { display: inline-flex; align-items: center; gap: 10px; }
   li.head em b { font-weight: 500; color: var(--ink-3); }

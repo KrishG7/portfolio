@@ -351,7 +351,7 @@ async function run(a: string) {
   if (a.startsWith('go:')) {
     const url = a.slice(3); closeCmd();
     if (url.startsWith('http')) window.open(url, '_blank', 'noopener');
-    else if (url.startsWith('/#') && location.pathname === '/') { const t = $(url.slice(1)); if (t) lenis ? lenis.scrollTo(t, { duration: 2 }) : t.scrollIntoView(); }
+    else if (url.startsWith('/#') && location.pathname === '/') { const t = $(url.slice(1)); if (t) setTimeout(() => (lenis ? lenis.scrollTo(t, { duration: 2 }) : t.scrollIntoView()), 250); } // wait until the palette has closed and smooth scrolling is running again
     else location.href = url;
   } else if (a.startsWith('toggle:')) toggleGroup(a.slice(7));
   else if (a.startsWith('dl:')) { closeCmd(); const l = document.createElement('a'); l.href = a.slice(3); l.download = ''; document.body.appendChild(l); l.click(); l.remove(); }
