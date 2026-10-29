@@ -34,8 +34,8 @@ export function createRope(svg: SVGSVGElement, opts: { small: boolean }): Rope {
   const chain = mode === 'chain';
   // the comet: a head that leads, a tail that fades, a faint dotted path ahead and a few sparks
   const K = 28;
-  const trail = Array.from({ length: K }, (_, c) => { const u = c / (K - 1); return mk('trail', '#ff3552', .7 + 3.4 * Math.pow(u, 1.5), Math.pow(u, 1.7)); });
-  const ahead = mk('ahead', '#c8102e', 1.8, .55); ahead.setAttribute('stroke-dasharray', '1 9');
+  const trail = Array.from({ length: K }, (_, c) => { const u = c / (K - 1); return mk('trail', '#ff2d4d', 1 + 6.2 * Math.pow(u, 1.35), Math.min(1, .12 + Math.pow(u, 1.15))); });
+  const ahead = mk('ahead', '#c8102e', 1.8, .55); ahead.setAttribute('stroke-dasharray', '2 9'); ahead.setAttribute('stroke-width', '2.4');
   const sparks = Array.from({ length: 10 }, () => { const c = document.createElementNS(NS, 'circle'); c.setAttribute('fill', '#ff8da0'); c.setAttribute('class', 'spark'); svg.insertBefore(c, halo); return c; });
   const core = mk('core', '#2c0309', AMP * 2 + 1.6);
   const cLinkShadow = mk('c-shadow', '#2c0309', 4.8), cLink = mk('c-link', '#d92642', 2.5), cLinkHi = mk('c-hi', '#ffb0bc', .8, .65);
@@ -135,7 +135,7 @@ export function createRope(svg: SVGSVGElement, opts: { small: boolean }): Rope {
     const N = px.length; let tx = 0, ty = 0;
     if (mode === 'comet' && N > 1) {
       const head = N - 1; tx = px[head]; ty = py[head];
-      const TL = (opts.small ? 250 : 380) + e * 900, L1 = pl[head];
+      const TL = (opts.small ? 300 : 560) + e * 900, L1 = pl[head];
       let i0 = head; while (i0 > 0 && pl[i0] > L1 - TL) i0--;
       for (let c = 0; c < K; c++) {
         const a = i0 + Math.floor((head - i0) * c / K), b = Math.min(head, i0 + Math.floor((head - i0) * (c + 1) / K) + 1);
@@ -154,7 +154,7 @@ export function createRope(svg: SVGSVGElement, opts: { small: boolean }): Rope {
         const f = (n + 1) / (sparks.length + 1), j = Math.max(i0, Math.round(head - (head - i0) * f * .85)), off = Math.sin(t * 2.1 + n * 1.9) * 7 * f + (n % 2 ? 4 : -4) * f;
         const a0 = Math.max(0, j - 1), a1 = Math.min(N - 1, j + 1); let nx = -(py[a1] - py[a0]), ny = px[a1] - px[a0]; const nl = Math.hypot(nx, ny) || 1;
         c.setAttribute('cx', (px[j] + nx / nl * off).toFixed(1)); c.setAttribute('cy', (py[j] + ny / nl * off).toFixed(1));
-        c.setAttribute('r', (1.7 * (1 - f) + .4).toFixed(2)); c.setAttribute('opacity', (.85 * (1 - f) * (.6 + .4 * Math.sin(t * 3 + n))).toFixed(2));
+        c.setAttribute('r', (2.6 * (1 - f) + .6).toFixed(2)); c.setAttribute('opacity', (.85 * (1 - f) * (.6 + .4 * Math.sin(t * 3 + n))).toFixed(2));
       });
     } else if (chain && N > 1) {
       tx = px[N - 1]; ty = py[N - 1];
