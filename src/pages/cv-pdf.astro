@@ -1,0 +1,63 @@
+---
+import { allCases, skills, site } from '../data/projects';
+const one = (slug: string, text: string) => ({ name: allCases.find((c) => c.slug === slug)!.name, year: allCases.find((c) => c.slug === slug)!.year, text, stack: allCases.find((c) => c.slug === slug)!.stack.slice(0, 5).join(', ') });
+const projects = [
+  one('aegis-tensor', 'Static scanner that checks model files (safetensors, GGUF, PyTorch pickles, ONNX, Keras) for malicious payloads without ever loading them. Resolves pickle payloads, looks for data hidden in weights, and can disarm a file.'),
+  one('weavr', 'Blends GraphCast, HRES and IFS-ensemble rainfall forecasts over India, with region- and lead-specific weights, calibrated to the thresholds IMD warns on and verified leave-one-year-out. Built quantile-mapping and extreme-value tail repair (193 to 0 false-zero cells) and a memory fix that lets the blend run end to end in 12.8 minutes at 6.5 GB peak. 11 merged pull requests.'),
+  one('athena', 'Clinical evidence copilot for rare cancers. Knowledge graph over CIViC and PubMed in FalkorDB (about 190 nodes and 220 links of curated sarcoma evidence), case memory that flags what a new result changes, and offline research chat. 13 tumour-board subsystems across four pull requests; 1,388 tests pass.'),
+  one('syscv', 'Visual Linux system-call tracer. A Go server runs C programs under ptrace in Docker, decodes arguments for x86-64 and ARM64, and streams them to a React Flow kernel graph. 10 of 10 end-to-end tests pass.'),
+  one('brahm-kosh', 'Offline codebase-intelligence engine with a 3D viewer: 13 language adapters, a real import graph, multi-hop impact and blast radius, and no LLM calls. 61 tests.'),
+  one('wait-zero', 'Clinic queue and booking system, six-person team (lead developer and architect). Node and MySQL API, React dashboard for patients, doctors and admins, and an offline-first Flutter app. 115 backend tests.'),
+  one('trinetra', 'Farmer dashboard in seven languages: satellite crop-health check (Sentinel-2 through Earth Engine), AI soil advice, and a price outlook.'),
+  one('video-tracer', 'YOLOv8 detection with ByteTrack and BoT-SORT tracking and zone events. About 55 FPS on an Apple M3; 0.575 mAP50 on a 300-image COCO subset.'),
+  one('stock-anomaly', 'Unsupervised anomaly detection with provably causal features. The consensus detector flags 10 of 12 known S&P 500 stress sessions; 9 tests pass.'),
+];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex" />
+  <title>Krish Gupta · CV</title>
+  <style>
+    @page { size: A4; margin: 0; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #fff; color: #111; }
+    body { font: 9.4pt/1.34 'Times New Roman', Times, serif; padding: 12mm 14mm; }
+    h1 { margin: 0; text-align: center; font: 700 20pt/1.1 'Times New Roman', Times, serif; letter-spacing: .02em; }
+    .contact { margin: 3px 0 0; text-align: center; font-size: 9pt; }
+    h2 { margin: 10px 0 4px; padding-bottom: 1px; border-bottom: 1px solid #111; font: 700 10pt/1.2 'Times New Roman', Times, serif; letter-spacing: .08em; text-transform: uppercase; }
+    .row { display: flex; justify-content: space-between; gap: 12px; }
+    .row b { font-weight: 700; }
+    .row span.r { white-space: nowrap; }
+    p { margin: 1px 0; }
+    .proj { margin: 4px 0 0; break-inside: avoid; }
+    .proj .t { display: flex; justify-content: space-between; gap: 10px; }
+    .proj .t i { font-style: italic; }
+    .proj p { margin: 0; }
+    .sk p { margin: 0; }
+    .sk b { font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>Krish Gupta</h1>
+  <p class="contact">New Delhi, India · {site.email} · linkedin.com/in/krish-gupta007 · github.com/KrishG7 · leetcode.com/KrishGupta0007</p>
+
+  <h2>Education</h2>
+  <div class="row"><span><b>Faculty of Technology, University of Delhi</b> — B.Tech, Batch of 2028 (blockchain, cybersecurity and machine learning)</span><span class="r">Aug 2024 – May 2028</span></div>
+  <p>Coursework: deep learning, digital image processing, AI and machine learning, computer networks, operating systems, systems programming, applied cryptography, theory of computation.</p>
+  <div class="row"><span><b>Dalhousie Public School, Badhani</b> — classes 5 to 12 (earlier: Delhi Public School, Rajouri)</span><span class="r"></span></div>
+  <div class="row"><span><b>Daksh Gurukul, IIT Guwahati</b> — credit-linked Data Science certification</span><span class="r">2025 – 2026</span></div>
+
+  <h2>Skills</h2>
+  <div class="sk">{skills.map((s) => <p><b>{s.k}:</b> {s.v}</p>)}</div>
+
+  <h2>Selected projects</h2>
+  {projects.map((p) => (
+    <div class="proj"><div class="t"><span><b>{p.name}</b> <i>· {p.stack}</i></span><span>{p.year}</span></div><p>{p.text}</p></div>
+  ))}
+
+  <h2>Leadership</h2>
+  <p>House Captain and valedictorian (class 12); awarded the Red Coat. Captain of the school football and volleyball teams; inter-school debate and quiz winner. Active on LeetCode.</p>
+</body>
+</html>

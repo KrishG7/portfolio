@@ -468,13 +468,22 @@ export const minors: Minor[] = [
 ];
 
 // Smaller repositories on GitHub that don't get a case-study page.
-export const others: { name: string; line: string; repo: string }[] = [
-  { name: 'financial-time-machine', line: 'Forecast your future finances from real-world choices.', repo: 'https://github.com/KrishG7/financial-time-machine' },
-  { name: 'Akhada-Gym', line: 'A web app for a local gym business.', repo: 'https://github.com/KrishG7/Akhada-Gym' },
-  { name: 'C.G.P.A-Chatbot', line: 'A chatbot that helps track and query academic grades.', repo: 'https://github.com/KrishG7/C.G.P.A-Chatbot' },
-  { name: 'deploy-pipeline-demo', line: 'Staging and production with GitHub Actions, approved releases, HTTPS and backups.', repo: 'https://github.com/KrishG7/deploy-pipeline-demo' },
-  { name: 'athena-marketing', line: 'The marketing and technical showcase site for Athena.', repo: 'https://github.com/KrishG7/athena-marketing' },
-  { name: 'LeetCode-Solutions', line: 'My LeetCode solutions, in Python.', repo: 'https://github.com/KrishG7/LeetCode-Solutions' },
+export const others: { name: string; line: string; repo: string; year: string }[] = [
+  { name: 'financial-time-machine', year: '2025', line: 'Forecast your future finances from real-world choices.', repo: 'https://github.com/KrishG7/financial-time-machine' },
+  { name: 'Akhada-Gym', year: '2025', line: 'A web app for a local gym business.', repo: 'https://github.com/KrishG7/Akhada-Gym' },
+  { name: 'C.G.P.A Chatbot', year: '2025', line: 'Chitragupt Personal Assistant: a chatbot that helps track and query academic grades.', repo: 'https://github.com/KrishG7/C.G.P.A-Chatbot' },
+  { name: 'deploy-pipeline-demo', year: '2026', line: 'Staging and production with GitHub Actions, approved releases, HTTPS and backups.', repo: 'https://github.com/KrishG7/deploy-pipeline-demo' },
+  { name: 'athena-marketing', year: '2026', line: 'The marketing and technical showcase site for Athena.', repo: 'https://github.com/KrishG7/athena-marketing' },
+  { name: 'LeetCode-Solutions', year: '2026', line: 'My LeetCode solutions, in Python.', repo: 'https://github.com/KrishG7/LeetCode-Solutions' },
+];
+
+export const skills: { k: string; v: string }[] = [
+  { k: 'Languages', v: 'Python, C, Go, TypeScript, JavaScript, SQL, VHDL, MATLAB' },
+  { k: 'Machine learning and vision', v: 'PyTorch, YOLOv8, CNNs (ResNet, EfficientNet), ViT, GANs, OpenCV, scikit-learn, pandas, NumPy' },
+  { k: 'Forecasting and statistics', v: 'EMOS, BMA, CRPS, generalised Pareto tails, quantile mapping, xarray, Zarr, SciPy' },
+  { k: 'Security', v: 'Model-file and pickle analysis, Linux ptrace, sandboxing, applied cryptography' },
+  { k: 'Systems and backend', v: 'Linux, Docker, Node.js, Express, FastAPI, WebSockets, REST APIs' },
+  { k: 'Data and DevOps', v: 'FalkorDB (knowledge graph), PostgreSQL, MySQL, SQLite, Git, GitHub Actions, AWS, Vercel' },
 ];
 
 export const areaLabel: Record<Area, string> = {

@@ -4,16 +4,16 @@ import { flagships, minors, others, site } from '../data/projects';
 
 // which caption step is the moment the threat shows up
 const journey = [
-  { place: 'Rajouri', where: 'Jammu and Kashmir', coord: '33.38° N  74.31° E', when: 'Where I’m from', text: 'A small town in the hills, and where I grew up.' },
-  { place: 'Badhani', where: 'Pathankot, Punjab', coord: '32.27° N  75.65° E', when: 'Class 5 – 12', text: 'Seven years at a boarding school, where I was House Captain, valedictorian and captain of the football and volleyball teams, and received the Red Coat. It taught me to lead, and to keep going when it’s hard.' },
+  { place: 'Rajouri', where: 'Delhi Public School, Rajouri', coord: '33.38° N  74.31° E', when: 'Where I’m from', text: 'A small town in the hills of Jammu and Kashmir, and where I grew up. My first years of school were at Delhi Public School, Rajouri.' },
+  { place: 'Badhani', where: 'Dalhousie Public School, Badhani', coord: '32.27° N  75.65° E', when: 'Class 5 – 12', text: 'Classes 5 to 12 at a boarding school near Pathankot, Punjab, where I was House Captain, valedictorian and captain of the football and volleyball teams, and received the Red Coat. It taught me to lead, and to keep going when it’s hard.' },
   { place: 'New Delhi', where: 'University of Delhi', coord: '28.61° N  77.21° E', when: '2024 – 2028', text: 'B.Tech in blockchain, cybersecurity and machine learning at the Faculty of Technology. This is where the projects on this page were built.' },
 ];
 ---
 <Base film>
-  <svg class="rope" data-rope aria-hidden="true"><path class="glow" /><path class="line" /><path class="fiber" /><circle class="halo" r="11" /><circle class="tip" r="3.5" /></svg>
+  <svg class="rope" data-rope aria-hidden="true"><path class="glow" /><circle class="halo" r="11" /><circle class="tip" r="3.5" /></svg>
 
   <!-- 1 · ABOUT ME → dust → portrait and name → about -->
-  <section class="ch" data-where="About me" aria-labelledby="h-about">
+  <section id="about" class="ch" data-where="About me" aria-labelledby="h-about">
     <div class="stage" id="s1">
       <h2 id="h-about" class="sr">About me</h2>
       <div class="intro-foot wrap tag" data-intro-hint><span>Krish Gupta · Portfolio 2026</span><span>Scroll</span></div>
@@ -22,11 +22,11 @@ const journey = [
       <div class="about wrap" data-about>
         <div class="col-a">
           <p class="poster about-name" data-name-target aria-hidden="true">Krish Gupta</p>
-          <p class="statement" data-about-line>I build tools that check a machine learning model before anyone trusts it.</p>
+          <p class="statement" data-about-line>I build software that has to work in the real world, from model security to clinics to farms.</p>
         </div>
         <div class="col-b">
-          <p data-about-line>I’m Krish, a B.Tech student at the University of Delhi studying blockchain, cybersecurity and machine learning. I’m most interested in where security and machine learning meet: models are now files people download and run, and very few tools check them first.</p>
-          <p data-about-line>When a problem needs something I don’t know yet, I learn it properly, from the ground up, and keep building until it works. I enjoy leading a team and learning from the people around me. Away from the screen you’ll find me at the gym, or on a football or volleyball field.</p>
+          <p data-about-line>I’m Krish, a B.Tech student at the University of Delhi studying blockchain, cybersecurity and machine learning. My projects range from machine-learning security to healthcare software, developer tools and farm tech. What connects them is that I pick up whatever the problem needs and build it all the way through.</p>
+          <p data-about-line>I like learning things properly, from the ground up, and I enjoy leading a team and learning from the people around me. Away from the screen you’ll find me at the gym, or on a football or volleyball field.</p>
           <p class="tag" data-about-line><span class="dot"></span>Now building <b>{site.now}</b> · open to 2027 internships</p>
         </div>
       </div>
@@ -74,7 +74,7 @@ const journey = [
   </section>
 
   <!-- 3 · ARCHIVE -->
-  <section class="ch" data-where="Archive" aria-labelledby="h-arch">
+  <section id="archive" class="ch" data-where="Archive" aria-labelledby="h-arch">
     <div class="stage" id="s3">
       <h2 id="h-arch" class="sr">Archive</h2>
       <div class="slide list wrap" data-slide>
@@ -95,7 +95,7 @@ const journey = [
           <p class="tag">Other projects on GitHub</p>
           <ul class="mini">
             {others.map((o) => (
-              <li><a href={o.repo} target="_blank" rel="noopener" data-cursor-text="Source"><b>{o.name}</b><span>{o.line}</span></a></li>
+              <li><a href={o.repo} target="_blank" rel="noopener" data-cursor-text="Source"><b>{o.name} <i>{o.year}</i></b><span>{o.line}</span></a></li>
             ))}
           </ul>
           <a class="tag all" href={site.github} target="_blank" rel="noopener" data-roll>All repositories on GitHub ↗</a>
@@ -109,7 +109,7 @@ const journey = [
   </section>
 
   <!-- 4 · JOURNEY -->
-  <section class="ch" data-where="Journey" aria-labelledby="h-jour">
+  <section id="journey" class="ch" data-where="Journey" aria-labelledby="h-jour">
     <div class="stage" id="s4">
       <h2 id="h-jour" class="sr">Journey</h2>
       <div class="fig-box" id="jfig"></div>
@@ -149,7 +149,7 @@ const journey = [
             <a href={site.github} target="_blank" rel="noopener" data-magnetic data-roll>GitHub</a>
             <a href={site.linkedin} target="_blank" rel="noopener" data-magnetic data-roll>LinkedIn</a>
             <a href={site.leetcode} target="_blank" rel="noopener" data-magnetic data-roll>LeetCode</a>
-            <a href="/cv" data-magnetic data-roll>CV</a>
+            <a href="/KrishGupta_CV.pdf" download data-magnetic data-roll>CV</a>
           </nav>
           <p class="tag">© 2026 Krish Gupta · press <b>⌘K</b></p>
         </div>
@@ -172,10 +172,9 @@ const journey = [
 
   .rope { position: fixed; inset: 0; width: 100vw; height: 100lvh; z-index: 2; pointer-events: none; overflow: visible; }
   .rope path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .rope .glow { stroke: var(--crimson); stroke-width: 10; opacity: .22; filter: blur(5px); }
-  .rope .line { stroke: var(--crimson); stroke-width: 2.6; }
-  .rope .fiber { stroke: #ff6a82; stroke-width: 1; stroke-dasharray: 1.5 7; opacity: .75; }
-  .rope .tip { fill: #ffd6dd; }
+  .rope { filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .55)); }
+  .rope .glow { stroke: var(--crimson); stroke-width: 16; opacity: .16; filter: blur(7px); }
+  .rope .tip { fill: #ffe3e7; }
   .rope .halo { fill: none; stroke: var(--crimson); stroke-width: 1; opacity: .6; transform-box: fill-box; transform-origin: center; animation: halo 2s var(--ease) infinite; }
   @keyframes halo { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(1.8); opacity: 0; } }
 
@@ -227,10 +226,19 @@ const journey = [
   .contact { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 22px; }
   .contact .foot { align-self: stretch; }
   .big { font-size: clamp(60px, 9.6vw, 190px); margin: 0; }
-  .mail { display: block; text-align: left; max-width: 100%; margin-top: 12px; }
-  .addr { display: inline-block; font: 400 clamp(28px, 5vw, 96px)/1 var(--display); text-transform: uppercase; overflow-wrap: anywhere; transition: color .4s var(--ease); }
-  .mail:hover .addr { color: var(--cut); }
-  .mail .tag { display: block; margin-top: 18px; }
+  .mail { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; gap: 20px; text-align: left; max-width: 100%; margin-top: 14px;
+    padding: clamp(18px, 2.6vw, 34px) clamp(20px, 3.4vw, 52px) clamp(18px, 2.4vw, 30px); border: 1px solid var(--line-2); border-radius: 20px;
+    background: radial-gradient(120% 140% at 0% 0%, rgba(59, 82, 255, .22), rgba(59, 82, 255, 0) 60%), rgba(255, 255, 255, .02);
+    box-shadow: 0 0 0 0 rgba(59, 82, 255, .0), 0 30px 80px -40px rgba(59, 82, 255, .6); transition: border-color .4s var(--ease), box-shadow .5s var(--ease), background .5s var(--ease); }
+  .mail:hover, .mail:focus-visible { border-color: var(--cut); box-shadow: 0 0 0 4px rgba(59, 82, 255, .16), 0 30px 90px -30px rgba(59, 82, 255, .85); }
+  .mail::before { content: ''; position: absolute; inset: -1px; border-radius: 20px; border: 1px solid var(--cut); opacity: 0; animation: mailPulse 2.8s var(--ease) infinite; pointer-events: none; }
+  @keyframes mailPulse { 0% { opacity: .7; transform: scale(1); } 100% { opacity: 0; transform: scale(1.06); } }
+  .addr { display: inline-block; font: 400 clamp(28px, 5.4vw, 104px)/1 var(--display); text-transform: uppercase; overflow-wrap: anywhere; color: #fff; text-shadow: 0 0 28px rgba(120, 140, 255, .45);
+    background-image: linear-gradient(90deg, var(--cut), #9aa6ff); background-repeat: no-repeat; background-size: 0% 3px; background-position: 0 100%; padding-bottom: 6px; transition: background-size .6s var(--ease), color .4s var(--ease); }
+  .mail:hover .addr { background-size: 100% 3px; }
+  .mail .tag[data-copy-hint] { display: inline-flex; align-items: center; gap: 8px; margin: 0; padding: 10px 16px; border-radius: 999px; background: var(--cut); color: #fff; font-weight: 600; letter-spacing: .12em; }
+  .mail .tag[data-copy-hint]::before { content: ''; width: 12px; height: 12px; border: 1.6px solid #fff; border-radius: 3px; box-shadow: 3px -3px 0 -1px var(--cut), 3px -3px 0 0 #fff; }
+  @media (prefers-reduced-motion: reduce) { .mail::before { animation: none; } }
   .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: clamp(24px, 5svh, 64px); padding-top: 18px; border-top: 1px solid var(--line); }
   .foot nav { display: flex; gap: 24px; flex-wrap: wrap; color: var(--ink); }
   .foot p { margin: 0; }
@@ -257,7 +265,6 @@ const journey = [
     .st { display: none; }
     .list { justify-content: center; padding-block: 70px 90px; }
     .contact { padding-block: 70px 96px; justify-content: center; }
-    .rope .line { stroke-width: 2; }
   }
 
   .more { margin-top: clamp(18px, 3vh, 34px); border-top: 1px solid var(--line); padding-top: clamp(12px, 2vh, 20px); }
@@ -265,6 +272,7 @@ const journey = [
   .mini a { display: grid; gap: 2px; }
   .mini b { font: 500 13px/1.3 var(--mono); color: var(--ink); letter-spacing: .02em; }
   .mini span { font-size: 13px; line-height: 1.4; color: var(--ink-3); }
+  .mini b i { font-style: normal; color: var(--ink-3); font-weight: 400; margin-left: 6px; }
   .mini a:hover b { color: var(--cut); }
   .all { display: inline-block; color: var(--ink-2); }
   .all:hover { color: var(--ink); }

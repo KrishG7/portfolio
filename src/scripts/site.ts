@@ -327,7 +327,20 @@ const eggs: Record<string, string> = {
 };
 const visible = () => $$<HTMLLIElement>('li:not([hidden])', list ?? document.createElement('ul'));
 function paint() { visible().forEach((li, i) => li.setAttribute('aria-selected', String(i === sel))); visible()[sel]?.scrollIntoView({ block: 'nearest' }); }
-function filter() { const q = input!.value.trim().toLowerCase(); $$<HTMLLIElement>('li', list!).forEach((li) => (li.hidden = !!q && !q.split(/\s+/).every((w) => li.dataset.k!.includes(w)))); sel = 0; paint(); }
+function filter() {
+  const q = input!.value.trim().toLowerCase(), words = q.split(/\s+/).filter(Boolean);
+  $$<HTMLLIElement>('li', list!).forEach((li) => {
+    if (q) li.hidden = li.classList.contains('head') || !words.every((w) => li.dataset.k!.includes(w)); // while searching, show matches from every group
+    else if (li.classList.contains('child')) li.hidden = $<HTMLLIElement>(`li.head[data-toggle="${li.dataset.parent}"]`, list!)?.getAttribute('aria-expanded') !== 'true';
+    else li.hidden = false;
+  });
+  sel = 0; paint();
+}
+function toggleGroup(id: string, force?: boolean) {
+  const head = $<HTMLLIElement>(`li.head[data-toggle="${id}"]`, list!); if (!head) return;
+  head.setAttribute('aria-expanded', String(force ?? head.getAttribute('aria-expanded') !== 'true')); filter();
+  const i = visible().indexOf(head); if (i >= 0) { sel = i; paint(); }
+}
 function openCmd() { if (!dlg || dlg.open) return; dlg.showModal(); lenis?.stop(); input!.value = ''; out!.textContent = ''; filter(); input!.focus(); }
 function closeCmd() { if (dlg?.open) dlg.close(); }
 dlg?.addEventListener('close', () => lenis?.start());
@@ -338,7 +351,10 @@ async function run(a: string) {
     if (url.startsWith('http')) window.open(url, '_blank', 'noopener');
     else if (url.startsWith('/#') && location.pathname === '/') { const t = $(url.slice(1)); if (t) lenis ? lenis.scrollTo(t, { duration: 2 }) : t.scrollIntoView(); }
     else location.href = url;
-  } else if (a === 'copy') out!.textContent = (await copyEmail()) ? 'Copied krishgupta3879@gmail.com' : 'krishgupta3879@gmail.com';
+  } else if (a.startsWith('toggle:')) toggleGroup(a.slice(7));
+  else if (a.startsWith('dl:')) { closeCmd(); const l = document.createElement('a'); l.href = a.slice(3); l.download = ''; document.body.appendChild(l); l.click(); l.remove(); }
+  else if (a === 'noop') { /* a skill row: nothing to open */ }
+  else if (a === 'copy') out!.textContent = (await copyEmail()) ? 'Copied krishgupta3879@gmail.com' : 'krishgupta3879@gmail.com';
   else if (a === 'theme') { closeCmd(); toggleSound(); }
   else if (a === 'grid') { closeCmd(); root.classList.toggle('show-grid'); }
   else if (a === 'xray') { closeCmd(); root.classList.toggle('xray'); }
@@ -348,13 +364,15 @@ input?.addEventListener('keydown', (e) => {
   const v = visible();
   if (e.key === 'ArrowDown') { e.preventDefault(); sel = Math.min(v.length - 1, sel + 1); paint(); }
   else if (e.key === 'ArrowUp') { e.preventDefault(); sel = Math.max(0, sel - 1); paint(); }
+  else if (e.key === 'ArrowRight' && !input.value && v[sel]?.classList.contains('head')) { e.preventDefault(); toggleGroup(v[sel].dataset.toggle!, true); }
+  else if (e.key === 'ArrowLeft' && !input.value && v[sel]) { e.preventDefault(); const h = v[sel].classList.contains('head') ? v[sel] : $<HTMLLIElement>(`li.head[data-toggle="${v[sel].dataset.parent}"]`, list!); if (h) toggleGroup(h.dataset.toggle!, false); }
   else if (e.key === 'Enter') {
     e.preventDefault(); const q = input.value.trim().toLowerCase();
     if (eggs[q]) { out!.textContent = eggs[q]; if (q === 'sudo hire krish') copyEmail(); return; }
     if (v[sel]) run(v[sel].dataset.a!); else if (q) out!.textContent = `command not found: ${q}\ntry: whoami, ls, sudo`;
   }
 });
-list?.addEventListener('click', (e) => { const li = (e.target as HTMLElement).closest('li'); if (li) run(li.dataset.a!); });
+list?.addEventListener('click', (e) => { const li = (e.target as HTMLElement).closest('li'); if (li && !li.hidden) run(li.dataset.a!); });
 $$('[data-cmdk-open]').forEach((b) => b.addEventListener('click', openCmd));
 addEventListener('keydown', (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); dlg?.open ? closeCmd() : openCmd(); return; }

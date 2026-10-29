@@ -1,16 +1,28 @@
 ---
-import { flagships } from '../data/projects';
-const items = [
-  { g: 'Go to', t: 'Work', k: 'work projects', a: 'go:/#work' },
-  ...flagships.map((f) => ({ g: 'Go to', t: f.name, k: `${f.kicker} case study`, a: `go:/work/${f.slug}` })),
-  { g: 'Go to', t: 'About', k: 'bio story', a: 'go:/#about' },
-  { g: 'Go to', t: 'CV', k: 'resume', a: 'go:/cv' },
-  { g: 'Do', t: 'Copy email', k: 'contact mail', a: 'copy' },
-  { g: 'Do', t: 'Toggle sound', k: 'audio music ambient', a: 'theme' },
-  { g: 'Do', t: 'Show the grid', k: 'layout columns G', a: 'grid' },
-  { g: 'Do', t: 'X-ray mode', k: 'boxes outline debug X', a: 'xray' },
-  { g: 'Elsewhere', t: 'GitHub', k: 'code KrishG7', a: 'go:https://github.com/KrishG7' },
-  { g: 'Elsewhere', t: 'LinkedIn', k: 'linkedin', a: 'go:https://www.linkedin.com/in/krish-gupta007/' },
+import { flagships, minors, others, skills, site } from '../data/projects';
+type Row = { t: string; k: string; a: string; em?: string; sub?: string };
+// top-level rows and collapsible groups, in the order a visitor reads the page
+const groups: { id?: string; title?: string; open?: boolean; rows: Row[]; children?: Row[] }[] = [
+  { rows: [{ t: 'About me', k: 'about bio story krish', a: 'go:/#about' }] },
+  { id: 'projects', title: 'Projects', open: true, rows: [], children: flagships.map((f) => ({ t: f.name, k: `${f.kicker} ${f.area} case study`, a: `go:/work/${f.slug}`, em: f.kicker })) },
+  { id: 'archive', title: 'Archive', open: false, rows: [], children: [
+    ...minors.map((m) => ({ t: m.name, k: `${m.stack.join(' ')} archive`, a: m.slug ? `go:/work/${m.slug}` : `go:${m.repo}`, em: m.year })),
+    ...others.map((o) => ({ t: o.name, k: `${o.line} github archive`, a: `go:${o.repo}`, em: `${o.year} · GitHub ↗` })),
+  ] },
+  { rows: [{ t: 'Journey', k: 'journey rajouri badhani delhi school dps dalhousie', a: 'go:/#journey' }] },
+  { id: 'skills', title: 'Skills', open: false, rows: [], children: skills.map((x) => ({ t: x.k, k: `${x.k} ${x.v} skills`, a: 'noop', sub: x.v })) },
+  { id: 'contact', title: 'Contact and links', open: true, rows: [], children: [
+    { t: 'Copy email', k: `copy email mail contact ${site.email}`, a: 'copy', em: site.email },
+    { t: 'Download CV', k: 'cv resume pdf download', a: 'dl:/KrishGupta_CV.pdf', em: 'PDF' },
+    { t: 'LinkedIn', k: 'linkedin visit', a: `go:${site.linkedin}`, em: 'Visit ↗' },
+    { t: 'GitHub', k: 'github code krishg7 visit', a: `go:${site.github}`, em: 'Visit ↗' },
+    { t: 'LeetCode', k: 'leetcode visit', a: `go:${site.leetcode}`, em: 'Visit ↗' },
+  ] },
+  { id: 'do', title: 'Do', open: false, rows: [], children: [
+    { t: 'Toggle sound', k: 'sound audio music ambient', a: 'theme' },
+    { t: 'Show the grid', k: 'layout columns G', a: 'grid' },
+    { t: 'X-ray mode', k: 'boxes outline debug X', a: 'xray' },
+  ] },
 ];
 ---
 <dialog class="cmdk" data-cmdk aria-label="Command palette">
@@ -18,14 +30,26 @@ const items = [
     <label class="in">
       <span class="sr">Search commands</span>
       <span class="pr" aria-hidden="true">›</span>
-      <input type="text" placeholder="Type a command, or try sudo" autocomplete="off" spellcheck="false" data-cmdk-input />
+      <input type="text" placeholder="Search, or try sudo" autocomplete="off" spellcheck="false" data-cmdk-input />
       <kbd>esc</kbd>
     </label>
     <ul role="listbox" data-cmdk-list>
-      {items.map((it) => (
-        <li role="option" data-a={it.a} data-k={`${it.t} ${it.k}`.toLowerCase()}>
-          <span>{it.t}</span><em>{it.g}</em>
-        </li>
+      {groups.map((g) => (
+        <>
+          {g.rows.map((it) => (
+            <li role="option" class="top" data-a={it.a} data-k={`${it.t} ${it.k}`.toLowerCase()}><span>{it.t}</span><em>Go to</em></li>
+          ))}
+          {g.title && (
+            <li role="option" class="head" data-toggle={g.id} aria-expanded={String(!!g.open)} data-k={`${g.title} ${g.children!.map((c) => c.t).join(' ')}`.toLowerCase()} data-a={`toggle:${g.id}`}>
+              <span>{g.title}</span><em><b>{g.children!.length}</b><i aria-hidden="true">▾</i></em>
+            </li>
+          )}
+          {g.children?.map((it) => (
+            <li role="option" class={`child${it.sub ? ' skill' : ''}${it.a === 'copy' ? ' mailrow' : ''}`} data-parent={g.id} data-a={it.a} data-k={`${it.t} ${it.k}`.toLowerCase()} hidden={!g.open}>
+              {it.sub ? <><span>{it.t}</span><small>{it.sub}</small></> : <><span>{it.t}</span><em>{it.em ?? ''}</em></>}
+            </li>
+          ))}
+        </>
       ))}
     </ul>
     <p class="out" aria-live="polite" data-cmdk-out></p>
@@ -45,11 +69,22 @@ const items = [
   .pr { color: var(--gold); font: 500 18px/1 var(--mono); }
   input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--ink); font: 400 17px/1.2 var(--body); }
   kbd { font: 500 11px/1 var(--mono); color: var(--ink-3); border: 1px solid var(--line-2); border-radius: 5px; padding: 4px 6px; }
-  ul { list-style: none; margin: 0; padding: 8px; max-height: min(50vh, 420px); overflow: auto; }
+  ul { list-style: none; margin: 0; padding: 8px; max-height: min(64vh, 580px); overflow: auto; }
   li { display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 10px; cursor: pointer; color: var(--ink-2); }
   li em { font: 500 11px/1.6 var(--mono); font-style: normal; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; }
   li[aria-selected='true'] { background: color-mix(in srgb, var(--gold) 14%, transparent); color: var(--ink); }
   li[hidden] { display: none; }
+  li.head { margin-top: 6px; color: var(--ink); font-weight: 600; }
+  li.head em { display: inline-flex; align-items: center; gap: 10px; }
+  li.head em b { font-weight: 500; color: var(--ink-3); }
+  li.head em i { font-style: normal; display: inline-block; transition: transform .25s var(--ease); }
+  li.head[aria-expanded='false'] em i { transform: rotate(-90deg); }
+  li.child { margin-left: 14px; padding-block: 9px; border-left: 1px solid var(--line-2); border-radius: 0 10px 10px 0; }
+  li.child.skill { display: block; cursor: default; }
+  li.child.skill small { display: block; margin-top: 3px; font-size: 13px; line-height: 1.45; color: var(--ink-3); }
+  li.child.mailrow { background: linear-gradient(90deg, rgba(59, 82, 255, .28), rgba(59, 82, 255, .06)); color: #fff; font-weight: 600; border-left-color: var(--cut); }
+  li.child.mailrow em { color: #c9d0ff; text-transform: none; letter-spacing: .02em; font-size: 12px; }
+  li.top { font-weight: 600; color: var(--ink); }
   .out { margin: 0; padding: 0 22px; font: 500 13px/1.6 var(--mono); color: var(--gold); white-space: pre-wrap; }
   .out:not(:empty) { padding-block: 4px 18px; }
 </style>
