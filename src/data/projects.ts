@@ -467,6 +467,16 @@ export const minors: Minor[] = [
   { slug: 'stock-anomaly', name: 'Stock Anomaly', line: 'Unsupervised anomaly detection on equities where most of the code exists to prove nothing sees the future.', areas: ['ml', 'data'], stack: ['pandas', 'scikit-learn', 'DBSCAN'], repo: 'https://github.com/KrishG7/stock-anomaly-detection', year: '2026' },
 ];
 
+// Smaller repositories on GitHub that don't get a case-study page.
+export const others: { name: string; line: string; repo: string }[] = [
+  { name: 'financial-time-machine', line: 'Forecast your future finances from real-world choices.', repo: 'https://github.com/KrishG7/financial-time-machine' },
+  { name: 'Akhada-Gym', line: 'A web app for a local gym business.', repo: 'https://github.com/KrishG7/Akhada-Gym' },
+  { name: 'C.G.P.A-Chatbot', line: 'A chatbot that helps track and query academic grades.', repo: 'https://github.com/KrishG7/C.G.P.A-Chatbot' },
+  { name: 'deploy-pipeline-demo', line: 'Staging and production with GitHub Actions, approved releases, HTTPS and backups.', repo: 'https://github.com/KrishG7/deploy-pipeline-demo' },
+  { name: 'athena-marketing', line: 'The marketing and technical showcase site for Athena.', repo: 'https://github.com/KrishG7/athena-marketing' },
+  { name: 'LeetCode-Solutions', line: 'My LeetCode solutions, in Python.', repo: 'https://github.com/KrishG7/LeetCode-Solutions' },
+];
+
 export const areaLabel: Record<Area, string> = {
   security: 'Security',
   ml: 'Machine learning',
