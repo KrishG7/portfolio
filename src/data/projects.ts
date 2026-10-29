@@ -24,6 +24,7 @@ export interface Flagship {
   film?: 'bits' | 'graph' | 'rain' | 'sys';
   video?: string; // file name (no extension) under /video, shown when the file exists
   facts?: { v: string; label: string; src: string }[];
+  shots?: { img: string; alt: string; title: string; text: string; tall?: boolean }[];
   area: string;
   hook: string;
   body: string;
@@ -112,6 +113,10 @@ export const flagships: Flagship[] = [
     repo: 'https://github.com/healers-second-look/Athena',
     demo: 'graph',
     team: 'healers-second-look',
+    shots: [
+      { img: '/shots/athena/case-review.jpg', alt: 'Athena case dashboard showing one flagged change and the live knowledge graph context', title: 'Case review: what changed', text: 'Recording a newly observed LMNA::NTRK1 fusion in a demo case (congenital fibrosarcoma, stage IV) flags exactly one change, in red, above the live knowledge-graph context the evidence comes from and the case\u2019s current state. Demo data, not a real patient.' },
+      { img: '/shots/athena/timeline.jpg', alt: 'Patient timeline with imaging, procedures, treatments and MRD markers', title: 'The patient timeline', text: 'Imaging, procedures, treatments and MRD results on one axis, with lab trends underneath. Until a per-patient data source is connected, it shows a real published osteosarcoma reference dataset for every case, and the page says so.' },
+    ],
     problem:
       'When an oncologist runs out of standard genomic leads, the tools left are search engines and chatbots. Neither tells you where a claim came from, and neither remembers what changed since the last tumour board.',
     built: [
@@ -159,6 +164,10 @@ export const flagships: Flagship[] = [
     repo: 'https://github.com/ATMOSYNC/WEAVR',
     demo: 'rain',
     team: 'ATMOSYNC',
+    shots: [
+      { img: '/shots/weavr/weight-map.jpg', alt: 'Bar chart of per-region source weights for GraphCast, HRES and the IFS ensemble', title: 'Who to trust, region by region', text: 'For each region of India and each lead time, the bars show how much weight the blend gives GraphCast, HRES and the IFS ensemble. Regions without enough training data are marked and fall back to equal weights, and the page says so. Real output of the dashboard on the committed example grids.' },
+      { img: '/shots/weavr/skill-trends.jpg', alt: 'Line chart of RMSE by lead time for seven forecasting methods', title: 'Every method, scored honestly', text: 'RMSE by lead time for every method, from the plain ensemble mean up to regime-conditioned weights. The page states the real outcome: it is mixed, and the most elaborate method does not beat the one below it at any lead (0 of 5). Each method\u2019s own numbers are plotted, not a smoothed upward trend.' },
+    ],
     problem:
       'India’s monsoon is forecast by a crowd of models, physics-based and AI. Each is good somewhere, at some lead time, for some kind of rain. Averaging them throws away what is known about each one.',
     built: [
@@ -194,6 +203,9 @@ export const flagships: Flagship[] = [
     year: '2026',
     role: 'Sole author',
     video: 'syscv',
+    shots: [
+      { img: '/shots/syscv/decoded.jpg', alt: 'SysCV showing a decoded openat system call beside the C editor and the kernel graph', title: 'Every call, decoded', text: 'Write C in the editor, press Run, and every system call appears in order. Opening one shows its decoded arguments, the path it was given, the return value and a plain-English line about what it does. The chips filter calls into I/O, files, memory and processes, and the graph on the right follows the step you select.' },
+    ],
     facts: [
       { v: '10 of 10', label: 'end-to-end scenarios pass (file I/O, memory, fork, signals, exec, output flood, SIGSEGV)', src: 'tests/test_comprehensive.js, 28 Oct 2026' },
       { v: 'About 60 / 40', label: 'syscall definitions for x86-64 / ARM64', src: 'table_amd64.go (62) and table_arm64.go (40)' },
@@ -243,6 +255,10 @@ export const studies: Flagship[] = [
     stack: ['Python', 'ast', 'click', 'Three.js', 'SSE'],
     areas: ['systems'],
     repo: 'https://github.com/KrishG7/Brahm-Kosh',
+    shots: [
+      { img: '/shots/brahm-kosh/panel.jpg', alt: 'Brahm-Kosh viewer with the Architectural Intelligence panel listing the largest files', title: 'Where the trouble is', text: 'As soon as a project opens, the panel lists the files that have grown too big and everything else worth a look: files nothing imports, files that mix many concerns, and files ready to split. Here it is analysing its own source.' },
+      { img: '/shots/brahm-kosh/file.jpg', alt: 'File view showing a one-sentence explanation, multi-hop impact and a blast radius', title: 'What breaks if you change it', text: 'Open a file and it explains itself in one sentence, then answers the question that matters: which files break if you change it, what it relies on, and the blast radius, with a complexity score for every function.' },
+    ],
     facts: [
       { v: '61', label: 'tests passing (58 at first check, 3 added with the ignore-file fix)', src: 'pytest, 28 Oct 2026' },
       { v: '13', label: 'language adapters; only Python is parsed with a real syntax tree', src: '`brahm-kosh list-adapters`, 28 Oct 2026' },
@@ -284,6 +300,11 @@ export const studies: Flagship[] = [
     areas: ['health', 'systems'],
     repo: 'https://github.com/KrishG7/smart-clinic-booking',
     team: 'six-person course',
+    shots: [
+      { img: '/shots/wait-zero/patient.jpg', alt: 'Patient home with a live token ring, minutes of wait and people in line', title: 'The patient sees their place', tall: true, text: 'A live token, the minutes of estimated wait and how many people are ahead of you. Demo data.' },
+      { img: '/shots/wait-zero/book.jpg', alt: 'Doctor search with specialities, ratings, fees and a Book Token button', title: 'Find a doctor and book', text: 'Search by name or speciality, see each doctor\u2019s rating, experience, daily limit and fee, then book a token. The booking form takes a date, a time, a visit type (regular, follow-up or emergency) and a symptoms note.' },
+      { img: '/shots/wait-zero/doctor.jpg', alt: 'Doctor queue console showing the patient being served and the waiting list with estimated waits', title: 'The doctor runs the queue', text: 'The doctor sees who is being served and who is waiting, with every estimated wait. Call Next moves the next token to in progress, and the waits behind it are recomputed.' },
+    ],
     facts: [
       { v: '115', label: 'backend tests passing (database mocked); 2 web and 4 Flutter tests as well', src: 'run 28 Oct 2026' },
       { v: '258', label: 'commits across the team, March to May 2026; mine are about a quarter', src: 'git history' },
@@ -324,6 +345,11 @@ export const studies: Flagship[] = [
     stack: ['FastAPI', 'Next.js', 'PyTorch', 'Earth Engine', 'Gemini'],
     areas: ['ml', 'data'],
     repo: 'https://github.com/KrishG7/TriNetra-Farmers-Stack',
+    shots: [
+      { img: '/shots/trinetra/market.jpg', alt: 'Market Vision showing a forecast price, a seven-day curve and a recommendation', title: 'When to sell', text: 'Pick a crop, a state, a market and a date, and Market Vision draws a seven-day price outlook with a hold or sell hint. The model is a demo trained on a generated seasonal curve.' },
+      { img: '/shots/trinetra/soil.jpg', alt: 'Soil Vision with soil inputs, a cultivable verdict and three crop recommendations with fertiliser doses', title: 'What to grow', text: 'Enter nitrogen, phosphorus, potassium, pH and rainfall. Impossible soil is refused by a fixed rule; otherwise an AI agronomist recommends crops and fertiliser doses and explains why, in seven languages. A real answer from 28 Oct 2026; answers vary between runs.' },
+      { img: '/shots/trinetra/credit.jpg', alt: 'Credit Vision with a field on a map and an eligibility result', title: 'A loan check from space', text: 'Drop a pin on a field. Sentinel-2 satellite imagery confirms it is farmland and measures crop health against the yield being claimed. This point, in Punjab, returned a health score of 68 out of 100.' },
+    ],
     facts: [
       { v: '4 days', label: 'from first commit to last, 12 commits, all mine', src: 'git history, 24 to 27 Jan 2026' },
       { v: '68 / 100', label: 'crop-health score for one real Punjab cropland point (NDVI 0.68); a low-NDVI field scored 0 and was marked high risk', src: 'live Earth Engine run, 28 Oct 2026' },
@@ -348,6 +374,87 @@ export const studies: Flagship[] = [
     ],
     limits: ['The home-screen statistics are placeholders.', 'Soil answers take 35 to 50 seconds and vary between runs; the agronomy has not been reviewed by an agronomist.', 'The OTP is only printed to the server log; there is no SMS provider.'],
   },
+  {
+    slug: 'video-tracer',
+    area: 'Computer vision',
+    hook: 'From raw video to events you can act on.',
+    body: '',
+    caps: ['', '', ''],
+    n: '08',
+    name: 'Video-Tracer',
+    kicker: 'Computer vision',
+    line: 'Detect, track and count what moves through a doorway, with zones that fire events.',
+    year: '2026',
+    role: 'Author',
+    stack: ['YOLOv8', 'ByteTrack', 'BoT-SORT', 'OpenCV', 'Python'],
+    areas: ['ml'],
+    repo: 'https://github.com/KrishG7/Video-Tracer',
+    shots: [
+      { img: '/shots/video-tracer/tracking.jpg', alt: 'A street scene with tracked people and a bus, each boxed with an ID, and red regions of interest', title: 'Detect, track, trigger', text: 'Every person and vehicle gets a class, a confidence and a persistent ID. The red boxes are regions of interest: when a tracked object enters one, an event is logged with a timestamp, here \u201c#4 ENTERED entrance_zone\u201d. Frame from a demo clip made from a public sample photo.', tall: true },
+    ],
+    facts: [
+      { v: 'About 55 FPS', label: 'detection plus tracking on an Apple M3 GPU with the small pretrained model', src: 'measured 28 Oct 2026' },
+      { v: '0.575 mAP50', label: 'for the pretrained detector on a 300-image subset of COCO val (2,147 boxes); person AP50 is 0.753', src: 'run 28 Oct 2026' },
+      { v: '33.2% MOTA', label: 'tracking on 7 MOT16 training sequences (5,316 frames), with precision 91.5%', src: 'run 28 Oct 2026' },
+    ],
+    problem: 'Hours of video contain a few seconds that matter. The useful question is not what is in the frame but who crossed which line, and when.',
+    built: [
+      'A pipeline that detects with YOLO, tracks with ByteTrack or BoT-SORT, and keeps an ID on each object across frames.',
+      'Regions of interest and tripwires that turn tracks into timestamped events, exported as JSON.',
+      'Tools to capture, extract and label footage for fine-tuning a detector on doors.',
+    ],
+    steps: [
+      { k: 'detect', t: 'Find the objects', p: 'A YOLO detector boxes people, vehicles and other COCO classes in every frame.' },
+      { k: 'track', t: 'Keep their identity', p: 'A tracker links boxes across frames, so a person is one ID, not a hundred detections.' },
+      { k: 'zones', t: 'Draw the lines that matter', p: 'Zones and tripwires fire when a track enters or crosses them.' },
+      { k: 'events', t: 'Export what happened', p: 'Each trigger becomes a timestamped event in a JSON file.' },
+    ],
+    ledger: [
+      { h: 'The evaluation script proves the pipeline is accurate', out: 'failed', note: 'It printed \u201cALL CHECKS PASSED (100%)\u201d without measuring any accuracy. It now says it only runs structural checks, and real numbers come from a COCO subset and MOT16.' },
+      { h: 'A door detector fine-tuned on door images', out: 'open', note: 'The detector is pretrained on COCO, which has no door class. Fine-tuning on door footage is the next step and needs real recordings.' },
+    ],
+    limits: ['The detector is the pretrained COCO model, so it has no door class yet.', 'The event logic has not been scored on real doorway footage.', 'In crowds it misses many people (recall 37% on MOT16).'],
+  },
+  {
+    slug: 'stock-anomaly',
+    area: 'Data science',
+    hook: 'Anomaly detection that cannot see the future.',
+    body: '',
+    caps: ['', '', ''],
+    n: '09',
+    name: 'Stock Anomaly',
+    kicker: 'Data science',
+    line: 'Unsupervised detection of unusual trading days, built so every feature and threshold is provably causal.',
+    year: '2026',
+    role: 'Author',
+    stack: ['Python', 'pandas', 'scikit-learn', 'DBSCAN', 'k-means', 'pytest'],
+    areas: ['ml', 'data'],
+    repo: 'https://github.com/KrishG7/stock-anomaly-detection',
+    shots: [
+      { img: '/shots/stock-anomaly/flags.jpg', alt: 'Close prices of six tickers in Q1 2020 with consensus anomaly flags marked in red', title: 'The March 2020 crash, flagged', text: 'Close price for each ticker in the held-out test quarter, with the consensus detector\u2019s flags in red. The flags cluster in the late-February to March sell-off, which is where the twelve known stress sessions sit.' },
+    ],
+    facts: [
+      { v: '10 of 12', label: 'known S&P 500 stress sessions flagged by the consensus detector, at a 21% flag rate (the simple rule alone: 9 of 12 at 20%)', src: 'reproduced 28 Oct 2026' },
+      { v: '9 of 9', label: 'tests pass, including tests that rebuild features on truncated data and require identical results', src: 'pytest, 28 Oct 2026' },
+    ],
+    problem: 'Markets have no labelled anomalies, and almost every backtest quietly peeks at the future. A detector is only worth trusting if it provably cannot.',
+    built: [
+      'Four detectors over price and volume features: a transparent rule, k-means, DBSCAN, and a consensus of them.',
+      'A causality test suite: features rebuilt on a truncated history must match, and thresholds are fitted on the training period only.',
+      'Scoring against twelve known stress sessions, with recall always reported next to the flag rate.',
+    ],
+    steps: [
+      { k: 'features', t: 'Causal features only', p: 'Every feature looks backwards, and a test proves it by truncating the data.' },
+      { k: 'fit', t: 'Fit on the past', p: 'Thresholds and clustering parameters are calibrated on earlier data to a fixed alarm budget.' },
+      { k: 'detect', t: 'Flag the unusual', p: 'Rule, k-means and DBSCAN each vote, and the consensus decides.' },
+      { k: 'score', t: 'Score against stress days', p: 'With no labels, twelve known stress sessions stand in, and the flag rate is shown beside recall.' },
+    ],
+    ledger: [
+      { h: 'The clustering layers are strong detectors on their own', out: 'failed', note: 'k-means caught 6 of 12 and DBSCAN 5 of 12. Their value is as voters in the consensus, and the project says so.' },
+      { h: 'The original notebook\u2019s thresholds were sound', out: 'failed', note: 'Three defects were fixed: the market threshold was not fitted on the training period only, scaled copies leaked into features, and the DBSCAN radius gave a layer that never fired. Each is now pinned by a test.' },
+    ],
+    limits: ['There are no ground-truth labels, so recall is measured against twelve hand-listed stress sessions.', 'Results cover one test quarter (Q1 2020) and six tickers.'],
+  },
 ];
 
 export const allCases: Flagship[] = [...flagships, ...studies];
@@ -356,8 +463,8 @@ export const minors: Minor[] = [
   { slug: 'brahm-kosh', name: 'Brahm-Kosh', line: 'A static-analysis engine and 3D viewer that shows what breaks if you change a file. No LLM calls.', areas: ['systems'], stack: ['Python', 'AST', 'Three.js'], repo: 'https://github.com/KrishG7/Brahm-Kosh', year: '2026' },
   { slug: 'wait-zero', name: 'Wait Zero', line: 'Offline-first OPD queues for clinics on unreliable networks, with emergency interrupts and geofenced check-in.', areas: ['health', 'systems'], stack: ['Flutter', 'Node', 'SQLite', 'MySQL'], repo: 'https://github.com/KrishG7/smart-clinic-booking', year: '2026' },
   { slug: 'trinetra', name: 'TriNetra', line: 'Satellite crop-health checks, a demo price model and soil advice in local languages, in one farmer dashboard.', areas: ['ml', 'data'], stack: ['PyTorch', 'Earth Engine', 'FastAPI'], repo: 'https://github.com/KrishG7/TriNetra-Farmers-Stack', year: '2026' },
-  { name: 'Video-Tracer', line: 'From raw video to a trained YOLO tracker with trajectories and ROI tripwires.', areas: ['ml'], stack: ['YOLOv8', 'ByteTrack', 'BoT-SORT'], repo: 'https://github.com/KrishG7/Video-Tracer', year: '2026' },
-  { name: 'Stock Anomaly', line: 'Unsupervised anomaly detection on equities where most of the code exists to prove nothing sees the future.', areas: ['ml', 'data'], stack: ['pandas', 'scikit-learn', 'DBSCAN'], repo: 'https://github.com/KrishG7/stock-anomaly-detection', year: '2026' },
+  { slug: 'video-tracer', name: 'Video-Tracer', line: 'From raw video to a trained YOLO tracker with trajectories and ROI tripwires.', areas: ['ml'], stack: ['YOLOv8', 'ByteTrack', 'BoT-SORT'], repo: 'https://github.com/KrishG7/Video-Tracer', year: '2026' },
+  { slug: 'stock-anomaly', name: 'Stock Anomaly', line: 'Unsupervised anomaly detection on equities where most of the code exists to prove nothing sees the future.', areas: ['ml', 'data'], stack: ['pandas', 'scikit-learn', 'DBSCAN'], repo: 'https://github.com/KrishG7/stock-anomaly-detection', year: '2026' },
 ];
 
 export const areaLabel: Record<Area, string> = {
