@@ -356,8 +356,7 @@ async function run(a: string) {
   else if (a === 'noop') { /* a skill row: nothing to open */ }
   else if (a === 'copy') out!.textContent = (await copyEmail()) ? 'Copied krishgupta3879@gmail.com' : 'krishgupta3879@gmail.com';
   else if (a === 'theme') { closeCmd(); toggleSound(); }
-  else if (a === 'grid') { closeCmd(); root.classList.toggle('show-grid'); }
-  else if (a === 'xray') { closeCmd(); root.classList.toggle('xray'); }
+  else if (a === 'index') { closeCmd(); openIndex(); }
 }
 input?.addEventListener('input', filter);
 input?.addEventListener('keydown', (e) => {
@@ -379,9 +378,37 @@ addEventListener('keydown', (e) => {
   const t = e.target as HTMLElement;
   if (t.closest('input, textarea, [contenteditable]') || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.key === '/') { e.preventDefault(); openCmd(); }
-  else if (e.key === 'g' || e.key === 'G') root.classList.toggle('show-grid');
-  else if (e.key === 'x' || e.key === 'X') root.classList.toggle('xray');
-  else if (e.key === 'Escape') { setMenu(false); root.classList.remove('xray', 'show-grid'); }
+  else if (e.key === 'i' || e.key === 'I') openIndex();
+  else if (e.key === 'Escape') { setMenu(false); closeIndex(); }
+});
+
+/* ---------------- index: every project on one screen, hover to preview, scroll to skew ---------------- */
+const idx = $<HTMLElement>('[data-index]'), idxInner = $<HTMLElement>('[data-index-inner]'), idxPrev = $<HTMLElement>('[data-idx-prev]');
+let idxOpen = false, idxV = 0, idxSk = 0, idxX = 0, idxY = 0, idxTx = 0, idxTy = 0, idxRaf = 0;
+function idxLoop() {
+  idxSk += (Math.max(-9, Math.min(9, idxV * .04)) - idxSk) * .16; idxV *= .9;
+  idxX += (idxTx - idxX) * .16; idxY += (idxTy - idxY) * .16;
+  if (idxInner) idxInner.style.transform = `skewY(${idxSk.toFixed(2)}deg) translateY(${(idxSk * -2).toFixed(1)}px)`;
+  if (idxPrev) idxPrev.style.transform = `translate(${(idxX + 26).toFixed(1)}px, ${(idxY + 22).toFixed(1)}px) rotate(${((idxTx - idxX) * .04).toFixed(2)}deg)`;
+  idxRaf = idxOpen ? requestAnimationFrame(idxLoop) : 0;
+}
+function openIndex() {
+  if (!idx || idxOpen) return; idxOpen = true; idx.hidden = false; lenis?.stop(); closeCmd();
+  requestAnimationFrame(() => idx.classList.add('open')); idxRaf = requestAnimationFrame(idxLoop);
+}
+function closeIndex() { if (!idx || !idxOpen) return; idxOpen = false; idx.classList.remove('open'); idxPrev?.classList.remove('on'); lenis?.start(); setTimeout(() => { if (!idxOpen) idx.hidden = true; }, 450); }
+$$('[data-index-open]').forEach((b) => b.addEventListener('click', () => { setMenu(false); openIndex(); }));
+$$('[data-index-close]').forEach((b) => b.addEventListener('click', closeIndex));
+idx?.addEventListener('wheel', (e) => { idxV += e.deltaY; }, { passive: true });
+idx?.addEventListener('pointermove', (e) => { idxTx = e.clientX; idxTy = e.clientY; if (!idxPrev?.classList.contains('on')) { idxX = idxTx; idxY = idxTy; } });
+$$<HTMLAnchorElement>('[data-idx-a]').forEach((a) => {
+  a.addEventListener('pointerenter', () => { const src = a.dataset.img; const im = $<HTMLImageElement>('img', idxPrev!); if (src && im) { im.src = src; idxPrev!.classList.add('on'); } else idxPrev?.classList.remove('on'); });
+  a.addEventListener('pointerleave', () => idxPrev?.classList.remove('on'));
+  a.addEventListener('click', (e) => {
+    const href = a.getAttribute('href')!;
+    if (href.startsWith('/#') && location.pathname === '/') { e.preventDefault(); closeIndex(); const t = $(href.slice(1)); if (t) setTimeout(() => (lenis ? lenis.scrollTo(t, { duration: 2 }) : t.scrollIntoView()), 250); }
+    else if (!href.startsWith('http')) closeIndex();
+  });
 });
 
 console.log('%cKG', 'font: 48px Impact; color: #c8102e');

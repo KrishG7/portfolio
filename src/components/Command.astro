@@ -3,7 +3,7 @@ import { flagships, minors, others, skills, site } from '../data/projects';
 type Row = { t: string; k: string; a: string; em?: string; sub?: string };
 // top-level rows and collapsible groups, in the order a visitor reads the page
 const groups: { id?: string; title?: string; open?: boolean; rows: Row[]; children?: Row[] }[] = [
-  { rows: [{ t: 'About me', k: 'about bio story krish', a: 'go:/#about' }] },
+  { rows: [{ t: 'About me', k: 'about bio story krish', a: 'go:/#about' }, { t: 'Index of everything', k: 'index all list overview', a: 'index' }] },
   { id: 'projects', title: 'Projects', open: true, rows: [], children: flagships.map((f) => ({ t: f.name, k: `${f.kicker} ${f.area} case study`, a: `go:/work/${f.slug}`, em: f.kicker })) },
   { id: 'archive', title: 'Archive', open: false, rows: [], children: [
     ...minors.map((m) => ({ t: m.name, k: `${m.stack.join(' ')} archive`, a: m.slug ? `go:/work/${m.slug}` : `go:${m.repo}`, em: m.year })),
@@ -13,19 +13,15 @@ const groups: { id?: string; title?: string; open?: boolean; rows: Row[]; childr
   { id: 'skills', title: 'Skills', open: false, rows: [], children: skills.map((x) => ({ t: x.k, k: `${x.k} ${x.v} skills`, a: 'noop', sub: x.v })) },
   { id: 'contact', title: 'Contact and links', open: true, rows: [], children: [
     { t: 'Copy email', k: `copy email mail contact ${site.email}`, a: 'copy', em: site.email },
+    { t: 'Sound on or off', k: 'sound audio music ambient', a: 'theme', em: 'Ambient' },
     { t: 'Download CV', k: 'cv resume pdf download', a: 'dl:/KrishGupta_CV.pdf', em: 'PDF' },
     { t: 'LinkedIn', k: 'linkedin visit', a: `go:${site.linkedin}`, em: 'Visit ↗' },
     { t: 'GitHub', k: 'github code krishg7 visit', a: `go:${site.github}`, em: 'Visit ↗' },
     { t: 'LeetCode', k: 'leetcode visit', a: `go:${site.leetcode}`, em: 'Visit ↗' },
   ] },
-  { id: 'do', title: 'Do', open: false, rows: [], children: [
-    { t: 'Toggle sound', k: 'sound audio music ambient', a: 'theme' },
-    { t: 'Show the grid', k: 'layout columns G', a: 'grid' },
-    { t: 'X-ray mode', k: 'boxes outline debug X', a: 'xray' },
-  ] },
 ];
 ---
-<dialog class="cmdk" data-cmdk aria-label="Command palette">
+<dialog class="cmdk" data-cmdk data-lenis-prevent aria-label="Command palette">
   <div class="box">
     <label class="in">
       <span class="sr">Search commands</span>
@@ -33,7 +29,7 @@ const groups: { id?: string; title?: string; open?: boolean; rows: Row[]; childr
       <input type="text" placeholder="Search, or try sudo" autocomplete="off" spellcheck="false" data-cmdk-input />
       <kbd>esc</kbd>
     </label>
-    <ul role="listbox" data-cmdk-list>
+    <ul role="listbox" data-cmdk-list data-lenis-prevent>
       {groups.map((g) => (
         <>
           {g.rows.map((it) => (

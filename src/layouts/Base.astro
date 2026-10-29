@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Command from '../components/Command.astro';
+import IndexView from '../components/Index.astro';
 import { site } from '../data/projects';
 
 interface Props { title?: string; description?: string; og?: string; film?: boolean }
@@ -58,6 +59,7 @@ const links = [
       <div class="left"><a class="mark" href="/" aria-label="Krish Gupta, home">KG</a><span class="where tag" data-where aria-live="polite">Index</span></div>
       <p class="clock tag" aria-label="Local time in India"><span class="live"></span>India <b data-clock>--:--:-- --</b></p>
       <nav class="links tag" aria-label="Primary">
+        <button type="button" class="idx-btn" data-index-open data-magnetic data-roll>Index</button>
         {links.map((l) => <a href={l.href} data-magnetic data-roll>{l.label}</a>)}
         <button type="button" class="snd" data-sound aria-pressed="false" aria-label="Sound"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span data-sound-label>Sound off</span></button>
         <button type="button" class="kbd" data-cmdk-open aria-label="Open command palette">⌘K</button>
@@ -67,6 +69,7 @@ const links = [
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-btn>Menu</button>
     <div class="menu" id="menu" hidden data-menu>
       <nav aria-label="Menu">
+        <button type="button" class="poster idx-m" data-index-open>Index</button>
         {links.map((l) => <a href={l.href} class="poster">{l.label}</a>)}
         <a href="/KrishGupta_CV.pdf" download class="poster">CV</a>
       </nav>
@@ -84,6 +87,7 @@ const links = [
     </main>
 
     <Command />
+    <IndexView />
     <div class="cursor" data-cursor aria-hidden="true"><i></i><span data-cursor-label></span></div>
     <div class="grid-overlay" aria-hidden="true"><div class="wrap">{Array.from({ length: 12 }).map(() => <i />)}</div></div>
     <script>
@@ -154,4 +158,6 @@ const links = [
     .menu nav a { font-size: clamp(64px, 22vw, 120px); line-height: .9; }
     .menu-foot { display: flex; justify-content: space-between; color: #fff; }
   }
+  .idx-btn { font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; cursor: pointer; }
+  .idx-m { background: none; border: 0; text-align: left; color: inherit; cursor: pointer; padding: 0; }
 </style>

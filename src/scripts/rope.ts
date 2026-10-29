@@ -29,7 +29,11 @@ export function createRope(svg: SVGSVGElement, opts: { small: boolean }): Rope {
     svg.insertBefore(el, halo); return el;
   };
   const SW = opts.small ? 4 : 5.4, AMP = opts.small ? 2.5 : 3.6, PITCH = opts.small ? 30 : 44;
+  // ?rope=chain draws the same path as chain links instead, to compare the two looks
+  const chain = new URLSearchParams(location.search).get('rope') === 'chain';
   const core = mk('core', '#2c0309', AMP * 2 + 1.6);
+  const cLinkShadow = mk('c-shadow', '#2c0309', 4.8), cLink = mk('c-link', '#d92642', 2.5), cLinkHi = mk('c-hi', '#ffb0bc', .8, .65);
+  const cEdge = mk('c-edge', '#7d0a1d', 4.2), cEdgeHi = mk('c-edge-hi', '#e9566c', 1.5);
   const back = STRANDS.map((c) => mk('back', c.back, SW));
   const front = STRANDS.map((c) => mk('front', c.front, SW));
   const sheen = STRANDS.map(() => mk('sheen', '#ff9aa9', 1.1, .5));
@@ -122,7 +126,25 @@ export function createRope(svg: SVGSVGElement, opts: { small: boolean }): Rope {
       for (let j = 1; j <= n; j++) { const u = j / n; px.push(cx[i - 1] + dx * u); py.push(cy[i - 1] + dy * u); pl.push(cl[i - 1] + (cl[i] - cl[i - 1]) * u); }
     }
     const N = px.length; let tx = 0, ty = 0;
-    if (N > 1) {
+    if (chain && N > 1) {
+      tx = px[N - 1]; ty = py[N - 1];
+      const S = opts.small ? 13 : 17, a = S * .74, bb = opts.small ? 3.6 : 4.6;
+      let face = '', edge = '', cdl = '', j = 0;
+      for (let k = Math.ceil(pl[0] / S); k * S <= pl[N - 1]; k++) {
+        const tg = k * S; while (j < N - 2 && pl[j + 1] < tg) j++;
+        const u = (tg - pl[j]) / ((pl[j + 1] - pl[j]) || 1), x = px[j] + (px[j + 1] - px[j]) * u, y = py[j] + (py[j + 1] - py[j]) * u;
+        const ang = Math.atan2(py[j + 1] - py[j], px[j + 1] - px[j]), ux = Math.cos(ang), uy = Math.sin(ang), deg = (ang * 180 / Math.PI).toFixed(1);
+        if (k % 2 === 0) { // a link seen face-on: a ring with its long axis along the chain
+          face += `M${(x - ux * a).toFixed(1)} ${(y - uy * a).toFixed(1)}A${a.toFixed(1)} ${bb} ${deg} 1 0 ${(x + ux * a).toFixed(1)} ${(y + uy * a).toFixed(1)}A${a.toFixed(1)} ${bb} ${deg} 1 0 ${(x - ux * a).toFixed(1)} ${(y - uy * a).toFixed(1)}`;
+        } else { // the next link is turned a quarter, so it is seen edge-on as a short bar
+          const e = S * .46; edge += `M${(x - ux * e).toFixed(1)} ${(y - uy * e).toFixed(1)}L${(x + ux * e).toFixed(1)} ${(y + uy * e).toFixed(1)}`;
+        }
+      }
+      cdl = face;
+      cLinkShadow.setAttribute('d', face); cLink.setAttribute('d', face); cLinkHi.setAttribute('d', cdl);
+      cEdge.setAttribute('d', edge); cEdgeHi.setAttribute('d', edge);
+      glow.setAttribute('d', `M${px[0].toFixed(1)} ${py[0].toFixed(1)}` + px.map((x, i) => `L${x.toFixed(1)} ${py[i].toFixed(1)}`).join(''));
+    } else if (N > 1) {
       tx = px[N - 1]; ty = py[N - 1];
       let cd = '';
       const bd: string[] = ['', '', ''], fd: string[] = ['', '', ''], sd: string[] = ['', '', ''];

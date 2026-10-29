@@ -1,0 +1,50 @@
+---
+import { flagships, minors, others, allCases } from '../data/projects';
+const img = (slug?: string) => (slug ? allCases.find((c) => c.slug === slug)?.shots?.[0]?.img : undefined);
+type It = { t: string; a: string; img?: string; ext?: boolean };
+const lines: { label: string; items: It[] }[] = [
+  { label: 'Start', items: [{ t: 'About me', a: '/#about' }, { t: 'Journey', a: '/#journey' }, { t: 'Contact', a: '/#contact' }] },
+  { label: 'Projects', items: flagships.map((f) => ({ t: f.name, a: `/work/${f.slug}`, img: img(f.slug) })) },
+  { label: 'Archive', items: minors.map((m) => ({ t: m.name, a: m.slug ? `/work/${m.slug}` : m.repo, img: img(m.slug), ext: !m.slug })) },
+  { label: 'More on GitHub', items: others.map((o) => ({ t: o.name, a: o.repo, ext: true })) },
+];
+---
+<div class="index" data-index hidden data-lenis-prevent role="dialog" aria-modal="true" aria-label="Index of everything">
+  <button class="x tag" type="button" data-index-close>Close <kbd>esc</kbd></button>
+  <div class="inner" data-index-inner>
+    {lines.map((l) => (
+      <div class="grp">
+        <p class="lab tag">{l.label}</p>
+        <p class="names">
+          {l.items.map((it, i) => (
+            <>
+              <a href={it.a} data-idx-a data-img={it.img} target={it.ext ? '_blank' : undefined} rel={it.ext ? 'noopener' : undefined}>{it.t}</a>
+              {i < l.items.length - 1 && <span class="dot" aria-hidden="true">·</span>}
+            </>
+          ))}
+        </p>
+      </div>
+    ))}
+  </div>
+  <div class="prev" data-idx-prev aria-hidden="true"><img alt="" /></div>
+</div>
+
+<style>
+  .index { position: fixed; inset: 0; z-index: 90; background: #000; color: var(--ink); display: grid; place-items: center; overflow: hidden; opacity: 0; transition: opacity .45s var(--ease); }
+  .index[hidden] { display: none; }
+  .index.open { opacity: 1; }
+  .x { position: absolute; top: 18px; right: var(--gutter); color: var(--ink-2); }
+  .x kbd { font: 500 10px/1 var(--mono); border: 1px solid var(--line-2); border-radius: 4px; padding: 3px 5px; margin-left: 6px; }
+  .x:hover { color: #fff; }
+  .inner { width: min(1060px, calc(100% - 2 * var(--gutter))); display: grid; gap: clamp(14px, 2.6vh, 26px); text-align: center; will-change: transform; }
+  .lab { margin: 0 0 6px; color: var(--ink-3); }
+  .names { margin: 0; font: 500 clamp(22px, 3.3vw, 46px)/1.22 var(--body); letter-spacing: -.02em; text-wrap: balance; }
+  .names a { display: inline-block; padding: 0 .04em; color: #fff; transition: color .25s, transform .4s var(--ease), opacity .3s; }
+  .names .dot { color: var(--ink-3); margin: 0 .22em; }
+  .inner:hover .names a { opacity: .38; }
+  .inner .names a:hover, .inner .names a:focus-visible { opacity: 1; color: #fff; transform: translateY(-2px); }
+  .prev { position: fixed; left: 0; top: 0; width: min(34vw, 380px); aspect-ratio: 16 / 10; border-radius: 14px; overflow: hidden; pointer-events: none; opacity: 0; z-index: 2; background: #111; box-shadow: 0 30px 80px rgba(0, 0, 0, .6); transition: opacity .25s; }
+  .prev.on { opacity: 1; }
+  .prev img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  @media (max-width: 760px) { .prev { display: none; } .names { font-size: clamp(20px, 5.6vw, 28px); } .inner { gap: 16px; } .index { align-items: start; padding-top: 70px; overflow-y: auto; } }
+</style>
